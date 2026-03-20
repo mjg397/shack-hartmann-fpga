@@ -319,6 +319,35 @@ image_aber = camera.read_out()
 #   In hardware this is:  2 × (M²) multiply-accumulate operations per
 #   subaperture, all computed in parallel for all N_subs windows each frame.
 #
+# --- FPGA fixed-point design note: reciprocal LUT ---
+#
+#   Proposed scheme:
+#     - Represent each pixel as a fractional fixed-point value clamped to
+#       [0.0, 1.0]  (e.g. 0.8 unsigned fixed-point:  8 fractional bits,
+#       integer part always 0).  This preserves the Gaussian intensity
+#       weighting that makes centroid estimation sub-pixel accurate.
+#     - total_flux = Σ I[r,c] is then a fixed-point number in [0.0, 36.0],
+#       represented as 6.K format (6 integer bits to hold up to 36, K
+#       fractional bits inherited from the pixel representation).
+#     - Clamp total_flux to a minimum of 1.0 to avoid divide-by-zero for
+#       windows that lie outside the pupil / receive no light.
+#     - Store 1/total_flux in a lookup table with entries in 1.8 unsigned
+#       fixed-point (1 integer bit + 8 fractional bits, range [0, ~2.0),
+#       resolution 1/256 ≈ 0.0039).  All reciprocals fit because
+#       1/total_flux ∈ [1/36, 1.0], which is always < 1.996.
+#
+#   Practical approach:  accumulate pixel values in full precision (0.8) for
+#   centroid accuracy, then truncate total_flux to fewer fractional bits
+#   (e.g. 4) before the LUT lookup to keep the table small.  The truncation
+#   error is at most 1/16 of a flux unit, which causes a centroid error of
+#   at most  Δc ≈ (1/16) × (d_centroid/d_flux)  — negligible in practice.
+#
+#   Reciprocal output precision:
+#     The 1.8 format has resolution 1/256.  The worst-case quantisation
+#     error on the reciprocal is  ε = 1/(2×256) ≈ 0.2%.  For total_flux = 1
+#     (minimum), 1/1 = 1.0 is exactly representable.  For total_flux = 36
+#     (maximum), 1/36 ≈ 0.02778 → stored as 7/256 = 0.02734, error ≈ 1.6%.
+#
 # Differential slopes (the quantity that encodes wavefront error):
 #
 #   slopes_delta = [cx, cy] − slopes_ref
