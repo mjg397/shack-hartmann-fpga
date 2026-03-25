@@ -1,6 +1,6 @@
 //This next section is for a 3x3(3x3) shack hartmann, w/ beginning of CoG centroid calculations.
 
-
+// check if in the circle, if not then each of the pixels in the subapeture is invalid, we can also count the number of total subarpetures to get correct number of valid for when we can calculate the matrix. we will figure out inspired by literature exactly what we should do
 module streaming_centroid_accumulator (
   input wire raw_data
   input centroids
