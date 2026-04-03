@@ -1,4 +1,4 @@
-//this file will be deleted soon due to not being necessary
+//this file will be deleted soon due to not being necessary, this file is an outdated version of centroid-division.v
 //when completed[i]:
 //  do the intensity[i] division
 ///  x_intensity[i] * 1/intensity[i]
