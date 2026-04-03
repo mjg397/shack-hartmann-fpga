@@ -1,3 +1,28 @@
+`timescale 1ns/1ns
+
+module test-TCoG-intensity-accumulator();
+  reg clk_100;
+  reg reset;
+  reg valid;
+  reg data
+  wire subap_valid
+  wire instensity
+  wire x_intensity
+  wire y_intensity
+  wire subap_col,
+  wire subap_row
+
+  TCoG-intensity-accumulator DUT (
+    .clk(clk_100),
+    .reset(reset),
+    .valid(valid),
+    .data_in(data),
+all the way down
+
+endmodule
+
+
+
 module TCoG-intensity-accumulator #(
   parameter NUM_SUBAPETURES = 16,
   parameter NUM_PIXELS_SUBAPETURE = 16,
