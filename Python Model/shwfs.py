@@ -35,7 +35,6 @@ This script models the full SHWFS pipeline and is split into two stages:
            │
            ▼
   HOST resumes: reconstruct OPD map, display results, compare to truth
-  So true.
 """
 
 from hcipy import (
