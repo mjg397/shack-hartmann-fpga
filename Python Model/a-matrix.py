@@ -69,3 +69,5 @@ for i, (n, m) in enumerate(modes):
     Z[i, :] = zernike(n, m, r, theta)
 
 print("Z shape:", Z.shape)
+print(Z)
+np.savetxt("zernike_matrix.csv", Z, delimiter=",", header="Zernike modes (rows) vs subapertures (cols)")
