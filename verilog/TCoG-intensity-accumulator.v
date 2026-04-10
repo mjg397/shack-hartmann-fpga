@@ -7,7 +7,7 @@ module TCoG_intensity_accumulator #(
   input wire reset,
   input wire valid,
   input wire [17:0] data_in,
-  output reg        subap_valid [NUM_SUBAPETURES*NUM_SUBAPETURES-1:0] = {(NUM_SUBAPETURES*NUMSUBAPETURES)1'b0}, \\set them default invalid until the streaming comes in (this allows for us to have feature of early complete detection)
+  output reg        subap_valid [NUM_SUBAPETURES*NUM_SUBAPETURES-1:0] = {(NUM_SUBAPETURES*NUM_SUBAPETURES)1'b0}, \\set them default invalid until the streaming comes in (this allows for us to have feature of early complete detection)
   output reg [17:0] intensity   [NUM_SUBAPETURES*NUM_SUBAPETURES-1:0],
   output reg [17:0] x_intensity [NUM_SUBAPETURES*NUM_SUBAPETURES-1:0],
   output reg [17:0] y_intensity [NUM_SUBAPETURES*NUM_SUBAPETURES-1:0],
@@ -17,7 +17,7 @@ module TCoG_intensity_accumulator #(
 
 reg [$clog2(NUM_SUBAPETURES)-1:0] subap_col;
 reg [$clog2(NUM_SUBAPETURES)-1:0] subap_row;
--
+
 assign subap_idx = subap_row * NUM_SUBAP_X + subap_col;
 
 // control logic for TCoG
