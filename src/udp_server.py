@@ -12,7 +12,7 @@ import time
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-server_address = '127.0.0.1'
+server_address = '10.48.157.28'
 server_port = 31337
 
 CHUNK_SIZE = 1024

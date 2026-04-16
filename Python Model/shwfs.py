@@ -389,6 +389,11 @@ estimated_coeffs = RM.T @ slopes_delta.ravel()
 #
 # ==========================================================================
 
+print("Estimated coeffs: \n", estimated_coeffs)
+print("Slopes: \n", slopes_aber)
+np.set_printoptions(threshold=np.inf, linewidth=200, precision=6, suppress=True)
+print(np.asarray(slopes_aber))
+
 # HOST resumes: build OPD map from returned coefficients for display/logging.
 recon_opd       = sum(c * m for c, m in zip(estimated_coeffs, zernike_modes))
 recon_opd_field = VLT_aperture * recon_opd

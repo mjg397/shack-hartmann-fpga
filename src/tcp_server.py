@@ -1,9 +1,8 @@
 import socket 
 import threading 
 import os
-import time
 
-bind_ip = "127.0.0.1" 
+bind_ip = "10.48.157.28" 
 bind_port = 1234
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
@@ -15,26 +14,80 @@ server.listen(5)
 
 print(f"[+] Listening on port {bind_ip} : {bind_port}")                            
 
+
+def recv_exact(sock, n):
+    data = bytearray()
+    while len(data) < n:
+        chunk = sock.recv(n - len(data))
+        if not chunk:
+            return None
+        data.extend(chunk)
+    return bytes(data)
+
+
+def recv_line(sock):
+    data = bytearray()
+    while True:
+        ch = sock.recv(1)
+        if not ch:
+            return None
+        if ch == b"\n":
+            return bytes(data)
+        data.extend(ch)
+
 #client handling thread
 def handle_client(client_socket): 
     #printing what the client sends 
-    request = client_socket.recv(1024) 
-    print(f"[+] Recieved: {request}") 
 
-    with open("weather.csv", "rb") as f:
-        client_socket.sendfile(f)
+    while True:
 
-    # redundant exit packet
-    while(True):
-        try:
-            client_socket.send(bytes("exit", "utf-8")) 
-        except:
+        request = recv_line(client_socket)
+        if request is None:
+            print("[+] Client disconnected")
             break
-        time.sleep(0.1) # wait to close connection
 
-    time.sleep(1)
-    
+        request_s = request.decode("utf-8", errors="strict").strip()
+        print(f"[+] Recieved: {request_s}") 
+
+        match request_s:
+            case "start":
+                print("Executing file send. ")
+                file_size = os.path.getsize("file_example_PNG_3MB.png")
+                client_socket.sendall(file_size.to_bytes(4, "big"))
+                with open("file_example_PNG_3MB.png", "rb") as f:
+                    while True:
+                        chunk = f.read(4096)
+                        if not chunk:
+                            break
+                        client_socket.sendall(chunk)
+
+            case "returning":
+                print("Executing file receive")
+                size_bytes = recv_exact(client_socket, 4)
+                if size_bytes is None:
+                    print("[!] Client disconnected before size header")
+                    break
+
+                remaining = int.from_bytes(size_bytes, "big")
+                with open("received.bin", "wb") as f:
+                    while remaining > 0:
+                        recvd = client_socket.recv(min(4096, remaining))
+                        if not recvd:
+                            print("[!] Client disconnected during file transfer")
+                            break
+                        f.write(recvd)
+                        remaining -= len(recvd)
+                print("response received!")
+
+            case "done":
+                print("Exiting!")
+                break
+            case _:
+                print("Pattern not recognized")
+                # client_socket.close()
+        
     client_socket.close()
+
 
 while True: 
     # When a client connects we receive the 
