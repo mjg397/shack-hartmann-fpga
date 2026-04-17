@@ -31,11 +31,11 @@ module TCoG-intensity-accumulator #(
   input wire clk,
   input wire reset,
   input wire valid,
-  input wire [17:0] data_in,
+  input wire [7:0] data_in,
   output reg        subap_valid [NUM_SUBAP*NUM_SUBAP-1:0] = {(NUM_SUBAP*NUMSUBAP)1'b0}, \\set them default invalid until the streaming comes in (this allows for us to have feature of early complete detection)
-  output reg [17:0] intensity   [NUM_SUBAP*NUM_SUBAP-1:0],
-  output reg [17:0] x_intensity [NUM_SUBAP*NUM_SUBAP-1:0],
-  output reg [17:0] y_intensity [NUM_SUBAP*NUM_SUBAP-1:0],
+  output reg [15:0] intensity   [NUM_SUBAP*NUM_SUBAP-1:0],
+  output reg [15:0] x_intensity [NUM_SUBAP*NUM_SUBAP-1:0],
+  output reg [15:0] y_intensity [NUM_SUBAP*NUM_SUBAP-1:0],
   output reg [$clog2(NUM_SUBAP)-1:0] subap_col,
   output reg [$clog2(NUM_SUBAP)-1:0] subap_row
 );
