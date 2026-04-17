@@ -57,6 +57,69 @@ warnings.filterwarnings('ignore', category=DeprecationWarning)
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.ndimage as ndimage
+from pathlib import Path
+
+
+def load_vlt_demo_scene(size=256):
+    """Load and normalize a VLT image from ./VLT_Images for AO demo rendering."""
+    image_dir = Path("VLT_Images")
+    candidates = [
+        image_dir / "eso1322a.jpg",
+        image_dir / "eso1131a.jpg",
+    ]
+
+    for path in candidates:
+        if path.exists():
+            img = plt.imread(path)
+            if img.ndim == 3:
+                # Convert RGB/RGBA to luminance.
+                img = 0.2126 * img[..., 0] + 0.7152 * img[..., 1] + 0.0722 * img[..., 2]
+            img = np.asarray(img, dtype=float)
+
+            # Resize to simulation grid while keeping content centered.
+            zoom_y = size / img.shape[0]
+            zoom_x = size / img.shape[1]
+            zoom_factor = min(zoom_y, zoom_x)
+            resized = ndimage.zoom(img, zoom_factor, order=1)
+
+            out = np.zeros((size, size), dtype=float)
+            y0 = max((size - resized.shape[0]) // 2, 0)
+            x0 = max((size - resized.shape[1]) // 2, 0)
+            y1 = min(y0 + resized.shape[0], size)
+            x1 = min(x0 + resized.shape[1], size)
+
+            src_y0 = max((resized.shape[0] - size) // 2, 0)
+            src_x0 = max((resized.shape[1] - size) // 2, 0)
+            src_y1 = src_y0 + (y1 - y0)
+            src_x1 = src_x0 + (x1 - x0)
+
+            out[y0:y1, x0:x1] = resized[src_y0:src_y1, src_x0:src_x1]
+            out -= out.min()
+            out /= (out.max() + 1e-30)
+
+            print(f"AO demo scene loaded from {path}")
+            return out
+
+    raise FileNotFoundError(
+        "No VLT demo image found in ./VLT_Images. Expected one of: eso1322a.jpg, eso1131a.jpg"
+    )
+
+
+def psf_from_opd(opd_m, aperture_mask, wavelength):
+    """Compute a normalized PSF from OPD and aperture using scalar Fraunhofer FFT."""
+    phase = (2.0 * np.pi / wavelength) * opd_m
+    pupil = aperture_mask * np.exp(1j * phase)
+    ef = np.fft.fftshift(np.fft.fft2(pupil))
+    psf = np.abs(ef) ** 2
+    psf /= psf.sum() + 1e-30
+    return psf
+
+
+def convolve_with_psf(image, psf):
+    """Circular convolution using FFT; PSF is centered and shifted to kernel origin."""
+    kernel = np.fft.ifftshift(psf)
+    out = np.fft.ifft2(np.fft.fft2(image) * np.fft.fft2(kernel)).real
+    return np.clip(out, 0.0, None)
 
 
 # ===========================================================================
@@ -105,12 +168,12 @@ VLT_aperture = evaluate_supersampled(aperture_gen, pupil_grid, 4)
 print(f"Pupil grid: {num_pupil_pixels}x{num_pupil_pixels} px")
 
 # ---------------------------------------------------------------------------
-# 2. SHWFS optics (40x40 lenslets, F/50, 5 mm beam)
+# 2. SHWFS optics (16x16 lenslets, F/50, 5 mm beam)
 #    HOST: optical propagation model — not run on FPGA
 # ---------------------------------------------------------------------------
 wavelength_wfs = 0.7e-6   # m
 f_number       = 50
-num_lenslets   = 40
+num_lenslets   = 16
 sh_diameter    = 5e-3     # m
 
 magnification = sh_diameter / telescope_diameter
@@ -480,3 +543,67 @@ for label, tc, ec in zip(mode_labels, true_coeffs, estimated_coeffs):
 
 residual_rms = np.std(residual_field[VLT_aperture > 0.5])
 print(f"\nResidual OPD RMS inside pupil = {residual_rms*1e9:.2f} nm")
+
+# ---------------------------------------------------------------------------
+# 10. AO image demo (object -> aberrated telescope image -> corrected image)
+# ---------------------------------------------------------------------------
+scene = load_vlt_demo_scene(size=num_pupil_pixels)
+
+ap_mask = np.asarray(VLT_aperture, dtype=float).reshape(num_pupil_pixels, num_pupil_pixels)
+opd_true_m = np.asarray(opd_field, dtype=float).reshape(num_pupil_pixels, num_pupil_pixels)
+opd_recon_m = np.asarray(recon_opd_field, dtype=float).reshape(num_pupil_pixels, num_pupil_pixels)
+opd_resid_m = np.asarray(residual_field, dtype=float).reshape(num_pupil_pixels, num_pupil_pixels)
+
+psf_dl = psf_from_opd(np.zeros_like(opd_true_m), ap_mask, wavelength_wfs)
+psf_ab = psf_from_opd(opd_true_m, ap_mask, wavelength_wfs)
+
+# Simulated correction applies the negative reconstructed OPD,
+# leaving residual OPD = true - reconstructed.
+psf_corr = psf_from_opd(opd_resid_m, ap_mask, wavelength_wfs)
+
+img_ab = convolve_with_psf(scene, psf_ab)
+img_corr = convolve_with_psf(scene, psf_corr)
+img_dl = convolve_with_psf(scene, psf_dl)
+
+img_ab /= img_ab.max() + 1e-30
+img_corr /= img_corr.max() + 1e-30
+img_dl /= img_dl.max() + 1e-30
+
+strehl_ab = psf_ab.max() / (psf_dl.max() + 1e-30)
+strehl_corr = psf_corr.max() / (psf_dl.max() + 1e-30)
+
+fig2, ax2 = plt.subplots(2, 3, figsize=(16, 10))
+fig2.suptitle("AO Imaging Demo: Aberrated vs Corrected Telescope Image", fontsize=14, fontweight='bold')
+
+ax2[0, 0].imshow(scene, cmap='gray', origin='lower')
+ax2[0, 0].set_title("Reference object (VLT image)")
+ax2[0, 0].axis('off')
+
+ax2[0, 1].imshow(img_ab, cmap='gray', origin='lower')
+ax2[0, 1].set_title("Aberrated image")
+ax2[0, 1].axis('off')
+
+ax2[0, 2].imshow(img_corr, cmap='gray', origin='lower')
+ax2[0, 2].set_title("Corrected image (from reconstructed OPD)")
+ax2[0, 2].axis('off')
+
+ax2[1, 0].imshow(np.log10(psf_ab + 1e-12), cmap='magma', origin='lower')
+ax2[1, 0].set_title("log10 PSF (aberrated)")
+ax2[1, 0].axis('off')
+
+ax2[1, 1].imshow(np.log10(psf_corr + 1e-12), cmap='magma', origin='lower')
+ax2[1, 1].set_title("log10 PSF (corrected)")
+ax2[1, 1].axis('off')
+
+ax2[1, 2].imshow(np.log10(psf_dl + 1e-12), cmap='magma', origin='lower')
+ax2[1, 2].set_title("log10 PSF (diffraction-limited)")
+ax2[1, 2].axis('off')
+
+fig2.text(0.5, 0.01,
+          f"Strehl (aberrated): {strehl_ab:.3f}   |   Strehl (corrected): {strehl_corr:.3f}",
+          ha='center', fontsize=11)
+
+plt.tight_layout(rect=[0, 0.03, 1, 0.97])
+plt.savefig("shwfs_ao_demo.png", dpi=150, bbox_inches='tight')
+print("AO demo figure saved to shwfs_ao_demo.png")
+plt.show()
