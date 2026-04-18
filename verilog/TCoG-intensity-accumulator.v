@@ -6,11 +6,11 @@ module TCoG_intensity_accumulator #(
   input wire clk,
   input wire reset,
   input wire valid,
-  input wire [17:0] data_in,
-  output reg        subap_valid [NUM_SUBAPETURES*NUM_SUBAPETURES-1:0] = {(NUM_SUBAPETURES*NUM_SUBAPETURES)1'b0}, \\set them default invalid until the streaming comes in (this allows for us to have feature of early complete detection)
-  output reg [17:0] intensity   [NUM_SUBAPETURES*NUM_SUBAPETURES-1:0],
-  output reg [17:0] x_intensity [NUM_SUBAPETURES*NUM_SUBAPETURES-1:0],
-  output reg [17:0] y_intensity [NUM_SUBAPETURES*NUM_SUBAPETURES-1:0],
+  input wire [7:0] data_in,
+  output reg [$clog2(NUM_PIXELS_SUBAPETURE)-1:0] subapeture // fix this
+  output reg [8+$clog2(NUM_PIXELS_SUBAPETURE)-1:0] intensity   [NUM_SUBAPETURES*NUM_SUBAPETURES-1:0],
+  output reg [8+$clog2(NUM_PIXELS_SUBAPETURE)-1:0] x_intensity [NUM_SUBAPETURES*NUM_SUBAPETURES-1:0],
+  output reg [8+$clog2(NUM_PIXELS_SUBAPETURE)-1:0] y_intensity [NUM_SUBAPETURES*NUM_SUBAPETURES-1:0],
   output reg [$clog2(NUM_SUBAPETURES)-1:0] subap_col,
   output reg [$clog2(NUM_SUBAPETURES)-1:0] subap_row
 );
@@ -20,10 +20,10 @@ reg [$clog2(NUM_SUBAPETURES)-1:0] subap_row;
 
 assign subap_idx = subap_row * NUM_SUBAP_X + subap_col;
 
-// control logic for TCoG
+// Control logic for TCoG
 always @(posedge clk) begin
   if (reset) begin
-
+  end
   else begin
     if valid begin
       count_pixel_h <= count_pixel_h + 1;
@@ -43,20 +43,21 @@ always @(posedge clk) begin
         end
       end
   end
+  end
 
-  // accumulation of pixel data
+  // Intensity accumulation of valid pixel data
   always @(posedge clk) begin
-  if (reset) begin
+    if (reset) begin
+      for (i = 0; i < NUM_SUBAPETURES*NUM_SUBAPETURES-1; i = i + 1) begin
+              intensity[i]   <= 8'b0; 
+              x_intensity[i] <= 8'b0;
+              y_intensity[i] <= 8'b0;
+      end
+    end
+    else if (valid) begin
+      intensity[subap_idx]   <= data_in;
+      x_intensity[subap_idx] <= data_in*count_pixel_h;
+      y_intensity[subap_idx] <= data_in*count_pixel_y;
+    end
   end
-  else begin
-    intensity[subap_row * NUM_SUBAP + subap_col] <= data_in
-    x_intensity[subap_row * NUM_SUBAP + subap_col] <= data_in*count_pixel_h
-    y_intensity[subap_row * NUM_SUBAP + subap_col] <= data_in*count_pixel_y
-  end
-
-  // valid data handling
-
-  if at row NUM_SUBAP-1 and
-    if (valid && ()) // if it is valid pixel and is in the frame
-
 endmodule
