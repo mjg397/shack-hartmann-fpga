@@ -5,6 +5,7 @@ module centroid_divison (
   input wire [17:0] intensity,
   input wire [17:0] x_intensity,
   input wire [17:0] y_intensity,
+  input wire [17:0] centroid_number,
   output reg [17:0] x_centroid,
   output reg [17:0] y_centroid
 );
