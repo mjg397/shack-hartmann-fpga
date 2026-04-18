@@ -90,7 +90,7 @@ reg [$clog2(NUM_SUBAPETURES_SQRT)-1:0] subap_row;
 reg [$clog2(NUM_PIXELS_SUBAPETURE_SQRT)-1:0] count_pixel_h;
 reg [$clog2(NUM_PIXELS_SUBAPETURE_SQRT)-1:0] count_pixel_v;
 
-wire [$log2(NUM_SUBAPETURES_SQRT*NUM_SUBAPETURES_SQRT)-1:0] subap_idx;
+wire [$clog2(NUM_SUBAPETURES_SQRT*NUM_SUBAPETURES_SQRT)-1:0] subap_idx;
 wire last_pixel_h = (count_pixel_h == NUM_PIXELS_SUBAPETURE_SQRT-1);
 wire last_pixel_v = (count_pixel_v == NUM_PIXELS_SUBAPETURE_SQRT-1);
 wire last_subap_col = (subap_col == NUM_SUBAPETURES_SQRT-1);
@@ -111,6 +111,9 @@ assign subap_idx = (subap_row * NUM_SUBAPETURES_SQRT + subap_col);
     if (reset) begin
       subap_col <= 0;
       subap_row <= 0;
+      count_pixel_h <= 0;
+      count_pixel_v <= 0;
+      full_frame_complete <= 0;
     end
     else if (valid) begin
       full_frame_complete <= 0;
@@ -193,4 +196,3 @@ assign subap_idx = (subap_row * NUM_SUBAPETURES_SQRT + subap_col);
     end
   end
 endmodule
-cl
