@@ -12,8 +12,6 @@ module TCoG_intensity_accumulator #(
   output reg [8+$clog2(NUM_PIXELS_SUBAPETURE_SQRT)-1:0] intensity,
   output reg [8+$clog2(NUM_PIXELS_SUBAPETURE_SQRT)-1:0] x_intensity,
   output reg [8+$clog2(NUM_PIXELS_SUBAPETURE_SQRT)-1:0] y_intensity,
-  output reg [$clog2(NUM_SUBAPETURES_SQRT)-1:0] subap_col,
-  output reg [$clog2(NUM_SUBAPETURES_SQRT)-1:0] subap_row
 );
 
 wire [$clog2(NUM_SUBAPETURES_SQRT*NUM_SUBAPETURES_SQRT)-1:0] subap_idx;
