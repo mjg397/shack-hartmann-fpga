@@ -1,51 +1,102 @@
 `timescale 1ns/1ns
 
-module test-TCoG-intensity-accumulator();
-  reg clk_100,
-  reg reset,
-  reg valid,
-  reg data_in,
-  wire intensity,
-  wire x_intensity,
-  wire y_intensity,
+module test_TCoG_intensity_accumulator();
+  
+  localparam NUM_SUBAP_SQRT = 16;
+  localparam NUM_PIX_SQRT = 16;
+  localparam FRAME_SIZE = NUM_SUBAP_SQRT*NUM_SUBAP_SQRT*NUM_PIX_SQRT*NUM_PIX_SQRT;
+  reg clk_100;
+  reg reset;
+  reg valid;
+  reg [7:0] data_in;
+  wire full_frame_complete;
+  wire [$clog2(NUM_SUBAP_SQRT*NUM_SUBAP_SQRT)-1:0] subapetures_completed;
+  wire [8+$clog2(NUM_PIX_SQRT)-1:0] intensity;
+  wire [8+$clog2(NUM_PIX_SQRT)-1:0] x_intensity;
+  wire [8+$clog2(NUM_PIX_SQRT)-1:0] y_intensity;
 
-  TCoG-intensity-accumulator DUT (
+  TCoG_intensity_accumulator #(
+    .NUM_SUBAPETURES_SQRT(NUM_SUBAP_SQRT),
+    .NUM_PIXELS_SUBAPETURE_SQRT(NUM_PIX_SQRT)
+  ) DUT (
     .clk(clk_100),
     .reset(reset),
     .valid(valid),
-    .data_in(data),
-all the way down
+    .data_in(data_in),
+    .full_frame_complete(full_frame_complete),
+    .subapetures_completed(subapetures_completed),
+    .intensity(intensity),
+    .x_intensity(x_intensity),
+    .y_intensity(y_intensity)
+  );
 
+  // Initialize the clk and reset
+  initial begin
+    clk_100 <= 0;
+    reset <= 1;
+    #10
+    reset <= 0;
+  end
+
+  //Toggle the clock
+  always begin
+    #5
+    clk_100  = !clk_100;
+  end
+ 
+ integer i;
+
+  initial begin
+    #20
+    clk_100 = 0;
+    reset = 1;
+    valid = 0;
+    data_in = 0;
+  
+    #20;
+    reset = 0;
+    valid = 1;
+  
+    for (i = 0; i < FRAME_SIZE; i = i + 1) begin
+      @(posedge clk_100);
+      data_in <= i[7:0];   // simple ramp pattern
+    end
+
+    @(posedge clk_100);
+    valid = 0;
+
+    #50;
+    $finish;
+  end
 endmodule
-
-
 
 module TCoG_intensity_accumulator #(
   parameter NUM_SUBAPETURES_SQRT = 16,
-  parameter NUM_PIXELS_SUBAPETURE_SQRT = 16,
-  parameter NUM_CENTROIDS = 9
+  parameter NUM_PIXELS_SUBAPETURE_SQRT = 16
 )(
   input wire clk,
   input wire reset,
   input wire valid,
   input wire [7:0] data_in,
   output reg full_frame_complete,
-  output reg [$clog2(NUM_PIXELS_SUBAPETURE_SQRT)-1:0] subapetures_completed, // indexed with i=1 corresponding to centroid 0, 0 completed
+  output reg [$clog2(NUM_PIXELS_SUBAPETURE_SQRT*NUM_PIXELS_SUBAPETURE_SQRT)-1:0] subapetures_completed, // indexed with i=1 corresponding to centroid 0, 0 completed
   output reg [8+$clog2(NUM_PIXELS_SUBAPETURE_SQRT)-1:0] intensity,
   output reg [8+$clog2(NUM_PIXELS_SUBAPETURE_SQRT)-1:0] x_intensity,
-  output reg [8+$clog2(NUM_PIXELS_SUBAPETURE_SQRT)-1:0] y_intensity,
+  output reg [8+$clog2(NUM_PIXELS_SUBAPETURE_SQRT)-1:0] y_intensity
 );
-
-wire [$clog2(NUM_SUBAPETURES_SQRT*NUM_SUBAPETURES_SQRT)-1:0] subap_idx;
-wire last_pixel_h = (count_pixel_h == NUM_PIXELS_SUBAPETURE_SQRT-1);
-wire last_pixel_v = (count_pixel_v == NUM_PIXELS_SUBAPETURE_SQRT-1);
-wire last_subap_col = (subap_col == NUM_SUBAPETURE_SQRT-1);
-wire last_subap_row = (subap_row == NUM_SUBAPETURE_SQRT-1);
 
 reg [$clog2(NUM_SUBAPETURES_SQRT)-1:0] subap_col;
 reg [$clog2(NUM_SUBAPETURES_SQRT)-1:0] subap_row;
 reg [$clog2(NUM_PIXELS_SUBAPETURE_SQRT)-1:0] count_pixel_h;
 reg [$clog2(NUM_PIXELS_SUBAPETURE_SQRT)-1:0] count_pixel_v;
+
+wire [$log2(NUM_SUBAPETURES_SQRT*NUM_SUBAPETURES_SQRT)-1:0] subap_idx;
+wire last_pixel_h = (count_pixel_h == NUM_PIXELS_SUBAPETURE_SQRT-1);
+wire last_pixel_v = (count_pixel_v == NUM_PIXELS_SUBAPETURE_SQRT-1);
+wire last_subap_col = (subap_col == NUM_SUBAPETURES_SQRT-1);
+wire last_subap_row = (subap_row == NUM_SUBAPETURES_SQRT-1);
+
+
 reg [8+$clog2(NUM_PIXELS_SUBAPETURE_SQRT)-1:0] i   [NUM_SUBAPETURES_SQRT*NUM_SUBAPETURES_SQRT-1:0];
 reg [8+$clog2(NUM_PIXELS_SUBAPETURE_SQRT)-1:0] x_i [NUM_SUBAPETURES_SQRT*NUM_SUBAPETURES_SQRT-1:0];
 reg [8+$clog2(NUM_PIXELS_SUBAPETURE_SQRT)-1:0] y_i [NUM_SUBAPETURES_SQRT*NUM_SUBAPETURES_SQRT-1:0];
@@ -58,7 +109,6 @@ assign subap_idx = (subap_row * NUM_SUBAPETURES_SQRT + subap_col);
 //  TCoG indexing control logic
   always @(posedge clk) begin
     if (reset) begin
-      subapetures_completed <= 0;
       subap_col <= 0;
       subap_row <= 0;
     end
@@ -114,6 +164,7 @@ assign subap_idx = (subap_row * NUM_SUBAPETURES_SQRT + subap_col);
       intensity <= 0;
       x_intensity <= 0;
       y_intensity <= 0;
+      subapetures_completed <= 0;
     end else begin
       if (subap_done_delay) begin
         subapetures_completed <= subapetures_completed + 1;
@@ -126,9 +177,9 @@ assign subap_idx = (subap_row * NUM_SUBAPETURES_SQRT + subap_col);
 
 
   // Intensity accumulation of valid pixel data
+  integer j;
   always @(posedge clk) begin
     if (reset) begin
-      integer j;
       for (j = 0; j < NUM_SUBAPETURES_SQRT*NUM_SUBAPETURES_SQRT; j = j + 1) begin
               i[j]   <= 8'b0; 
               x_i[j] <= 8'b0;
@@ -142,4 +193,4 @@ assign subap_idx = (subap_row * NUM_SUBAPETURES_SQRT + subap_col);
     end
   end
 endmodule
-
+cl
