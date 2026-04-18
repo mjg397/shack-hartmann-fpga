@@ -80,9 +80,9 @@ module TCoG_intensity_accumulator #(
   input wire [7:0] data_in,
   output reg full_frame_complete,
   output reg [$clog2(NUM_PIXELS_SUBAPETURE_SQRT*NUM_PIXELS_SUBAPETURE_SQRT)-1:0] subapetures_completed, // indexed with i=1 corresponding to centroid 0, 0 completed
-  output reg [8+$clog2(NUM_PIXELS_SUBAPETURE_SQRT)-1:0] intensity,
-  output reg [8+$clog2(NUM_PIXELS_SUBAPETURE_SQRT)-1:0] x_intensity,
-  output reg [8+$clog2(NUM_PIXELS_SUBAPETURE_SQRT)-1:0] y_intensity
+  output reg [$clog2(255*NUM_PIXELS_SUBAPETURE_SQRT*NUM_PIXELS_SUBAPETURE_SQRT)-1:0] intensity,
+  output reg [19:0] x_intensity,
+  output reg [19:0] y_intensity
 );
 
 reg [$clog2(NUM_SUBAPETURES_SQRT)-1:0] subap_col;
@@ -97,9 +97,9 @@ wire last_subap_col = (subap_col == NUM_SUBAPETURES_SQRT-1);
 wire last_subap_row = (subap_row == NUM_SUBAPETURES_SQRT-1);
 
 
-reg [8+$clog2(NUM_PIXELS_SUBAPETURE_SQRT)-1:0] i   [NUM_SUBAPETURES_SQRT*NUM_SUBAPETURES_SQRT-1:0];
-reg [8+$clog2(NUM_PIXELS_SUBAPETURE_SQRT)-1:0] x_i [NUM_SUBAPETURES_SQRT*NUM_SUBAPETURES_SQRT-1:0];
-reg [8+$clog2(NUM_PIXELS_SUBAPETURE_SQRT)-1:0] y_i [NUM_SUBAPETURES_SQRT*NUM_SUBAPETURES_SQRT-1:0];
+reg [$clog2(255*NUM_PIXELS_SUBAPETURE_SQRT*NUM_PIXELS_SUBAPETURE_SQRT)-1:0] i   [NUM_SUBAPETURES_SQRT*NUM_SUBAPETURES_SQRT-1:0];
+reg [19:0] x_i [NUM_SUBAPETURES_SQRT*NUM_SUBAPETURES_SQRT-1:0];
+reg [19:0] y_i [NUM_SUBAPETURES_SQRT*NUM_SUBAPETURES_SQRT-1:0];
 
 reg subap_done_delay;
 reg [$clog2(NUM_SUBAPETURES_SQRT*NUM_SUBAPETURES_SQRT)-1:0] subap_idx_delay;
@@ -117,35 +117,36 @@ assign subap_idx = (subap_row * NUM_SUBAPETURES_SQRT + subap_col);
     end
     else if (valid) begin
       full_frame_complete <= 0;
-
+      
+      // If at last column of subapeture
       if (last_pixel_h) begin
         count_pixel_h <= 0;
+      	 // Adjust the subapeture column
+      	if (last_subap_col) begin
+       	 subap_col <= 0;
+     	end else begin
+      	  subap_col <= subap_col + 1;
+        end
+
       end else begin
         count_pixel_h <= count_pixel_h + 1;
       end
-
-      if (last_pixel_h) begin
+      
+      // If at last column of subapeture and last subapeture of the apeture's column
+      if (last_pixel_h && last_subap_col) begin
+	// If at last row of subapeture
         if (last_pixel_v) begin
-          count_pixel_v <= 0;
-        end else begin
+	  count_pixel_v <= 0;
+	 // If at last subapeture of the apeture's row
+	  if (last_subap_row) begin
+	    subap_row <= 0;
+	    full_frame_complete <= 1;
+	  end else begin
+	    subap_row <= subap_row + 1;
+ 	  end
+	end else begin
           count_pixel_v <= count_pixel_v + 1;
-        end
-      end
-
-      if (last_pixel_h && last_pixel_v) begin
-          if (last_subap_col)
-              subap_col <= 0;
-          else
-              subap_col <= subap_col + 1;
-       end
-
-      if (last_pixel_h && last_pixel_v && last_subap_col) begin
-        if (last_subap_row) begin
-          subap_row <= 0;
-          full_frame_complete <= 1;
-        end else begin
-          subap_row <= subap_row + 1;
-        end
+        end 
       end
     end
   end
