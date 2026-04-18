@@ -1,16 +1,13 @@
 `timescale 1ns/1ns
 
 module test-TCoG-intensity-accumulator();
-  reg clk_100;
-  reg reset;
-  reg valid;
-  reg data
-  wire subap_valid
-  wire instensity
-  wire x_intensity
-  wire y_intensity
-  wire subap_col,
-  wire subap_row
+  reg clk_100,
+  reg reset,
+  reg valid,
+  reg data_in,
+  wire intensity,
+  wire x_intensity,
+  wire y_intensity,
 
   TCoG-intensity-accumulator DUT (
     .clk(clk_100),
