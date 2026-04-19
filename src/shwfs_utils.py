@@ -1,5 +1,5 @@
 """
-stage1.py — Generate an aberrated Shack-Hartmann wavefront sensor image.
+shwfs_utils.py — Generate an aberrated Shack-Hartmann wavefront sensor image.
 
 Builds a VLT-like pupil and SHWFS optical model using HCIPy, applies a known
 Zernike aberration, propagates through the sensor, and returns the resulting
