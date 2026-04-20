@@ -100,19 +100,19 @@ void func(int sockfd)
     }
     printf("Matrix received!\n");
 
-    FILE *fm = fopen("received_e_matrix.txt", "w");
-    if (fm == NULL) {
-        printf("Failed to open e_matrix output file\n");
-        return;
-    }
-    for (int i = 0; i < 3360; i++) {
-        if (i > 0 && i % 336 == 0)
-            fprintf(fm, "\n");
-        fprintf(fm, "%08X ", e_matrix[i]);
-    }
-    fprintf(fm, "\n");
-    fclose(fm);
-    printf("wrote received_e_matrix.txt\n");
+    // FILE *fm = fopen("received_e_matrix.txt", "w");
+    // if (fm == NULL) {
+    //     printf("Failed to open e_matrix output file\n");
+    //     return;
+    // }
+    // for (int i = 0; i < 3360; i++) {
+    //     if (i > 0 && i % 336 == 0)
+    //         fprintf(fm, "\n");
+    //     fprintf(fm, "%08X ", e_matrix[i]);
+    // }
+    // fprintf(fm, "\n");
+    // fclose(fm);
+    // printf("wrote received_e_matrix.txt\n");
 
     send_all(sockfd, "matrix_done\n", 12);
 
@@ -141,6 +141,30 @@ void func(int sockfd)
     // fclose(f);
 
     printf("Done receiving\n");
+
+    // Now received data gets written into M10K on avalon bus - or transmitted some other way
+
+    // When FPGA notifies ARM that computation is done - we're here
+    // Result data from M10K gets written into HPS memory
+    fabricate_results();
+
+    printf("Sending centroid vector. \n");
+    send_all(sockfd, centroids, sizeof(centroids));
+
+    // wait for ack from pyserver
+    printf("    Centroids received.");
+
+    printf("Sending slope vector.\n");
+    send_all(sockfd, slopes, sizeof(slopes));
+
+    // wait for ack from pyserver
+    printf("    Slopes received\n");
+     
+    printf("Sending zernike coefficients\n");
+    send_all(sockfd, zernike_coeffs, sizeof(zernike_coeffs));
+
+    // wait for ack from server
+    printf("    Zernike coeffs received. \n");
 
 }
 

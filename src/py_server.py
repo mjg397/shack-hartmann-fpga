@@ -5,6 +5,10 @@ from shwfs_utils import generate_aberrated_image
 from e_matrix_lib import generate_e_matrix
 import numpy as np
 
+CENTROID_SIZE = 4
+SLOPE_SIZE = 4
+ZERNIKE_SIZE = 4
+
 bind_ip = "192.168.86.45" 
 bind_port = 80
 
@@ -99,6 +103,14 @@ def handle_client(client_socket):
                     if ack == b"compute_done":
                         print("Compute Done. Receiving results.")
                         break
+
+                # Now recieve 512 centroid vector, 512 slope vector, and 10 zernike vector
+                print("receiving centroids")
+                centroid_bytes = recv_exact(client_socket, 512 * CENTROID_SIZE)
+                
+                if centroid_bytes is None:
+                    print("Client disconnected before delivering centroid vector. ")
+                
 
             case "returning":
                 print("Executing file receive")
