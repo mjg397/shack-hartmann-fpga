@@ -1,4 +1,4 @@
-module reciprocal_u16_q16_comb (
+module reciprocal_u16_q16(
   input  wire [15:0] v_u16,
   output wire [15:0] reciprocal_q16,
   output wire        divide_by_zero,
