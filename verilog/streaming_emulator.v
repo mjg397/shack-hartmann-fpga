@@ -1,3 +1,5 @@
+`timescale 1ns/1ps
+
 // this emulates the streaming property of the shack-hartmann wavefront sensor from a preloaded image into FPGA memroy
 // this intends to allow for our shack-hartmann processing pipeline to have an accurate representation of incoming data
 // I'm not sure if it syntheizes i havent tried yet :\
