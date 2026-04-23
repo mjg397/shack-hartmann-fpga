@@ -4,6 +4,7 @@ module reciprocal_u16_q16(
   output wire        divide_by_zero,
   output wire        saturated
 );
+  // 8 bit LUT in ROM (logic elements)
   localparam [4095:0] RECIP_SEED_LUT_Q0_16 = {
     16'h8020, 16'h8060, 16'h80A1, 16'h80E2, 16'h8123, 16'h8164, 16'h81A5, 16'h81E7,
     16'h8229, 16'h826B, 16'h82AE, 16'h82F1, 16'h8334, 16'h8377, 16'h83BB, 16'h83FF,
@@ -42,7 +43,7 @@ module reciprocal_u16_q16(
   function [4:0] clz16;
     input [15:0] x;
     begin
-      casex (x)
+      casez (x)
         16'b1???????????????: clz16 = 5'd0;
         16'b01??????????????: clz16 = 5'd1;
         16'b001?????????????: clz16 = 5'd2;
