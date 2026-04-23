@@ -11,8 +11,12 @@ module shwfs_pipeline_tb ();
     reg [15:0] rI_reciprocal;
     reg [7:0] subaps_done_reciprocal;
 
+    wire frame_complete_w;
+    reg frame_complete_t;
+
     initial begin
         clk_100 <= 0;
+        frame_complete_t <= 0;
         reset <= 1;
         #10
         reset <= 0;
@@ -22,10 +26,14 @@ module shwfs_pipeline_tb ();
     always begin
         #5
         clk_100  = !clk_100;
+
+        if (frame_complete_w) begin
+            frame_complete_t <= 1;
+        end
     end
 
     initial begin
-        #10000
+        #1000000
         $finish;
     end
 
@@ -41,7 +49,8 @@ module shwfs_pipeline_tb ();
         .xI_reciprocal          (xI_reciprocal),
         .yI_reciprocal          (yI_reciprocal),
         .rI_reciprocal          (rI_reciprocal),
-        .subaps_done_reciprocal (subaps_done_reciprocal)
+        .subaps_done_reciprocal (subaps_done_reciprocal),
+        .frame_complete_w       (frame_complete_w)
     );
 
 endmodule
