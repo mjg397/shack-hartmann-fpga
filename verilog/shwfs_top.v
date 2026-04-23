@@ -10,8 +10,11 @@ module shwfs_top (
     output reg [19:0] xI_reciprocal,
     output reg [19:0] yI_reciprocal,
     output reg [15:0] rI_reciprocal,
-    output reg [7:0] subaps_done_reciprocal
+    output reg [7:0] subaps_done_reciprocal,
+    output wire frame_complete_w
 );
+
+    assign frame_complete_w = frame_complete;
 
     reg [7:0] streamer_data;
     reg streamer_fv;

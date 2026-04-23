@@ -29,7 +29,7 @@ module streaming_emulator #(
   reg [7:0] mem [0:65535];
 
   initial begin
-      $readmemh("C:/Users/mjg397/image_rotating.hex", mem);
+      $readmemh("./image_rotating.hex", mem);
   end
 
   // state machine for pixel input

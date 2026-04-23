@@ -31,7 +31,7 @@ localparam y_ref;
     y_slopes <= 0;
 endmodule
 
-    module reference_calculation (
+module reference_calculation (
   input wire        clk,
   input wire        rst,
   input wire [7:0] subapetures_completed,
