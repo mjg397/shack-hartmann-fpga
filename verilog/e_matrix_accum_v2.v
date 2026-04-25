@@ -24,7 +24,7 @@ module ematrix_accumulator #(
     input  wire signed [26:0] y_slope,   // Q4.23
 
     // flattened output bus: zernike_out[m] = out_bus[m*27 +: 27]
-    output reg  [269:0] out_bus,          // 10 * 27 bits, Q4.23 per mode
+    output reg  [269:0] zernike_out,          // 10 * 27 bits, Q4.23 per mode
     output reg          done
 );
 
@@ -146,7 +146,7 @@ always @(posedge clk) begin
                         //   bits [43:40] = 4 integer bits
                         //   bits [39:17] = 23 fractional bits
                         for (i = 0; i < NUM_MODES; i = i + 1)
-                            out_bus[i*27 +: 27] <= acc_next[i][43:17];
+                            zernike_out[i*27 +: 27] <= acc_next[i][43:17];
                         state <= STATE_DONE;
                     end
                     else begin
