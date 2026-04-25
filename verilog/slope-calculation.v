@@ -1,4 +1,4 @@
-module reference_calculation (
+module slope_calculation (
     input wire        clk,
     input wire        rst,
     input wire [7:0] subapetures_completed,
