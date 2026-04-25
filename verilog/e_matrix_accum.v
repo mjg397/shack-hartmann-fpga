@@ -2,7 +2,9 @@
 // instead of waiting for all slopes to be ready, we accumulate
 // as soon as the first x/y pair arrives from reference_calculation
 // x and y slopes are ready at the same time so we multiply both in one cycle
-// E matrix is Q1.16 18-bit, slopes are Q4.23 27-bit, outputs are Q4.23 27-bit
+// since the entire e_rom is loaded at startup we can read all rows simultaneously
+// one sub_valid = one cycle of work across all modes in parallel
+// E matrix Q1.16 18-bit, slopes Q4.23 27-bit, outputs Q4.23 27-bit
 
 module ematrix_accumulator #(
     parameter NUM_MODES  = 10,   // zernike modes, rows of E
@@ -13,73 +15,95 @@ module ematrix_accumulator #(
     input  wire        rst,
 
     input  wire        sub_valid,
-    input  wire signed [26:0] x_slope,   
-    input  wire signed [26:0] y_slope,  
+    input  wire signed [26:0] x_slope,
+    input  wire signed [26:0] y_slope,
 
-    output reg  signed [26:0] zernike_out [0:NUM_MODES-1],  
-    output reg                done
+    // flattened output port — zernike_out_flat[k*27 +: 27] = mode k Q4.23
+    // unpack in the parent module with a generate loop
+    output reg  [(NUM_MODES*27)-1:0] zernike_out_flat,
+    output reg                       done
 );
 
 localparam integer E_FRAC   = 16;   // Q1.16 e matrix
 localparam integer SL_FRAC  = 23;   // Q4.23 slopes
 localparam integer ACC_FRAC = 39;   // Q5.39 accumulator (16+23)
 
-reg signed [17:0] e_rom [0:(NUM_MODES * NUM_SLOPES)-1];
+// split rom — x columns in one block, y columns in another
+// this lets us read both in the same cycle without dual-port complications
+// address = mode * NUM_SUBS + sub_col
+reg signed [17:0] e_rom_x [0:(NUM_MODES * NUM_SUBS)-1];
+reg signed [17:0] e_rom_y [0:(NUM_MODES * NUM_SUBS)-1];
 initial begin
-    $readmemh("e_matrix.hex", e_rom);
+    $readmemh("e_matrix_x.hex", e_rom_x);
+    $readmemh("e_matrix_y.hex", e_rom_y);
 end
 
-localparam STATE_IDLE   = 2'b00;
-localparam STATE_STREAM = 2'b01;
-localparam STATE_DONE   = 2'b10;
-
-reg [1:0] state;
-
-reg [$clog2(NUM_SUBS)-1:0]   sub_counter;
-reg [$clog2(NUM_MODES)-1:0]  mode_counter;
-
 // sub_col tracks which subaperture column pair we are on (0 to NUM_SUBS-1)
-// x lives at e_rom col 2*sub_col, y lives at e_rom col 2*sub_col+1
+// x lives at e_rom_x[mode * NUM_SUBS + sub_col]
+// y lives at e_rom_y[mode * NUM_SUBS + sub_col]
 reg [$clog2(NUM_SUBS)-1:0] sub_col;
+
+// combinatorial reads — all mode rows read simultaneously for current sub_col
+// flattened to avoid unpacked wire arrays which some tools struggle with
+// e_x_flat[m*18 +: 18] = e_rom_x row for mode m at current sub_col
+// e_y_flat[m*18 +: 18] = e_rom_y row for mode m at current sub_col
+wire [(NUM_MODES*18)-1:0] e_x_flat;
+wire [(NUM_MODES*18)-1:0] e_y_flat;
+
+genvar m;
+generate
+    for (m = 0; m < NUM_MODES; m = m + 1) begin : erom_read
+        assign e_x_flat[m*18 +: 18] = e_rom_x[m * NUM_SUBS + sub_col];
+        assign e_y_flat[m*18 +: 18] = e_rom_y[m * NUM_SUBS + sub_col];
+    end
+endgenerate
+
+// one mac_sum per mode — both x and y columns multiplied and summed in one cycle
+// Q1.16 * Q4.23 = Q5.39, sign extended to 55 bits
+// flattened — mac_sum_flat[m*55 +: 55] = mac result for mode m
+wire [(NUM_MODES*55)-1:0] mac_sum_flat;
+generate
+    for (m = 0; m < NUM_MODES; m = m + 1) begin : mac_gen
+        assign mac_sum_flat[m*55 +: 55] =
+            {{10{e_x_flat[m*18+17]}}, $signed(e_x_flat[m*18 +: 18]) * x_slope} +
+            {{10{e_y_flat[m*18+17]}}, $signed(e_y_flat[m*18 +: 18]) * y_slope};
+    end
+endgenerate
+
+// full precision result for the last subaperture — acc + final mac_sum
+// computed as a wire so we can assign to both acc and zernike_out in one cycle
+// without hitting the non-blocking assignment last-write-wins problem
+// flattened — acc_final_flat[m*55 +: 55] = final accumulated value for mode m
+wire [(NUM_MODES*55)-1:0] acc_final_flat;
+
+localparam STATE_IDLE = 1'b0;
+localparam STATE_DONE = 1'b1;
+
+reg state;
 
 // one accumulator per zernike mode
 // Q5.39 + 1 extra bit for the paired sum, so 55 bits to be safe
 reg signed [54:0] acc [0:NUM_MODES-1];
 
-// registered slope values for the current subaperture
-reg signed [26:0] slope_x;
-reg signed [26:0] slope_y;
+reg [$clog2(NUM_SUBS)-1:0] sub_counter;
 
-// two e_rom values per cycle,  x column and y column for current mode
-reg signed [17:0] e_val_x;
-reg signed [17:0] e_val_y;
-
-// Q1.16 * Q4.23 = Q5.39, sign extended to 55 bits
-wire signed [54:0] mac_x;
-wire signed [54:0] mac_y;
-assign mac_x = {{10{e_val_x[17]}}, e_val_x * slope_x};
-assign mac_y = {{10{e_val_y[17]}}, e_val_y * slope_y};
-
-// sum of both contributions for this subaperture, added in one cycle
-wire signed [54:0] mac_sum;
-assign mac_sum = mac_x + mac_y;
+generate
+    for (m = 0; m < NUM_MODES; m = m + 1) begin : acc_final_gen
+        assign acc_final_flat[m*55 +: 55] = acc[m] + mac_sum_flat[m*55 +: 55];
+    end
+endgenerate
 
 integer i;
 
 always @(posedge clk) begin
     if (rst == 1) begin
-        state        <= STATE_IDLE;
-        sub_counter  <= 0;
-        mode_counter <= 0;
-        sub_col      <= 0;
-        slope_x      <= 0;
-        slope_y      <= 0;
-        e_val_x      <= 0;
-        e_val_y      <= 0;
-        done         <= 0;
+        state       <= STATE_IDLE;
+        sub_counter <= 0;
+        sub_col     <= 0;
+        done        <= 0;
         for (i = 0; i < NUM_MODES; i = i + 1) begin
-            acc[i]         <= 0;
-            zernike_out[i] <= 0;
+            acc[i]                       <= 0;
+            zernike_out_flat[i*27 +: 27] <= 0;
         end
     end
     else begin
@@ -89,52 +113,40 @@ always @(posedge clk) begin
 
             STATE_IDLE: begin
                 if (sub_valid == 1) begin
+
                     if (sub_counter == 0) begin
+                        // first subaperture of a new frame
+                        // write mac_sum directly so no stale acc value is involved
                         for (i = 0; i < NUM_MODES; i = i + 1)
-                            acc[i] <= 0;
-                    end
-                    // latch both slopes and preload e_rom for mode 0
-                    slope_x      <= x_slope;
-                    slope_y      <= y_slope;
-                    mode_counter <= 0;
-                    e_val_x      <= e_rom[0 * NUM_SLOPES + (sub_col * 2)];
-                    e_val_y      <= e_rom[0 * NUM_SLOPES + (sub_col * 2 + 1)];
-                    state        <= STATE_STREAM;
-                end
-            end
+                            acc[i] <= $signed(mac_sum_flat[i*55 +: 55]);
 
-            // one cycle per mode — both x and y columns multiplied and summed
-            STATE_STREAM: begin
-                acc[mode_counter] <= acc[mode_counter] + mac_sum;
-
-                if (mode_counter < NUM_MODES - 1) begin
-                    mode_counter <= mode_counter + 1;
-                    e_val_x      <= e_rom[(mode_counter + 1) * NUM_SLOPES + (sub_col * 2)];
-                    e_val_y      <= e_rom[(mode_counter + 1) * NUM_SLOPES + (sub_col * 2 + 1)];
-                end
-                else begin
-                    // all modes done for this subaperture
-                    mode_counter <= 0;
-                    sub_col      <= sub_col + 1;
-
-                    if (sub_counter == NUM_SUBS - 1) begin
-                        for (i = 0; i < NUM_MODES; i = i + 1)
-                            zernike_out[i] <= acc[i][43:17];
-                        state <= STATE_DONE;
-                    end
-                    else begin
+                        sub_col     <= sub_col + 1;
                         sub_counter <= sub_counter + 1;
-                        if (sub_valid == 1) begin
-                            slope_x  <= x_slope;
-                            slope_y  <= y_slope;
-                            e_val_x  <= e_rom[0 * NUM_SLOPES + ((sub_col + 1) * 2)];
-                            e_val_y  <= e_rom[0 * NUM_SLOPES + ((sub_col + 1) * 2 + 1)];
-                            // stay in STATE_STREAM
-                        end
-                        else begin
-                            state <= STATE_IDLE;
-                        end
                     end
+
+                    else if (sub_counter == NUM_SUBS - 1) begin
+                        // last subaperture — acc_final_flat already holds acc + mac_sum
+                        // assign to both acc and output in same cycle with no conflict
+                        // truncate Q5.39 -> Q4.23: bits [43:17]
+                        // [43:40] = 4 integer bits, [39:17] = 23 fractional bits
+                        for (i = 0; i < NUM_MODES; i = i + 1) begin
+                            acc[i]                       <= $signed(acc_final_flat[i*55 +: 55]);
+                            zernike_out_flat[i*27 +: 27] <= acc_final_flat[i*55+17 +: 27];
+                        end
+
+                        sub_col <= sub_col + 1;
+                        state   <= STATE_DONE;
+                    end
+
+                    else begin
+                        // middle subapertures — accumulate and advance
+                        for (i = 0; i < NUM_MODES; i = i + 1)
+                            acc[i] <= $signed(acc_final_flat[i*55 +: 55]);
+
+                        sub_col     <= sub_col + 1;
+                        sub_counter <= sub_counter + 1;
+                    end
+
                 end
             end
 
