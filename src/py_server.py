@@ -145,27 +145,6 @@ def handle_client(client_socket):
 
         match request_s:
             case "start":
-                # NEED TO DECIDE ON E MATRIX ENTRY NOTATION
-                print("Shack Hartmann Generation - E Matrix Generation running. ")
-                e_matrix = gen_E_matrix()
-
-                # Match C-side buffer element width (uint32_t/int32_t): 4 bytes per entry.
-                e_matrix = np.ascontiguousarray(e_matrix, dtype=np.int32)
-
-                e_matrix_to_send = summarize_array_for_c("E_fp", e_matrix)
-                print(f"[E-MATRIX] sending {e_matrix_to_send.nbytes} bytes over TCP")
-
-                e_matrix_payload = e_matrix_to_send.tobytes(order="C")
-                dump_bytes("py_sent_e_matrix", e_matrix_payload, elem_size=4, words_per_row=336)
-                client_socket.sendall(e_matrix_payload) # send e_matrix
-                print("     E Matrix done sending.")
-
-                # wait for ack (done receiving)
-                while True:
-                    ack = recv_line(client_socket)
-                    if ack == b"matrix_done":
-                        print("     E Matrix received.")
-                        break
 
                 print("Shack Hartmann Generation - Image Abberation running. ")
                 coeffs = generate_aberrated_image() # 65536 array of ints
@@ -178,15 +157,16 @@ def handle_client(client_socket):
 
                 while True:
                     ack = recv_line(client_socket)
-                    print(ack)
                     if ack == b"coeffs_done":
                         print("     Coeffs received")
                         break
 
+                print("Waiting on compute.")
+
                 while True:
                     ack = recv_line(client_socket)
                     if ack == b"compute_done":
-                        print("Compute Done. Receiving results.")
+                        print("     Compute Done. Receiving results.")
                         break
 
                 # Now recieve 512 centroid vector, 512 slope vector, and 10 zernike vector

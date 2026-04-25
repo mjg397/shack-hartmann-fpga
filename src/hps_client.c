@@ -10,6 +10,13 @@
 #include <sys/stat.h>
 #include <unistd.h> // read(), write(), close()
 #include <errno.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/ipc.h> 
+#include <sys/shm.h> 
+#include <sys/mman.h>
+#include <sys/time.h> 
+#include <math.h> 
 
 #define MAX 4096
 #define PORT 80
@@ -28,6 +35,80 @@ uint32_t centroids[512];
 uint32_t slopes[512];
 uint32_t zernike_coeffs[10];
 
+// ======================================
+#define H2F_AXI_MASTER_BASE   0xC0000000
+// main bus; scratch RAM
+#define FPGA_ONCHIP_BASE      0xC8000000
+#define FPGA_ONCHIP_SPAN      0x00010000
+// h2f bus
+// RAM FPGA port s2
+// main bus addess 0x0800_0000
+volatile uint8_t * sram_ptr = NULL ;
+void *sram_virtual_base;
+
+// ======================================
+// lw_bus; DMA  addresses
+#define HW_REGS_BASE        0xff200000
+#define HW_REGS_SPAN        0x00005000 
+#define DMA					0xff200000
+#define DMA_STATUS_OFFSET	0x00
+#define DMA_READ_ADD_OFFSET	0x04 // DATASHEET says 1!
+#define DMA_WRT_ADD_OFFSET	0x08	
+#define DMA_LENGTH_OFFSET	0x012
+#define DMA_CNTL_OFFSET		0x024	
+// the h2f light weight bus base
+void *h2p_lw_virtual_base;
+// HPS_to_FPGA DMA address = 0
+volatile unsigned int * DMA_status_ptr = NULL ;	
+volatile unsigned int * DMA_read_ptr = NULL ;	
+volatile unsigned int * DMA_write_ptr = NULL ;	
+volatile unsigned int * DMA_length_ptr = NULL ;	
+volatile unsigned int * DMA_cntl_ptr = NULL ;	
+
+// ======================================
+// HPS onchip memory base/span
+// 2^16 bytes at the top of memory
+#define HPS_ONCHIP_BASE		0xffff0000
+#define HPS_ONCHIP_SPAN		0x00010000
+// HPS onchip memory (HPS side!)
+volatile unsigned int * hps_onchip_ptr = NULL ;
+void *hps_onchip_virtual_base;
+// ======================================
+// HPS linux MMU memory
+//int test_array[];
+uint8_t data[65536] ;
+// ======================================
+		  
+// WAIT looks nicer than just braces
+#define WAIT {}
+
+// /dev/mem file id
+int fd;	
+
+// DMA helper functions
+void DMA_transfer_bytes(uint8_t *data, int N, unsigned int *DMA_status_ptr, unsigned int *DMA_read_ptr, 
+						unsigned int *DMA_write_ptr, unsigned int *DMA_length_ptr, unsigned int *DMA_cntl_ptr) 
+	{
+		// === DMA transfer HPS->FPGA 
+		// set up DMA
+		// from https://www.altera.com/en_US/pdfs/literature/ug/ug_embedded_ip.pdf
+		// section 25.4.3 Tables 224 and 225
+		*(DMA_status_ptr) = 0;
+		// read bus-master gets data from HPS addr=0xffff0000
+		*(DMA_status_ptr+1) = HPS_ONCHIP_BASE ;
+		// write bus_master for fpga sram is mapped to 0x08000000 
+		*(DMA_status_ptr+2) = 0x08000000 ;
+		// copy N bytes (65536 for coeff array)
+		*(DMA_status_ptr+3) = N ;
+		// set bit 2 for WORD transfer
+		// set bit 3 to start DMA
+		// set bit 7 to stop on byte-coun	t
+		// start the timer because DMA will start
+
+		*(DMA_status_ptr+6) = 0b10001100;
+		while ((*(DMA_status_ptr) & 0x010) == 0) WAIT;
+	}
+
 void fabricate_results() {
     for (uint32_t i = 0; i < 512; i++) {
         centroids[i] = i;
@@ -39,6 +120,7 @@ void fabricate_results() {
     }
 }
 
+// Debug helpers
 static void ensure_dump_dir(void)
 {
 #if ENABLE_DUMPS
@@ -101,6 +183,7 @@ static void dump_buffer(const char *base_name, const void *buf, size_t len, size
 #endif
 }
 
+// Socket helpers
 static int send_all(int sockfd, const void *buf, size_t len)
 {
     const char *p = (const char *)buf;
@@ -116,18 +199,6 @@ static int send_all(int sockfd, const void *buf, size_t len)
 
     return 0;
 }
-
-// static int send_line(int sockfd, const void *buf) {
-//     const char *p = (const char *) buf;
-    
-//     while (p[0] != "\n") {
-//         write(sockfd, p, 1);
-//         p++;
-//     }
-
-//     if (p >= buf + MAX) return -1;
-//     return 0;
-// }
 
 static int recv_all(int sockfd, void *buf, size_t len)
 {
@@ -219,30 +290,18 @@ static int wait_for_ack(int sockfd, const char *expected_ack, int max_lines)
     return -1;
 }
 
-void func(int sockfd)
+void receive_shwfs(int sockfd)
 {
     char buff[MAX];
     int n;
 
     // send
     bzero(buff, sizeof(buff));
-    printf("Enter the string : ");
-    n = 0;
-    while ((buff[n++] = getchar()) != '\n');
-    if (send_all(sockfd, buff, (size_t)n) != 0) {
+
+    if (send_all(sockfd, "start\n", 6) != 0) {
         printf("Failed to send command\n");
         return;
     }
-
-    // Assuming "start" was sent - receive e_matrix then coeffs
-    if (recv_all(sockfd, e_matrix, sizeof(e_matrix)) != 0) {
-        printf("Failed to receive coeffs\n");
-        return;
-    }
-    printf("Matrix received!\n");
-    dump_buffer("c_recv_e_matrix", e_matrix, sizeof(e_matrix), 4, 336);
-
-    send_all(sockfd, "matrix_done\n", 12);
 
     if (recv_all(sockfd, coeffs, sizeof(coeffs)) != 0) {
         printf("Failed to receive coeffs\n");
@@ -275,6 +334,10 @@ void func(int sockfd)
 
     // When FPGA notifies ARM that computation is done - we're here
     // Result data from M10K gets written into HPS memory
+
+}
+
+void send_shwfs(int sockfd) {
     fabricate_results();
 
     // Notify server that compute stage is done before sending results.
@@ -313,11 +376,75 @@ void func(int sockfd)
     }
 
     printf("    Zernike coeffs received. \n");
-
 }
 
+// entry point
 int main(int argc, char **argv)
 {
+	// Declare volatile pointers to I/O registers (volatile 	
+	// means that IO load and store instructions will be used 	
+	// to access these pointer locations, 
+	// instead of regular memory loads and stores)  
+
+	// === get FPGA addresses ==================
+    // Open /dev/mem
+	if( ( fd = open( "/dev/mem", ( O_RDWR | O_SYNC ) ) ) == -1 ) 	{
+		printf( "ERROR: could not open \"/dev/mem\"...\n" );
+		return( 1 );
+	}
+
+	//============================================
+    // get virtual addr that maps to physical
+	// for light weight bus
+	// DMA status register
+	h2p_lw_virtual_base = mmap( NULL, HW_REGS_SPAN, ( PROT_READ | PROT_WRITE ), MAP_SHARED, fd, HW_REGS_BASE );	
+	if( h2p_lw_virtual_base == MAP_FAILED ) {
+		printf( "ERROR: mmap1() failed...\n" );
+		close( fd );
+		return(1);
+	}
+	// the DMA registers
+	DMA_status_ptr = (unsigned int *)(h2p_lw_virtual_base);
+	DMA_read_ptr = (unsigned int *)(h2p_lw_virtual_base + DMA_READ_ADD_OFFSET);
+	DMA_write_ptr = (unsigned int *)(h2p_lw_virtual_base + DMA_WRT_ADD_OFFSET);
+	DMA_length_ptr = (unsigned int *)(h2p_lw_virtual_base + DMA_LENGTH_OFFSET);
+	DMA_cntl_ptr = (unsigned int *)(h2p_lw_virtual_base + DMA_CNTL_OFFSET);
+
+
+	//============================================
+
+	//  RAM FPGA parameter addr 
+	sram_virtual_base = mmap( NULL, FPGA_ONCHIP_SPAN, ( PROT_READ | PROT_WRITE ), MAP_SHARED, fd, FPGA_ONCHIP_BASE); 	
+
+	if( sram_virtual_base == MAP_FAILED ) {
+		printf( "ERROR: mmap3() failed...\n" );
+		close( fd );
+		return(1);
+	}
+    // Get the address that maps to the RAM buffer
+	sram_ptr =(unsigned int *)(sram_virtual_base);
+
+	// ===========================================
+
+	// HPS onchip ram
+	hps_onchip_virtual_base = mmap( NULL, HPS_ONCHIP_SPAN, ( PROT_READ | PROT_WRITE ), MAP_SHARED, fd, HPS_ONCHIP_BASE); 	
+
+	if( hps_onchip_virtual_base == MAP_FAILED ) {
+		printf( "ERROR: mmap3() failed...\n" );
+		close( fd );
+		return(1);
+	}
+    // Get the address that maps to the HPS ram
+	hps_onchip_ptr =(unsigned int *)(hps_onchip_virtual_base);
+
+
+	//============================================
+	int N = 65536;
+	//int data[16384] ;
+	int i ;
+
+    // TCP SOCKET
+
     int sockfd, connfd;
     struct sockaddr_in servaddr, cli;
 
@@ -360,8 +487,26 @@ int main(int argc, char **argv)
         setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
     }
 
+    // Handle Data Transfers
+
     // function for chat
-    func(sockfd);
+    receive_shwfs(sockfd);
+
+    printf("Starting DMA transfer\n");
+    // Coefficients should now be in array
+    DMA_transfer_bytes(coeffs, sizeof(coeffs), DMA_status_ptr, DMA_read_ptr, DMA_write_ptr, DMA_length_ptr, DMA_cntl_ptr);
+    printf("DMA Transfer complete.\n");
+    // send ack to fpga? start compute
+    // wait for results
+
+    FILE *output = fopen("read_out_coeffs.hex", "w");
+    // read results back from FPGA mem
+
+    for (i = 0; i < 65536; i++) {
+        fwrite(output, 1, 1, sram_ptr + i);
+    }
+
+    fclose(output);
 
     // close the socket
     close(sockfd);
