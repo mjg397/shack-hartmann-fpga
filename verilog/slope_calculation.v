@@ -3,7 +3,7 @@ module slope_calculation (
     input wire        clk,
     input wire        rst,
     input wire [7:0] subapetures_completed,
-    input wire [7:0] frame_complete,
+    input wire       frame_complete,
     input wire [26:0] rec_intensity,
     input wire [19:0] x_intensity,
     input wire [19:0] y_intensity,

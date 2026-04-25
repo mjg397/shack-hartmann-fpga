@@ -7,10 +7,10 @@ module shwfs_top (
     input wire clk,
     input wire reset,
 
-    output reg [19:0] xI_reciprocal,
-    output reg [19:0] yI_reciprocal,
-    output reg [15:0] rI_reciprocal,
-    output reg [7:0] subaps_done_reciprocal,
+    // output reg [19:0] xI_reciprocal,
+    // output reg [19:0] yI_reciprocal,
+    // output reg [26:0] rI_reciprocal,
+    // output reg [7:0] subaps_done_reciprocal,
     output wire frame_complete_w
 );
 
@@ -56,10 +56,10 @@ module shwfs_top (
         .y_intensity            (yI_accumulator)
     );
 
-    // reg [19:0] xI_reciprocal;
-    // reg [19:0] yI_reciprocal;
-    // reg [15:0] rI_reciprocal;
-    // reg [7:0] subaps_done_reciprocal;
+    reg [19:0] xI_reciprocal;
+    reg [19:0] yI_reciprocal;
+    reg [26:0] rI_reciprocal;
+    reg [7:0] subaps_done_reciprocal;
 
     intensity_reciprocal reciprocal
     (
@@ -75,5 +75,45 @@ module shwfs_top (
         .rI_out             (rI_reciprocal),
         .centroids_done_out (subaps_done_reciprocal)
     );
+
+    reg [27:0] x_centroid;
+    reg [27:0] y_centroid;
+    reg [26:0] x_slopes;
+    reg [26:0] y_slopes;
+    reg new_subapeture;
+
+    slope_calculation slopes
+    (
+        .clk                    (clk),
+        .rst                    (reset),
+        .subapetures_completed  (subaps_done_reciprocal),
+        .frame_complete         (frame_complete),
+        .rec_intensity          (rI_reciprocal),
+        .x_intensity            (xI_reciprocal),
+        .y_intensity            (yI_reciprocal),
+        .x_centroid             (x_centroid),
+        .y_centroid             (y_centroid),
+        .x_slope                (x_slopes),
+        .y_slope                (y_slopes),
+        .new_subapeture         (new_subapeture)
+    );
+
+    reg [269:0] zernike_out;
+    reg done;
+
+    ematrix_accumulator em
+    (
+        .clk             (clk),
+        .rst             (reset),
+
+        .sub_valid       (new_subapeture),
+        .x_slope         (x_slopes),   // Q4.23
+        .y_slope         (y_slopes),   // Q4.23
+
+        .zernike_out     (zernike_out),     // 10 × 27 bits, Q4.23 per mode
+        .done            (done)
+    );
+
+    
 
 endmodule
