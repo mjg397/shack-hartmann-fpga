@@ -1,4 +1,4 @@
-// i can later on make the centroids be unsigned im stupid so i didnt realize till now
+// i can later on make the centroids be unsigned im stupid so i didnt realize till now and frame complete
 module slope_calculation (
     input wire        clk,
     input wire        rst,
