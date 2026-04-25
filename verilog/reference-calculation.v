@@ -1,24 +1,23 @@
 module reference_calculation (
-  input wire        clk,
-  input wire        rst,
-  input wire [7:0] subapetures_completed,
-  input wire [7:0] frame_complete,
-  input wire [26:0] rec_intensity,
-  input wire [19:0] x_intensity,
-  input wire [19:0] y_intensity,
-  output reg [26:0] x_centroid,
-  output reg [26:0] y_centroid,
-  output reg [26:0] x_slope,
-  output reg [26:0] y_slope
-  //output reg new_subapeture
+    input wire        clk,
+    input wire        rst,
+    input wire [7:0] subapetures_completed,
+    input wire [7:0] frame_complete,
+    input wire [26:0] rec_intensity,
+    input wire [19:0] x_intensity,
+    input wire [19:0] y_intensity,
+    output reg signed [27:0] x_centroid,
+    output reg signed [27:0] y_centroid,
+    output reg signed [26:0] x_slope,
+    output reg signed [26:0] y_slope
 );
-  
-  localparam integer SCALE = 8388608; // 2^23 for 4.23 fixed point
-  localparam x_ref = 7.5 * SCALE;
-  localparam y_ref = 7.5 * SCALE;
 
-  wire [26:0] x_centroid_mult;
-  wire [26:0] y_centroid_mult;
+  localparam integer SCALE = 8388608; // 2^23 for 4.23 signed fixed point
+  localparam x_ref = 62914560;
+  localparam y_ref = 62914560;
+
+  wire [27:0] x_centroid_mult;
+  wire [27:0] y_centroid_mult;
 
   unsigned_mult x_mult(
     .out(x_centroid_mult),
@@ -26,31 +25,35 @@ module reference_calculation (
     .b(rec_intensity)
   );
   
-  signed_mult y_mult(
+  unsigned_mult y_mult(
     .out(y_centroid_mult),
     .a(y_intensity),
     .b(rec_intensity)
   );
 
 
+  wire signed [27:0] raw_x_slope = $signed(x_centroid_mult) - x_ref;
+  wire signed [27:0] raw_y_slope = $signed(y_centroid_mult) - y_ref;
+
   always @(posedge clk) begin
-  if (rst) begin
-    x_slope <= 0;
-    y_slope <= 0;
-    x_centroid <= 0;
-    y_centroid <= 0;
-  end else begin
-    x_centroid <= x_centroid_mult;
-    y_centroid <= y_centroid_mult;
-    x_slope <= x_centroid - x_ref;
-    y_slope <= y_centroid - y_ref;
+    if (rst) begin
+        x_centroid <= 0;
+        y_centroid <= 0;
+        x_slope    <= 0;
+        y_slope    <= 0;
+    end else begin
+        x_centroid <= $signed(x_centroid_mult);
+        y_centroid <= $signed(y_centroid_mult);
+
+        // Truncate slope to 27-bit signed (4.23)
+        x_slope <= raw_x_slope[26:0];
+        y_slope <= raw_y_slope[26:0];
+    end
   end
- end
 endmodule
 
-
 module unsigned_mult (
-  output signed [26:0] out,
+  output signed [27:0] out,
   input signed  [19:0] a,  // in this case 20.0
   input signed  [26:0] b  // in this case 0.27
   );
