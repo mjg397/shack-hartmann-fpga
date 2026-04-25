@@ -10,7 +10,8 @@ module slope_calculation (
     output reg signed [27:0] x_centroid,
     output reg signed [27:0] y_centroid,
     output reg signed [26:0] x_slope,
-    output reg signed [26:0] y_slope
+    output reg signed [26:0] y_slope,
+    output reg         new_subapeture
 );
 
   localparam integer SCALE = 8388608; // 2^23 for 4.23 signed fixed point
@@ -51,6 +52,23 @@ module slope_calculation (
         y_slope <= raw_y_slope[26:0];
     end
   end
+
+  // high every time a new subap appears
+  reg current_subap;
+  always @(posedge clk) begin
+    if (rst) begin
+      current_subap <= 0;
+      new_subapeture <= 0;
+    end else begin
+      if (subapetures_completed > current_subap) begin
+        current_subap <= current_subap + 1;
+        new_subapeture <= 1;
+      end else begin
+        new_subapeture <= 0;
+      end
+    end
+  end
+
 endmodule
 
 module unsigned_mult (
