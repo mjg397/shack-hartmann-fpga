@@ -393,7 +393,7 @@ int main(int argc, char **argv)
 		return( 1 );
 	}
 
-	//============================================
+    //============================================
     // get virtual addr that maps to physical
 	// for light weight bus
 	// DMA status register
@@ -422,7 +422,7 @@ int main(int argc, char **argv)
 		return(1);
 	}
     // Get the address that maps to the RAM buffer
-	sram_ptr =(unsigned int *)(sram_virtual_base);
+	sram_ptr = (volatile uint8_t *)(sram_virtual_base);
 
 	// ===========================================
 
@@ -468,7 +468,7 @@ int main(int argc, char **argv)
 
     // assign IP, PORT
     servaddr.sin_family = AF_INET;
-    servaddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    servaddr.sin_addr.s_addr = inet_addr("10.48.143.64");
     servaddr.sin_port = htons(PORT);
 
     // connect the client socket to server socket
@@ -500,10 +500,19 @@ int main(int argc, char **argv)
     // wait for results
 
     FILE *output = fopen("read_out_coeffs.hex", "w");
+    if (output == NULL) {
+        printf("Failed to open file output.\n");
+        return 1;
+    } else {
+        printf("Output file opened successfully.\n");
+    }
     // read results back from FPGA mem
 
     for (i = 0; i < 65536; i++) {
-        fwrite(output, 1, 1, sram_ptr + i);
+        if (fprintf(output, "0x%02X\n", sram_ptr[i]) < 0) {
+            printf("Write failed at byte %d\n", i);
+            break;
+        }
     }
 
     fclose(output);
