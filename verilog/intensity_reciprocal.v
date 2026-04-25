@@ -11,7 +11,7 @@ module intensity_reciprocal (
 
     output reg [19:0]   xI_out,
     output reg [19:0]   yI_out,
-    output reg [15:0]   rI_out,
+    output reg [26:0]   rI_out,
     output reg [7:0]    centroids_done_out
 );
 
@@ -30,13 +30,13 @@ always @(posedge clk) begin
     end
 end
 
-wire [15:0] reciprocal_wire;
+wire [26:0] reciprocal_wire;
 wire divide_by_zero_wire;
 wire saturated_wire;
 
-reciprocal_u16_q16 recip (
+reciprocal_u16_q27 recip (
     .v_u16          (sI),
-    .reciprocal_q16 (reciprocal_wire),
+    .reciprocal_q27 (reciprocal_wire),
     .divide_by_zero (divide_by_zero_wire),
     .saturated      (saturated_wire)
 );
