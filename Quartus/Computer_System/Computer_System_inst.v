@@ -71,14 +71,20 @@
 		.memory_mem_odt                  (<connected-to-memory_mem_odt>),                  //                     .mem_odt
 		.memory_mem_dm                   (<connected-to-memory_mem_dm>),                   //                     .mem_dm
 		.memory_oct_rzqin                (<connected-to-memory_oct_rzqin>),                //                     .oct_rzqin
-		.onchip_m10k_address             (<connected-to-onchip_m10k_address>),             //          onchip_m10k.address
-		.onchip_m10k_chipselect          (<connected-to-onchip_m10k_chipselect>),          //                     .chipselect
-		.onchip_m10k_clken               (<connected-to-onchip_m10k_clken>),               //                     .clken
-		.onchip_m10k_write               (<connected-to-onchip_m10k_write>),               //                     .write
-		.onchip_m10k_readdata            (<connected-to-onchip_m10k_readdata>),            //                     .readdata
-		.onchip_m10k_writedata           (<connected-to-onchip_m10k_writedata>),           //                     .writedata
-		.sdram_clk_clk                   (<connected-to-sdram_clk_clk>),                   //            sdram_clk.clk
+		.intensity_sram_address          (<connected-to-intensity_sram_address>),          //       intensity_sram.address
+		.intensity_sram_chipselect       (<connected-to-intensity_sram_chipselect>),       //                     .chipselect
+		.intensity_sram_clken            (<connected-to-intensity_sram_clken>),            //                     .clken
+		.intensity_sram_write            (<connected-to-intensity_sram_write>),            //                     .write
+		.intensity_sram_readdata         (<connected-to-intensity_sram_readdata>),         //                     .readdata
+		.intensity_sram_writedata        (<connected-to-intensity_sram_writedata>),        //                     .writedata
 		.system_pll_ref_clk_clk          (<connected-to-system_pll_ref_clk_clk>),          //   system_pll_ref_clk.clk
-		.system_pll_ref_reset_reset      (<connected-to-system_pll_ref_reset_reset>)       // system_pll_ref_reset.reset
+		.system_pll_ref_reset_reset      (<connected-to-system_pll_ref_reset_reset>),      // system_pll_ref_reset.reset
+		.result_sram_address             (<connected-to-result_sram_address>),             //          result_sram.address
+		.result_sram_clken               (<connected-to-result_sram_clken>),               //                     .clken
+		.result_sram_chipselect          (<connected-to-result_sram_chipselect>),          //                     .chipselect
+		.result_sram_write               (<connected-to-result_sram_write>),               //                     .write
+		.result_sram_readdata            (<connected-to-result_sram_readdata>),            //                     .readdata
+		.result_sram_writedata           (<connected-to-result_sram_writedata>),           //                     .writedata
+		.result_sram_byteenable          (<connected-to-result_sram_byteenable>)           //                     .byteenable
 	);
 

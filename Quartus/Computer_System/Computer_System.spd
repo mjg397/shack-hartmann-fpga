@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simPackage>
+ <file
+   path="simulation/submodules/verbosity_pkg.sv"
+   type="SYSTEM_VERILOG"
+   library="altera_common_sv_packages"
+   systemVerilogPackageName="avalon_vip_verbosity_pkg" />
+ <file
+   path="simulation/submodules/avalon_utilities_pkg.sv"
+   type="SYSTEM_VERILOG"
+   library="altera_common_sv_packages"
+   systemVerilogPackageName="avalon_vip_avalon_utilities_pkg" />
+ <file
+   path="simulation/submodules/avalon_mm_pkg.sv"
+   type="SYSTEM_VERILOG"
+   library="altera_common_sv_packages"
+   systemVerilogPackageName="avalon_vip_avalon_mm_pkg" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_2_avalon_st_adapter_error_adapter_0.sv"
+   type="SYSTEM_VERILOG"
+   library="error_adapter_0" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_0_avalon_st_adapter_error_adapter_0.sv"
+   type="SYSTEM_VERILOG"
+   library="error_adapter_0" />
+ <file
+   path="simulation/submodules/altera_avalon_mm_slave_bfm.sv"
+   type="SYSTEM_VERILOG"
+   library="border" />
+ <file
+   path="simulation/submodules/altera_avalon_interrupt_sink.sv"
+   type="SYSTEM_VERILOG"
+   library="border" />
+ <file
+   path="simulation/submodules/altera_avalon_clock_source.sv"
+   type="SYSTEM_VERILOG"
+   library="border" />
+ <file
+   path="simulation/submodules/altera_avalon_reset_source.sv"
+   type="SYSTEM_VERILOG"
+   library="border" />
+ <file
+   path="simulation/submodules/Computer_System_ARM_A9_HPS_hps_io_border_memory.sv"
+   type="SYSTEM_VERILOG"
+   library="border" />
+ <file
+   path="simulation/submodules/Computer_System_ARM_A9_HPS_hps_io_border_hps_io.sv"
+   type="SYSTEM_VERILOG"
+   library="border" />
+ <file
+   path="simulation/submodules/Computer_System_ARM_A9_HPS_hps_io_border.sv"
+   type="SYSTEM_VERILOG"
+   library="border" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_2_avalon_st_adapter.v"
+   type="VERILOG"
+   library="avalon_st_adapter" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_2_rsp_mux.sv"
+   type="SYSTEM_VERILOG"
+   library="rsp_mux" />
+ <file
+   path="simulation/submodules/altera_merlin_arbitrator.sv"
+   type="SYSTEM_VERILOG"
+   library="rsp_mux" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_2_rsp_demux.sv"
+   type="SYSTEM_VERILOG"
+   library="rsp_demux" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_2_cmd_mux.sv"
+   type="SYSTEM_VERILOG"
+   library="cmd_mux" />
+ <file
+   path="simulation/submodules/altera_merlin_arbitrator.sv"
+   type="SYSTEM_VERILOG"
+   library="cmd_mux" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_2_cmd_demux.sv"
+   type="SYSTEM_VERILOG"
+   library="cmd_demux" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_2_router_002.sv"
+   type="SYSTEM_VERILOG"
+   library="router_002" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_2_router.sv"
+   type="SYSTEM_VERILOG"
+   library="router" />
+ <file
+   path="simulation/submodules/altera_merlin_width_adapter.sv"
+   type="SYSTEM_VERILOG"
+   library="ARM_A9_HPS_f2h_axi_slave_wr_cmd_width_adapter" />
+ <file
+   path="simulation/submodules/altera_merlin_address_alignment.sv"
+   type="SYSTEM_VERILOG"
+   library="ARM_A9_HPS_f2h_axi_slave_wr_cmd_width_adapter" />
+ <file
+   path="simulation/submodules/altera_merlin_burst_uncompressor.sv"
+   type="SYSTEM_VERILOG"
+   library="ARM_A9_HPS_f2h_axi_slave_wr_cmd_width_adapter" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_1_rsp_mux.sv"
+   type="SYSTEM_VERILOG"
+   library="rsp_mux" />
+ <file
+   path="simulation/submodules/altera_merlin_arbitrator.sv"
+   type="SYSTEM_VERILOG"
+   library="rsp_mux" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_1_cmd_mux.sv"
+   type="SYSTEM_VERILOG"
+   library="cmd_mux" />
+ <file
+   path="simulation/submodules/altera_merlin_arbitrator.sv"
+   type="SYSTEM_VERILOG"
+   library="cmd_mux" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_1_cmd_demux_001.sv"
+   type="SYSTEM_VERILOG"
+   library="cmd_demux_001" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_1_cmd_demux.sv"
+   type="SYSTEM_VERILOG"
+   library="cmd_demux" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_1_router_002.sv"
+   type="SYSTEM_VERILOG"
+   library="router_002" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_1_router.sv"
+   type="SYSTEM_VERILOG"
+   library="router" />
+ <file
+   path="simulation/submodules/altera_merlin_axi_slave_ni.sv"
+   type="SYSTEM_VERILOG"
+   library="ARM_A9_HPS_f2h_axi_slave_agent" />
+ <file
+   path="simulation/submodules/altera_merlin_burst_uncompressor.sv"
+   type="SYSTEM_VERILOG"
+   library="ARM_A9_HPS_f2h_axi_slave_agent" />
+ <file
+   path="simulation/submodules/altera_avalon_sc_fifo.v"
+   type="VERILOG"
+   library="ARM_A9_HPS_f2h_axi_slave_agent" />
+ <file
+   path="simulation/submodules/altera_merlin_address_alignment.sv"
+   type="SYSTEM_VERILOG"
+   library="ARM_A9_HPS_f2h_axi_slave_agent" />
+ <file
+   path="simulation/submodules/altera_merlin_master_agent.sv"
+   type="SYSTEM_VERILOG"
+   library="dma_1_read_master_agent" />
+ <file
+   path="simulation/submodules/altera_merlin_master_translator.sv"
+   type="SYSTEM_VERILOG"
+   library="dma_1_read_master_translator" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_0_avalon_st_adapter.v"
+   type="VERILOG"
+   library="avalon_st_adapter" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_0_rsp_mux.sv"
+   type="SYSTEM_VERILOG"
+   library="rsp_mux" />
+ <file
+   path="simulation/submodules/altera_merlin_arbitrator.sv"
+   type="SYSTEM_VERILOG"
+   library="rsp_mux" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_0_rsp_demux.sv"
+   type="SYSTEM_VERILOG"
+   library="rsp_demux" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_0_cmd_mux.sv"
+   type="SYSTEM_VERILOG"
+   library="cmd_mux" />
+ <file
+   path="simulation/submodules/altera_merlin_arbitrator.sv"
+   type="SYSTEM_VERILOG"
+   library="cmd_mux" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_0_cmd_demux.sv"
+   type="SYSTEM_VERILOG"
+   library="cmd_demux" />
+ <file
+   path="simulation/submodules/altera_merlin_burst_adapter.sv"
+   type="SYSTEM_VERILOG"
+   library="dma_1_control_port_slave_burst_adapter" />
+ <file
+   path="simulation/submodules/altera_merlin_burst_adapter_uncmpr.sv"
+   type="SYSTEM_VERILOG"
+   library="dma_1_control_port_slave_burst_adapter" />
+ <file
+   path="simulation/submodules/altera_merlin_burst_adapter_13_1.sv"
+   type="SYSTEM_VERILOG"
+   library="dma_1_control_port_slave_burst_adapter" />
+ <file
+   path="simulation/submodules/altera_merlin_burst_adapter_new.sv"
+   type="SYSTEM_VERILOG"
+   library="dma_1_control_port_slave_burst_adapter" />
+ <file
+   path="simulation/submodules/altera_incr_burst_converter.sv"
+   type="SYSTEM_VERILOG"
+   library="dma_1_control_port_slave_burst_adapter" />
+ <file
+   path="simulation/submodules/altera_wrap_burst_converter.sv"
+   type="SYSTEM_VERILOG"
+   library="dma_1_control_port_slave_burst_adapter" />
+ <file
+   path="simulation/submodules/altera_default_burst_converter.sv"
+   type="SYSTEM_VERILOG"
+   library="dma_1_control_port_slave_burst_adapter" />
+ <file
+   path="simulation/submodules/altera_merlin_address_alignment.sv"
+   type="SYSTEM_VERILOG"
+   library="dma_1_control_port_slave_burst_adapter" />
+ <file
+   path="simulation/submodules/altera_avalon_st_pipeline_stage.sv"
+   type="SYSTEM_VERILOG"
+   library="dma_1_control_port_slave_burst_adapter" />
+ <file
+   path="simulation/submodules/altera_avalon_st_pipeline_base.v"
+   type="SYSTEM_VERILOG"
+   library="dma_1_control_port_slave_burst_adapter" />
+ <file
+   path="simulation/submodules/altera_merlin_traffic_limiter.sv"
+   type="SYSTEM_VERILOG"
+   library="ARM_A9_HPS_h2f_lw_axi_master_wr_limiter" />
+ <file
+   path="simulation/submodules/altera_merlin_reorder_memory.sv"
+   type="SYSTEM_VERILOG"
+   library="ARM_A9_HPS_h2f_lw_axi_master_wr_limiter" />
+ <file
+   path="simulation/submodules/altera_avalon_sc_fifo.v"
+   type="SYSTEM_VERILOG"
+   library="ARM_A9_HPS_h2f_lw_axi_master_wr_limiter" />
+ <file
+   path="simulation/submodules/altera_avalon_st_pipeline_base.v"
+   type="SYSTEM_VERILOG"
+   library="ARM_A9_HPS_h2f_lw_axi_master_wr_limiter" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_0_router_002.sv"
+   type="SYSTEM_VERILOG"
+   library="router_002" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_0_router.sv"
+   type="SYSTEM_VERILOG"
+   library="router" />
+ <file
+   path="simulation/submodules/altera_avalon_sc_fifo.v"
+   type="VERILOG"
+   library="dma_1_control_port_slave_agent_rsp_fifo" />
+ <file
+   path="simulation/submodules/altera_merlin_slave_agent.sv"
+   type="SYSTEM_VERILOG"
+   library="dma_1_control_port_slave_agent" />
+ <file
+   path="simulation/submodules/altera_merlin_burst_uncompressor.sv"
+   type="SYSTEM_VERILOG"
+   library="dma_1_control_port_slave_agent" />
+ <file
+   path="simulation/submodules/altera_merlin_axi_master_ni.sv"
+   type="SYSTEM_VERILOG"
+   library="ARM_A9_HPS_h2f_lw_axi_master_agent" />
+ <file
+   path="simulation/submodules/altera_merlin_address_alignment.sv"
+   type="SYSTEM_VERILOG"
+   library="ARM_A9_HPS_h2f_lw_axi_master_agent" />
+ <file
+   path="simulation/submodules/altera_merlin_slave_translator.sv"
+   type="SYSTEM_VERILOG"
+   library="dma_1_control_port_slave_translator" />
+ <file
+   path="simulation/submodules/altera_up_avalon_reset_from_locked_signal.v"
+   type="VERILOG"
+   library="reset_from_locked" />
+ <file
+   path="simulation/submodules/Computer_System_System_PLL_sys_pll.vo"
+   type="VERILOG"
+   library="sys_pll" />
+ <file
+   path="simulation/submodules/Computer_System_ARM_A9_HPS_hps_io.v"
+   type="VERILOG"
+   library="hps_io" />
+ <file
+   path="simulation/submodules/altera_avalon_mm_slave_bfm.sv"
+   type="SYSTEM_VERILOG"
+   library="fpga_interfaces" />
+ <file
+   path="simulation/submodules/questa_mvc_svapi.svh"
+   type="SYSTEM_VERILOG"
+   library="fpga_interfaces" />
+ <file
+   path="simulation/submodules/mgc_common_axi.sv"
+   type="SYSTEM_VERILOG"
+   library="fpga_interfaces" />
+ <file
+   path="simulation/submodules/mgc_axi_master.sv"
+   type="SYSTEM_VERILOG"
+   library="fpga_interfaces" />
+ <file
+   path="simulation/submodules/mgc_axi_slave.sv"
+   type="SYSTEM_VERILOG"
+   library="fpga_interfaces" />
+ <file
+   path="simulation/submodules/altera_avalon_interrupt_sink.sv"
+   type="SYSTEM_VERILOG"
+   library="fpga_interfaces" />
+ <file
+   path="simulation/submodules/altera_avalon_clock_source.sv"
+   type="SYSTEM_VERILOG"
+   library="fpga_interfaces" />
+ <file
+   path="simulation/submodules/altera_avalon_reset_source.sv"
+   type="SYSTEM_VERILOG"
+   library="fpga_interfaces" />
+ <file
+   path="simulation/submodules/Computer_System_ARM_A9_HPS_fpga_interfaces.sv"
+   type="SYSTEM_VERILOG"
+   library="fpga_interfaces" />
+ <file
+   path="simulation/submodules/altera_reset_controller.v"
+   type="VERILOG"
+   library="rst_controller" />
+ <file
+   path="simulation/submodules/altera_reset_synchronizer.v"
+   type="VERILOG"
+   library="rst_controller" />
+ <file
+   path="simulation/submodules/altera_reset_controller.sdc"
+   type="SDC"
+   library="rst_controller" />
+ <file
+   path="simulation/submodules/Computer_System_irq_mapper.sv"
+   type="SYSTEM_VERILOG"
+   library="irq_mapper" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_2.v"
+   type="VERILOG"
+   library="mm_interconnect_2" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_1.v"
+   type="VERILOG"
+   library="mm_interconnect_1" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_0.v"
+   type="VERILOG"
+   library="mm_interconnect_0" />
+ <file
+   path="simulation/submodules/Computer_System_dma_2.v"
+   type="VERILOG"
+   library="dma_2" />
+ <file
+   path="simulation/submodules/Computer_System_dma_1.v"
+   type="VERILOG"
+   library="dma_1" />
+ <file
+   path="simulation/submodules/Computer_System_System_PLL.v"
+   type="VERILOG"
+   library="System_PLL" />
+ <file
+   path="simulation/submodules/Computer_System_Onchip_SRAM.hex"
+   type="HEX"
+   library="Onchip_SRAM" />
+ <file
+   path="simulation/submodules/Computer_System_Onchip_SRAM.v"
+   type="VERILOG"
+   library="Onchip_SRAM" />
+ <file
+   path="simulation/submodules/Computer_System_ARM_A9_HPS.v"
+   type="VERILOG"
+   library="ARM_A9_HPS" />
+ <file path="simulation/Computer_System.v" type="VERILOG" />
+ <topLevel name="Computer_System" />
+ <deviceFamily name="cyclonev" />
+ <modelMap
+   controllerPath="Computer_System.ARM_A9_HPS"
+   modelPath="Computer_System.ARM_A9_HPS" />
+ <modelMap
+   controllerPath="Computer_System.ARM_A9_HPS.fpga_interfaces"
+   modelPath="Computer_System.ARM_A9_HPS.fpga_interfaces" />
+ <modelMap
+   controllerPath="Computer_System.ARM_A9_HPS.hps_io"
+   modelPath="Computer_System.ARM_A9_HPS.hps_io" />
+ <modelMap
+   controllerPath="Computer_System.Onchip_SRAM"
+   modelPath="Computer_System.Onchip_SRAM" />
+</simPackage>

@@ -378,12 +378,21 @@ HexDigit Digit3(HEX3, hex3_hex0[15:12]);
 
 // Wires for interfacing with onchip sram for intensity
  wire [7:0] 	intensity_rdata;
- wire [7:0]		intensity_wdata;
+ reg  [7:0]		intensity_wdata;
  wire [15:0]	intensity_addr;
 
  wire 			intensity_clken = 1'b1;
- wire				intensity_write = 1'b0;
+ reg				intensity_write;
  wire				intensity_chipsel = 1'b1;
+ 
+ wire [31:0] 	result_rdata;
+ reg  [31:0]	result_wdata;
+ reg  [10:0]	result_addr;
+
+ wire 			result_clken = 1'b1;
+ reg				result_write;
+ wire				result_chipsel = 1'b1;
+ wire [3:0]		result_bytesel = 4'hF;
  
 // Pipeline start
  wire [7:0] streamer_data;
@@ -455,10 +464,10 @@ HexDigit Digit3(HEX3, hex3_hex0[15:12]);
 	  .centroids_done_out (subaps_done_reciprocal)
  );
 
- wire [27:0] x_centroid;
- wire [27:0] y_centroid;
- wire [26:0] x_slopes;
- wire [26:0] y_slopes;
+ (*keep*) wire [27:0] x_centroid; 
+ (*keep*) wire [27:0] y_centroid; 
+ (*keep*) wire [26:0] x_slopes; 
+ (*keep*) wire [26:0] y_slopes; 
  wire new_subapeture;
 
  slope_calculation slopes
@@ -477,8 +486,8 @@ HexDigit Digit3(HEX3, hex3_hex0[15:12]);
 	  .new_subapeture         (new_subapeture)
  );
 
- wire [269:0] zernike_out;
- wire done;
+ (*keep*) wire [269:0] zernike_out; /* synthesis keep */
+ (*keep*) wire done; /* synthesis keep */
 
  ematrix_accumulator em
  (
@@ -493,8 +502,101 @@ HexDigit Digit3(HEX3, hex3_hex0[15:12]);
 	  .done            (done)
  );
  
- assign LEDR[7:0] = zernike_out[7:0];
- assign LEDR[8] = zernike_out[8];
+ (*preserve, noprune*) reg [269:0] zernike_out_reg;
+ (*preserve, noprune*) reg [27:0] x_centroid_out;
+ (*preserve, noprune*) reg [27:0] y_centroid_out;
+ (*preserve, noprune*) reg [26:0] x_slopes_out;
+ (*preserve, noprune*) reg [26:0] y_slopes_out;
+ (*preserve, noprune*) reg [7:0]  resw_write_idx;
+ 
+ localparam SLOPE_X_OFFSET = 0;
+ localparam SLOPE_Y_OFFSET = 256;
+ localparam CENTROID_X_OFFSET = 512;
+ localparam CENTROID_Y_OFFSET = 768;
+ localparam ZERNIKE_OFFSET = 1024;
+ 
+ localparam RESULT_W_WAIT = 4'd0;
+ localparam RESULT_W_SX = 4'd1;
+ localparam RESULT_W_SY = 4'd2;
+ localparam RESULT_W_CX = 4'd3;
+ localparam RESULT_W_CY = 4'd4;
+ localparam RESULT_W_DONE = 4'd5;
+ 
+ reg  [4:0] resw_next_state;
+ reg	 		resw_start;
+ reg  [4:0] resw_state;
+ 
+ 
+ // Result writing FSM
+ always @(*) begin
+	case (resw_state)
+		RESULT_W_WAIT: resw_next_state = resw_start ? RESULT_W_SX : RESULT_W_WAIT;
+		RESULT_W_SX:	resw_next_state = RESULT_W_SY;
+		RESULT_W_SY: 	resw_next_state = RESULT_W_CX;
+		RESULT_W_CX:	resw_next_state = RESULT_W_CY;
+		RESULT_W_CY:	resw_next_state = RESULT_W_DONE;
+		RESULT_W_DONE:	resw_next_state = RESULT_W_WAIT;
+	endcase
+ end
+ 
+ always @(posedge clk) begin
+	if (resw_state == RESULT_W_WAIT) begin
+		result_wdata <= 32'd0;
+		result_addr <= 11'd0;
+		result_write <= 1'b0;
+		resw_write_idx <= 8'd0;
+	end
+	else if (resw_state == RESULT_W_SX) begin
+		result_wdata <= x_slopes;
+		result_addr <= resw_write_idx + SLOPE_X_OFFSET;
+		result_write <= 1'b1;
+	end
+	else if (resw_state == RESULT_W_SY) begin
+		result_wdata <= y_slopes;
+		result_addr <= resw_write_idx + SLOPE_Y_OFFSET;
+		result_write <= 1'b1;
+	end
+	else if (resw_state == RESULT_W_CX) begin
+		result_wdata <= x_centroid;
+		result_addr <= resw_write_idx + CENTROID_X_OFFSET;
+		result_write <= 1'b1;
+	end
+	else if (resw_state == RESULT_W_CY) begin
+		result_wdata <= y_centroid;
+		result_addr <= resw_write_idx + CENTROID_Y_OFFSET;
+		result_write <= 1'b1;
+	end
+	else if (resw_state == RESULT_W_DONE) begin
+		resw_write_idx <= resw_write_idx + 8'd1;
+		result_write <= 1'b0;
+	end
+ end
+
+ // Intensity reading logic
+ always @(posedge clk) begin
+	if (reset) begin
+		intensity_write <= 1'b0;
+		intensity_wdata <= 8'd0;
+	end
+	else begin
+		if (done) begin
+			zernike_out_reg <= zernike_out;
+		end
+		
+		if (new_subapeture) begin
+			resw_start <= 1'b1;
+		end
+		else begin
+			resw_start <= 1'b0;
+		end
+		
+		x_centroid_out <= x_centroid;
+		y_centroid_out <= y_centroid;
+		x_slopes_out <= x_slopes;
+		y_slopes_out <= y_slopes;
+		
+	end
+ end
 
 
 //=======================================================
@@ -512,12 +614,20 @@ Computer_System The_System (
 	.system_pll_ref_reset_reset			(1'b0),
 	
 	
-	.onchip_m10k_address			(intensity_addr),            	//          onchip_m10k.address
-	.onchip_m10k_chipselect		(intensity_chipsel),          //                     .chipselect
-	.onchip_m10k_clken			(intensity_clken),          	//                     .clken
-	.onchip_m10k_write			(intensity_write),            //                     .write
-	.onchip_m10k_readdata		(intensity_rdata),            //                     .readdata
-	.onchip_m10k_writedata		(intensity_wdata),           	//                     .writedata
+	.intensity_sram_address			(intensity_addr),            	//       intensity_sram.address
+	.intensity_sram_chipselect		(intensity_chipsel),          //                     .chipselect
+	.intensity_sram_clken			(intensity_clken),          	//                     .clken
+	.intensity_sram_write			(intensity_write),            //                     .write
+	.intensity_sram_readdata		(intensity_rdata),            //                     .readdata
+	.intensity_sram_writedata		(intensity_wdata),           	//                     .writedata
+	
+	.result_sram_address			(result_addr),            			//          result_sram.address
+	.result_sram_chipselect		(result_chipsel),          		//                     .chipselect
+	.result_sram_clken			(result_clken),          			//                     .clken
+	.result_sram_write			(result_write),            		//                     .write
+	.result_sram_readdata		(result_rdata),            		//                     .readdata
+	.result_sram_writedata		(result_wdata),           			//                     .writedata
+	.result_sram_byteenable		(result_bytesel),						//							  .byteenable
 	
 	////////////////////////////////////
 	// HPS Side

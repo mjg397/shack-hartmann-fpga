@@ -12,7 +12,8 @@
    <endaddress preferredWidth="239" />
   </columns>
  </systemtable>
- <library expandedCategories="Library,Project" />
+ <library
+   expandedCategories="Library/Basic Functions,Project,Library,Library/Basic Functions/On Chip Memory" />
  <window width="3868" height="2320" x="-14" y="-14" />
- <generation block_symbol_file="0" />
+ <generation block_symbol_file="0" greybox="0" simulation="NONE" />
 </preferences>

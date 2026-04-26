@@ -72,15 +72,21 @@ module Computer_System (
 	memory_mem_odt,
 	memory_mem_dm,
 	memory_oct_rzqin,
-	onchip_m10k_address,
-	onchip_m10k_chipselect,
-	onchip_m10k_clken,
-	onchip_m10k_write,
-	onchip_m10k_readdata,
-	onchip_m10k_writedata,
-	sdram_clk_clk,
+	intensity_sram_address,
+	intensity_sram_chipselect,
+	intensity_sram_clken,
+	intensity_sram_write,
+	intensity_sram_readdata,
+	intensity_sram_writedata,
 	system_pll_ref_clk_clk,
-	system_pll_ref_reset_reset);	
+	system_pll_ref_reset_reset,
+	result_sram_address,
+	result_sram_clken,
+	result_sram_chipselect,
+	result_sram_write,
+	result_sram_readdata,
+	result_sram_writedata,
+	result_sram_byteenable);	
 
 	output		hps_io_hps_io_emac1_inst_TX_CLK;
 	output		hps_io_hps_io_emac1_inst_TXD0;
@@ -154,13 +160,19 @@ module Computer_System (
 	output		memory_mem_odt;
 	output	[3:0]	memory_mem_dm;
 	input		memory_oct_rzqin;
-	input	[15:0]	onchip_m10k_address;
-	input		onchip_m10k_chipselect;
-	input		onchip_m10k_clken;
-	input		onchip_m10k_write;
-	output	[7:0]	onchip_m10k_readdata;
-	input	[7:0]	onchip_m10k_writedata;
-	output		sdram_clk_clk;
+	input	[15:0]	intensity_sram_address;
+	input		intensity_sram_chipselect;
+	input		intensity_sram_clken;
+	input		intensity_sram_write;
+	output	[7:0]	intensity_sram_readdata;
+	input	[7:0]	intensity_sram_writedata;
 	input		system_pll_ref_clk_clk;
 	input		system_pll_ref_reset_reset;
+	input	[10:0]	result_sram_address;
+	input		result_sram_clken;
+	input		result_sram_chipselect;
+	input		result_sram_write;
+	output	[31:0]	result_sram_readdata;
+	input	[31:0]	result_sram_writedata;
+	input	[3:0]	result_sram_byteenable;
 endmodule

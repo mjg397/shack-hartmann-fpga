@@ -535,7 +535,7 @@ endmodule
 //Read slaves:
 //ARM_A9_HPS_sdrctl.axi_slave0,ARM_A9_HPS_uart0.axi_slave0,ARM_A9_HPS_fpgamgr.axi_slave0,ARM_A9_HPS_sysmgr.axi_slave0,ARM_A9_HPS_fpgamgr.axi_slave1,ARM_A9_HPS_i2c1.axi_slave0,ARM_A9_HPS_dcan1.axi_slave0,ARM_A9_HPS_clkmgr.axi_slave0,ARM_A9_HPS_axi_sdram.axi_slave0,ARM_A9_HPS_gmac0.axi_slave0,ARM_A9_HPS_gpio1.axi_slave0,ARM_A9_HPS_l3regs.axi_slave0,ARM_A9_HPS_timer.axi_slave0,ARM_A9_HPS_spim0.axi_slave0,ARM_A9_HPS_i2c3.axi_slave0,ARM_A9_HPS_dma.axi_slave0,ARM_A9_HPS_timer1.axi_slave0,ARM_A9_HPS_usb1.axi_slave0,ARM_A9_HPS_timer3.axi_slave0,ARM_A9_HPS_sdmmc.axi_slave0,ARM_A9_HPS_uart1.axi_slave0,ARM_A9_HPS_qspi.axi_slave0,ARM_A9_HPS_L2.axi_slave0,ARM_A9_HPS_i2c0.axi_slave0,ARM_A9_HPS_dcan0.axi_slave0,ARM_A9_HPS_qspi.axi_slave1,ARM_A9_HPS_rstmgr.axi_slave0,ARM_A9_HPS_gpio0.axi_slave0,ARM_A9_HPS_i2c2.axi_slave0,ARM_A9_HPS_arm_gic_0.axi_slave0,ARM_A9_HPS_timer0.axi_slave0,ARM_A9_HPS_gmac1.axi_slave0,ARM_A9_HPS_gpio2.axi_slave0,ARM_A9_HPS_nand0.axi_slave0,ARM_A9_HPS_arm_gic_0.axi_slave1,ARM_A9_HPS_spim1.axi_slave0,ARM_A9_HPS_nand0.axi_slave1,ARM_A9_HPS_usb0.axi_slave0,ARM_A9_HPS_axi_ocram.axi_slave0,ARM_A9_HPS_timer2.axi_slave0; 
 //Write slaves:
-//Onchip_SRAM.s1; 
+//intensity_sram.s1; 
 
 
 module Computer_System_dma_1 (

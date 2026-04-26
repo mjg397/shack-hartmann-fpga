@@ -72,15 +72,21 @@
 			memory_mem_odt                  : out   std_logic;                                        -- mem_odt
 			memory_mem_dm                   : out   std_logic_vector(3 downto 0);                     -- mem_dm
 			memory_oct_rzqin                : in    std_logic                     := 'X';             -- oct_rzqin
-			onchip_m10k_address             : in    std_logic_vector(15 downto 0) := (others => 'X'); -- address
-			onchip_m10k_chipselect          : in    std_logic                     := 'X';             -- chipselect
-			onchip_m10k_clken               : in    std_logic                     := 'X';             -- clken
-			onchip_m10k_write               : in    std_logic                     := 'X';             -- write
-			onchip_m10k_readdata            : out   std_logic_vector(7 downto 0);                     -- readdata
-			onchip_m10k_writedata           : in    std_logic_vector(7 downto 0)  := (others => 'X'); -- writedata
-			sdram_clk_clk                   : out   std_logic;                                        -- clk
+			intensity_sram_address          : in    std_logic_vector(15 downto 0) := (others => 'X'); -- address
+			intensity_sram_chipselect       : in    std_logic                     := 'X';             -- chipselect
+			intensity_sram_clken            : in    std_logic                     := 'X';             -- clken
+			intensity_sram_write            : in    std_logic                     := 'X';             -- write
+			intensity_sram_readdata         : out   std_logic_vector(7 downto 0);                     -- readdata
+			intensity_sram_writedata        : in    std_logic_vector(7 downto 0)  := (others => 'X'); -- writedata
 			system_pll_ref_clk_clk          : in    std_logic                     := 'X';             -- clk
-			system_pll_ref_reset_reset      : in    std_logic                     := 'X'              -- reset
+			system_pll_ref_reset_reset      : in    std_logic                     := 'X';             -- reset
+			result_sram_address             : in    std_logic_vector(10 downto 0) := (others => 'X'); -- address
+			result_sram_clken               : in    std_logic                     := 'X';             -- clken
+			result_sram_chipselect          : in    std_logic                     := 'X';             -- chipselect
+			result_sram_write               : in    std_logic                     := 'X';             -- write
+			result_sram_readdata            : out   std_logic_vector(31 downto 0);                    -- readdata
+			result_sram_writedata           : in    std_logic_vector(31 downto 0) := (others => 'X'); -- writedata
+			result_sram_byteenable          : in    std_logic_vector(3 downto 0)  := (others => 'X')  -- byteenable
 		);
 	end component Computer_System;
 
@@ -158,14 +164,20 @@
 			memory_mem_odt                  => CONNECTED_TO_memory_mem_odt,                  --                     .mem_odt
 			memory_mem_dm                   => CONNECTED_TO_memory_mem_dm,                   --                     .mem_dm
 			memory_oct_rzqin                => CONNECTED_TO_memory_oct_rzqin,                --                     .oct_rzqin
-			onchip_m10k_address             => CONNECTED_TO_onchip_m10k_address,             --          onchip_m10k.address
-			onchip_m10k_chipselect          => CONNECTED_TO_onchip_m10k_chipselect,          --                     .chipselect
-			onchip_m10k_clken               => CONNECTED_TO_onchip_m10k_clken,               --                     .clken
-			onchip_m10k_write               => CONNECTED_TO_onchip_m10k_write,               --                     .write
-			onchip_m10k_readdata            => CONNECTED_TO_onchip_m10k_readdata,            --                     .readdata
-			onchip_m10k_writedata           => CONNECTED_TO_onchip_m10k_writedata,           --                     .writedata
-			sdram_clk_clk                   => CONNECTED_TO_sdram_clk_clk,                   --            sdram_clk.clk
+			intensity_sram_address          => CONNECTED_TO_intensity_sram_address,          --       intensity_sram.address
+			intensity_sram_chipselect       => CONNECTED_TO_intensity_sram_chipselect,       --                     .chipselect
+			intensity_sram_clken            => CONNECTED_TO_intensity_sram_clken,            --                     .clken
+			intensity_sram_write            => CONNECTED_TO_intensity_sram_write,            --                     .write
+			intensity_sram_readdata         => CONNECTED_TO_intensity_sram_readdata,         --                     .readdata
+			intensity_sram_writedata        => CONNECTED_TO_intensity_sram_writedata,        --                     .writedata
 			system_pll_ref_clk_clk          => CONNECTED_TO_system_pll_ref_clk_clk,          --   system_pll_ref_clk.clk
-			system_pll_ref_reset_reset      => CONNECTED_TO_system_pll_ref_reset_reset       -- system_pll_ref_reset.reset
+			system_pll_ref_reset_reset      => CONNECTED_TO_system_pll_ref_reset_reset,      -- system_pll_ref_reset.reset
+			result_sram_address             => CONNECTED_TO_result_sram_address,             --          result_sram.address
+			result_sram_clken               => CONNECTED_TO_result_sram_clken,               --                     .clken
+			result_sram_chipselect          => CONNECTED_TO_result_sram_chipselect,          --                     .chipselect
+			result_sram_write               => CONNECTED_TO_result_sram_write,               --                     .write
+			result_sram_readdata            => CONNECTED_TO_result_sram_readdata,            --                     .readdata
+			result_sram_writedata           => CONNECTED_TO_result_sram_writedata,           --                     .writedata
+			result_sram_byteenable          => CONNECTED_TO_result_sram_byteenable           --                     .byteenable
 		);
 
