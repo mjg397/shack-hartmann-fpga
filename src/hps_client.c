@@ -18,6 +18,9 @@
 #include <sys/time.h> 
 #include <math.h> 
 
+#define SIGN_EXTEND_4_23(v) \
+    (((v) & (1u << 26)) ? ((v) | 0xF8000000u) : ((v) & 0x07FFFFFFu))
+
 #define MAX 4096
 #define PORT 80
 #define SA struct sockaddr
@@ -39,7 +42,8 @@ uint32_t zernike_coeffs[10];
 #define H2F_AXI_MASTER_BASE   0xC0000000
 // main bus; scratch RAM
 #define FPGA_ONCHIP_BASE      0xC8000000
-#define FPGA_ONCHIP_SPAN      0x00010000
+#define FPGA_ONCHIP_SPAN      0x00001FFF
+
 // h2f bus
 // RAM FPGA port s2
 // main bus addess 0x0800_0000
@@ -338,7 +342,7 @@ void receive_shwfs(int sockfd)
 }
 
 void send_shwfs(int sockfd) {
-    fabricate_results();
+    // fabricate_results();
 
     // Notify server that compute stage is done before sending results.
     send_all(sockfd, "compute_done\n", 13);
@@ -417,7 +421,7 @@ int main(int argc, char **argv)
 	sram_virtual_base = mmap( NULL, FPGA_ONCHIP_SPAN, ( PROT_READ | PROT_WRITE ), MAP_SHARED, fd, FPGA_ONCHIP_BASE); 	
 
 	if( sram_virtual_base == MAP_FAILED ) {
-		printf( "ERROR: mmap3() failed...\n" );
+		printf( "ERROR: mmap2() failed...\n" );
 		close( fd );
 		return(1);
 	}
@@ -508,12 +512,31 @@ int main(int argc, char **argv)
     }
     // read results back from FPGA mem
 
-    for (i = 0; i < 65536; i++) {
-        if (fprintf(output, "0x%02X\n", sram_ptr[i]) < 0) {
+    while (1) WAIT; // wait for results to be ready in mem.
+
+    // rn we're printing output
+    for (i = 0; i < 1034; i++) {
+        if (fprintf(output, "0x%02X\n", sram_ptr[i * 4]) < 0) {
             printf("Write failed at byte %d\n", i);
             break;
         }
     }
+
+    // write output to result arrays
+    // Values are 4.23 fixed point (1 sign bit + 3 integer bits + 23 fractional bits = 27 bits).
+    // Sign-extend bit 26 into the unused upper 5 bits so Python can divide by 2^23 directly.
+
+    for (i = 0; i < 1034; i++) {
+        if (i < 512) {
+            slopes[i] = SIGN_EXTEND_4_23(*(sram_ptr + (i * sizeof(slopes[i]))));
+        } else if (i < 1024) {
+            centroids[i - 512] = SIGN_EXTEND_4_23(*(sram_ptr + (i * sizeof(centroids[i - 512]))));
+        } else if (i < 1034) {
+            zernike_coeffs[i - 1024] = SIGN_EXTEND_4_23(*(sram_ptr + (i * sizeof(zernike_coeffs[i - 1024]))));
+        }
+    }
+
+    send_shwfs(sockfd);
 
     fclose(output);
 

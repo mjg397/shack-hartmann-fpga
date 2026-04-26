@@ -78,7 +78,7 @@ module streaming_emulator #(
         STATE_HOROZONTAL_BLANKING: begin
           lv <= 0;
           line_counter <= 0;
-          h_blank_counter = h_blank_counter + 1;
+          h_blank_counter <= h_blank_counter + 1;
           if (h_blank_counter == HBLANK - 1) begin
             h_blank_counter <= 0;
             row_counter <= row_counter + 1;
