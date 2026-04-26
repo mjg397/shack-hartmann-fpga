@@ -486,7 +486,7 @@ HexDigit Digit3(HEX3, hex3_hex0[15:12]);
 	  .new_subapeture         (new_subapeture)
  );
 
- (*keep*) wire [269:0] zernike_out; /* synthesis keep */
+ (*keep*) wire [26:0] zernike_out[9:0]; /* synthesis keep */
  (*keep*) wire done; /* synthesis keep */
 
  ematrix_accumulator em
@@ -502,7 +502,7 @@ HexDigit Digit3(HEX3, hex3_hex0[15:12]);
 	  .done            (done)
  );
  
- (*preserve, noprune*) reg [269:0] zernike_out_reg;
+ (*preserve, noprune*) reg [26:0] zernike_out_reg[9:0];
  (*preserve, noprune*) reg [27:0] x_centroid_out;
  (*preserve, noprune*) reg [27:0] y_centroid_out;
  (*preserve, noprune*) reg [26:0] x_slopes_out;

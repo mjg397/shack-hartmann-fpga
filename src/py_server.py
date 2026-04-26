@@ -11,6 +11,7 @@ SLOPE_SIZE = 4
 ZERNIKE_SIZE = 4
 DUMP_DIR = "debug_dumps"
 ENABLE_DUMPS = False
+CLIENT_TIMEOUT_SEC = 5.0
 
 bind_ip = "10.48.143.64" 
 bind_port = 80
@@ -82,7 +83,12 @@ def summarize_array_for_c(name, arr):
 def recv_exact(sock, n):
     data = bytearray()
     while len(data) < n:
-        chunk = sock.recv(n - len(data))
+        try:
+            chunk = sock.recv(n - len(data))
+        except socket.timeout:
+            return None
+        except OSError:
+            return None
         if not chunk:
             return None
         data.extend(chunk)
@@ -92,12 +98,29 @@ def recv_exact(sock, n):
 def recv_line(sock):
     data = bytearray()
     while True:
-        ch = sock.recv(1)
+        try:
+            ch = sock.recv(1)
+        except socket.timeout:
+            return None
+        except OSError:
+            return None
         if not ch:
             return None
         if ch == b"\n":
             return bytes(data)
         data.extend(ch)
+
+
+def wait_for_exact_line(sock, expected, max_lines=8):
+    for _ in range(max_lines):
+        line = recv_line(sock)
+        if line is None:
+            return False
+        if line == expected:
+            return True
+        print(f"[!] Unexpected line while waiting for {expected!r}: {line!r}")
+    print(f"[!] Did not receive {expected!r} within {max_lines} lines")
+    return False
 
 
 def dump_bytes(base_name, payload, elem_size=1, words_per_row=16):
@@ -132,6 +155,7 @@ def dump_bytes(base_name, payload, elem_size=1, words_per_row=16):
 #client handling thread
 def handle_client(client_socket): 
     #printing what the client sends 
+    client_socket.settimeout(CLIENT_TIMEOUT_SEC)
 
     while True:
 
@@ -155,19 +179,17 @@ def handle_client(client_socket):
                 client_socket.sendall(coeff_payload) # send coefficient array
                 print("     Coeffs done sending.")
 
-                while True:
-                    ack = recv_line(client_socket)
-                    if ack == b"coeffs_done":
-                        print("     Coeffs received")
-                        break
+                if not wait_for_exact_line(client_socket, b"coeffs_done"):
+                    print("[!] Missing coeffs_done ack; closing client.")
+                    break
+                print("     Coeffs received")
 
                 print("Waiting on compute.")
 
-                while True:
-                    ack = recv_line(client_socket)
-                    if ack == b"compute_done":
-                        print("     Compute Done. Receiving results.")
-                        break
+                if not wait_for_exact_line(client_socket, b"compute_done"):
+                    print("[!] Missing compute_done marker; closing client.")
+                    break
+                print("     Compute Done. Receiving results.")
 
                 # Now recieve 512 centroid vector, 512 slope vector, and 10 zernike vector
                 print("receiving centroids")

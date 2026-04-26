@@ -296,12 +296,6 @@ static int wait_for_ack(int sockfd, const char *expected_ack, int max_lines)
 
 void receive_shwfs(int sockfd)
 {
-    char buff[MAX];
-    int n;
-
-    // send
-    bzero(buff, sizeof(buff));
-
     if (send_all(sockfd, "start\n", 6) != 0) {
         printf("Failed to send command\n");
         return;
@@ -313,7 +307,10 @@ void receive_shwfs(int sockfd)
     }
     printf("Coeffs received!\n");
     dump_buffer("c_recv_coeffs", coeffs, sizeof(coeffs), 1, 256);
-    send_all(sockfd, "coeffs_done\n", 12);
+    if (send_all(sockfd, "coeffs_done\n", 12) != 0) {
+        printf("Failed to send coeffs ack\n");
+        return;
+    }
     
     // FILE *f;
     // f = fopen("received_coeffs.txt", "w"); 
@@ -345,11 +342,17 @@ void send_shwfs(int sockfd) {
     // fabricate_results();
 
     // Notify server that compute stage is done before sending results.
-    send_all(sockfd, "compute_done\n", 13);
+    if (send_all(sockfd, "compute_done\n", 13) != 0) {
+        printf("Failed to send compute_done marker\n");
+        return;
+    }
 
     printf("Sending centroid vector. \n");
     dump_buffer("c_sent_centroids", centroids, sizeof(centroids), 4, 64);
-    send_all(sockfd, centroids, sizeof(centroids));
+    if (send_all(sockfd, centroids, sizeof(centroids)) != 0) {
+        printf("Failed while sending centroid vector\n");
+        return;
+    }
 
     // wait for ack from pyserver
     if (wait_for_ack(sockfd, "centroids_done", 8) != 0) {
@@ -361,7 +364,10 @@ void send_shwfs(int sockfd) {
 
     printf("Sending slope vector.\n");
     dump_buffer("c_sent_slopes", slopes, sizeof(slopes), 4, 64);
-    send_all(sockfd, slopes, sizeof(slopes));
+    if (send_all(sockfd, slopes, sizeof(slopes)) != 0) {
+        printf("Failed while sending slope vector\n");
+        return;
+    }
 
     // wait for ack from pyserver
     if (wait_for_ack(sockfd, "slopes_done", 8) != 0) {
@@ -372,7 +378,10 @@ void send_shwfs(int sockfd) {
      
     printf("Sending zernike coefficients\n");
     dump_buffer("c_sent_zernike", zernike_coeffs, sizeof(zernike_coeffs), 4, 10);
-    send_all(sockfd, zernike_coeffs, sizeof(zernike_coeffs));
+    if (send_all(sockfd, zernike_coeffs, sizeof(zernike_coeffs)) != 0) {
+        printf("Failed while sending zernike coefficients\n");
+        return;
+    }
 
     // wait for ack from server
     if (wait_for_ack(sockfd, "zernike_done", 8) != 0) {
