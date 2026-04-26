@@ -123,9 +123,10 @@ always @(posedge clk) begin
         state       <= STATE_IDLE;
         sub_counter <= 0;
         done        <= 0;
-        zernike_out <= 0;
-        for (i = 0; i < NUM_MODES; i = i + 1)
-            acc[i] <= 0;
+        for (i = 0; i < NUM_MODES; i = i + 1) begin
+            acc[i]         <= 0;
+            zernike_out[i] <=0;
+        end 
     end
     else begin
         done <= 0;  // default: de-assert every cycle
@@ -145,7 +146,7 @@ always @(posedge clk) begin
                         //   [39:17] = 23 fractional bits
                         for (i = 0; i < NUM_MODES; i = i + 1) begin
                             acc[i]                  <= acc_next[i];
-                            zernike_out[i*27 +: 27] <= acc_next[i][43:17];
+                            zernike_out[i] <= acc_next[i][43:17];
                         end
                         state <= STATE_DONE;
                     end
