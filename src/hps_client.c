@@ -39,7 +39,8 @@ uint32_t zernike_coeffs[10];
 #define H2F_AXI_MASTER_BASE   0xC0000000
 // main bus; scratch RAM
 #define FPGA_ONCHIP_BASE      0xC8000000
-#define FPGA_ONCHIP_SPAN      0x00010000
+#define FPGA_ONCHIP_SPAN      0x00001FFF
+
 // h2f bus
 // RAM FPGA port s2
 // main bus addess 0x0800_0000
@@ -417,7 +418,7 @@ int main(int argc, char **argv)
 	sram_virtual_base = mmap( NULL, FPGA_ONCHIP_SPAN, ( PROT_READ | PROT_WRITE ), MAP_SHARED, fd, FPGA_ONCHIP_BASE); 	
 
 	if( sram_virtual_base == MAP_FAILED ) {
-		printf( "ERROR: mmap3() failed...\n" );
+		printf( "ERROR: mmap2() failed...\n" );
 		close( fd );
 		return(1);
 	}
