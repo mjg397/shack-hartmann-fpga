@@ -33,7 +33,7 @@ module ematrix_accumulator #(
     input  wire signed [26:0] y_slope,   // Q4.23
 
     // flattened output bus: mode m occupies bits [m*27 +: 27]
-    output reg  [269:0] zernike_out,     /* synthesis keep */ // 10 × 27 bits, Q4.23 per mode
+    output reg  [26:0] zernike_out [0:NUM_MODES-1],     /* synthesis keep */ // 10 × 27 bits, Q4.23 per mode
     output reg          done
 );
 
