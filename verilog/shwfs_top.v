@@ -98,7 +98,7 @@ module shwfs_top (
         .new_subapeture         (new_subapeture)
     );
 
-    wire [269:0] zernike_out;
+    wire [26:0] zernike_out [0:9];
     wire done;
 
     ematrix_accumulator em
