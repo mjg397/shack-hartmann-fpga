@@ -6,6 +6,9 @@ module streaming_emulator #(
 )(
   input wire clk,
   input wire reset,
+  input wire [7:0] rdata,
+  
+  output reg [15:0] raddr,
   output reg [7:0] data,
   output reg fv,
   output reg lv,
@@ -45,6 +48,7 @@ module streaming_emulator #(
       lv <= 0;
       fv <= 0;
       frame_complete <= 0;
+		raddr <= 16'd0;
     end
 
     else begin
@@ -57,7 +61,9 @@ module streaming_emulator #(
         end
 
         STATE_ACTIVE_FRAME: begin
-          data <= mem[row_counter * HSIZE + line_counter];
+			 data <= rdata;
+			 raddr <= row_counter * HSIZE + line_counter;
+//          data <= mem[row_counter * HSIZE + line_counter];
           line_counter <= line_counter + 1;
           lv <= 1;
           if ((line_counter == HSIZE - 1) && (row_counter == VSIZE - 1)) begin
