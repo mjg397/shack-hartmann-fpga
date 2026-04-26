@@ -46,6 +46,10 @@ module shwfs_pipeline_tb ();
     (
         .clk                    (clk_100),
         .reset                  (reset), 
+        .xI_reciprocal          (xI_reciprocal),
+        .yI_reciprocal          (yI_reciprocal),
+        .rI_reciprocal          (rI_reciprocal),
+        .subaps_done_reciprocal (subaps_done_reciprocal),
         .frame_complete_w       (frame_complete_w)
     );
 

@@ -1,8 +1,3 @@
-`timescale 1ns/1ps
-
-// this emulates the streaming property of the shack-hartmann wavefront sensor from a preloaded image into FPGA memroy
-// this intends to allow for our shack-hartmann processing pipeline to have an accurate representation of incoming data
-// I'm not sure if it syntheizes i havent tried yet :\
 module streaming_emulator #(
   parameter HSIZE  = 256, // Horozontal Frame Size
   parameter VSIZE  = 256, // Vertical Frame Size
@@ -29,7 +24,7 @@ module streaming_emulator #(
   reg [7:0] mem [0:65535];
 
   initial begin
-      $readmemh("./image_rotating.hex", mem);
+      $readmemh("C:/Users/sjbar/OneDrive/Desktop/ECE5760/shack-hartmann-fpga/image_rotating.hex", mem);
   end
 
   // state machine for pixel input
@@ -77,7 +72,7 @@ module streaming_emulator #(
         STATE_HOROZONTAL_BLANKING: begin
           lv <= 0;
           line_counter <= 0;
-          h_blank_counter <= h_blank_counter + 1;
+          h_blank_counter = h_blank_counter + 1;
           if (h_blank_counter == HBLANK - 1) begin
             h_blank_counter <= 0;
             row_counter <= row_counter + 1;
@@ -100,3 +95,4 @@ module streaming_emulator #(
     end
   end
 endmodule
+

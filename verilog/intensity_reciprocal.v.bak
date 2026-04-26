@@ -19,6 +19,7 @@ wire [26:0] reciprocal_wire;
 wire divide_by_zero_wire;
 wire saturated_wire;
 
+
 always @(posedge clk) begin
     if (reset) begin
         xI_out <= 0;

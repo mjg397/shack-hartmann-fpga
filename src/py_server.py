@@ -12,7 +12,7 @@ ZERNIKE_SIZE = 4
 DUMP_DIR = "debug_dumps"
 ENABLE_DUMPS = False
 
-bind_ip = "127.0.0.1" 
+bind_ip = "10.48.143.64" 
 bind_port = 80
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 

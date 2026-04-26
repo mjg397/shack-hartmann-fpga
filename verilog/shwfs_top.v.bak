@@ -17,7 +17,7 @@ module shwfs_top (
     wire streamer_fv;
     wire streamer_lv;
     wire frame_complete;
-    wire streamer_valid;
+    reg streamer_valid;
 
 
     assign frame_complete_w = frame_complete;
