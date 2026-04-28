@@ -226,28 +226,9 @@ def handle_client(client_socket):
                 client_socket.sendall(b"zernike_done\n")
                 print("     Zernike coefficients received and acked.")
 
+                # now we have centroid_bytes, slope_bytes, and zernike_bytes
+                # run visualization
 
-            case "returning":
-                print("Executing file receive")
-                size_bytes = recv_exact(client_socket, 4)
-                if size_bytes is None:
-                    print("[!] Client disconnected before size header")
-                    break
-
-                remaining = int.from_bytes(size_bytes, "big")
-                with open("received.bin", "wb") as f:
-                    while remaining > 0:
-                        recvd = client_socket.recv(min(4096, remaining))
-                        if not recvd:
-                            print("[!] Client disconnected during file transfer")
-                            break
-                        f.write(recvd)
-                        remaining -= len(recvd)
-                print("response received!")
-
-            case "done":
-                print("Exiting!")
-                break
             case _:
                 print("Pattern not recognized")
                 # client_socket.close()
