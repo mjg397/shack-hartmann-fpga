@@ -42,13 +42,20 @@ uint32_t zernike_coeffs[10];
 #define H2F_AXI_MASTER_BASE   0xC0000000
 // main bus; scratch RAM
 #define FPGA_ONCHIP_BASE      0xC8000000
-#define FPGA_ONCHIP_SPAN      0x00001FFF
+#define FPGA_ONCHIP_SPAN      0x0000201F
+#define SRAM_SPAN             0x1FFF
+#define CTRL_REG_F2H_OFFSET   0x2000
+#define CTRL_REG_H2F_OFFSET   0x2010
 
 // h2f bus
 // RAM FPGA port s2
 // main bus addess 0x0800_0000
 volatile uint8_t * sram_ptr = NULL ;
 void *sram_virtual_base;
+
+volatile uint8_t * ctrl_reg_f2h = NULL;
+volatile uint8_t * ctrl_reg_h2f = NULL;
+
 
 // ======================================
 // lw_bus; DMA  addresses
@@ -60,6 +67,7 @@ void *sram_virtual_base;
 #define DMA_WRT_ADD_OFFSET	0x08	
 #define DMA_LENGTH_OFFSET	0x012
 #define DMA_CNTL_OFFSET		0x024	
+
 // the h2f light weight bus base
 void *h2p_lw_virtual_base;
 // HPS_to_FPGA DMA address = 0
@@ -90,8 +98,8 @@ uint8_t data[65536] ;
 int fd;	
 
 // DMA helper functions
-void DMA_transfer_bytes(uint8_t *data, int N, unsigned int *DMA_status_ptr, unsigned int *DMA_read_ptr, 
-						unsigned int *DMA_write_ptr, unsigned int *DMA_length_ptr, unsigned int *DMA_cntl_ptr) 
+void DMA_transfer_bytes(uint8_t *data, int N, volatile unsigned int *DMA_status_ptr, volatile unsigned int *DMA_read_ptr, 
+						volatile unsigned int *DMA_write_ptr, volatile unsigned int *DMA_length_ptr, volatile unsigned int *DMA_cntl_ptr) 
 	{
 		// === DMA transfer HPS->FPGA 
 		// set up DMA
@@ -436,6 +444,10 @@ int main(int argc, char **argv)
 	}
     // Get the address that maps to the RAM buffer
 	sram_ptr = (volatile uint8_t *)(sram_virtual_base);
+    ctrl_reg_f2h = (volatile uint8_t *)(sram_virtual_base + CTRL_REG_F2H_OFFSET);
+    ctrl_reg_h2f = (volatile uint8_t *)(sram_virtual_base + CTRL_REG_H2F_OFFSET);
+    
+    *ctrl_reg_h2f = 0;
 
 	// ===========================================
 
@@ -512,6 +524,8 @@ int main(int argc, char **argv)
     // send ack to fpga? start compute
     // wait for results
 
+    *ctrl_reg_h2f = 1u; // signal bit 0 in ctrl reg
+
     FILE *output = fopen("read_out_coeffs.hex", "w");
     if (output == NULL) {
         printf("Failed to open file output.\n");
@@ -521,7 +535,7 @@ int main(int argc, char **argv)
     }
     // read results back from FPGA mem
 
-    while (1) WAIT; // wait for results to be ready in mem.
+    while (*ctrl_reg_f2h == 0) WAIT; // wait for results to be ready in mem.
 
     // rn we're printing output
     for (i = 0; i < 1034; i++) {
@@ -545,10 +559,11 @@ int main(int argc, char **argv)
         }
     }
 
-    send_shwfs(sockfd);
+    fabricate_results();
 
+    send_shwfs(sockfd); // return data to python
+
+    // results
     fclose(output);
-
-    // close the socket
     close(sockfd);
 } 
