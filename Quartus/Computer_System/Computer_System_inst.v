@@ -55,6 +55,12 @@
 		.hps_io_hps_io_gpio_inst_GPIO53  (<connected-to-hps_io_hps_io_gpio_inst_GPIO53>),  //                     .hps_io_gpio_inst_GPIO53
 		.hps_io_hps_io_gpio_inst_GPIO54  (<connected-to-hps_io_hps_io_gpio_inst_GPIO54>),  //                     .hps_io_gpio_inst_GPIO54
 		.hps_io_hps_io_gpio_inst_GPIO61  (<connected-to-hps_io_hps_io_gpio_inst_GPIO61>),  //                     .hps_io_gpio_inst_GPIO61
+		.intensity_sram_address          (<connected-to-intensity_sram_address>),          //       intensity_sram.address
+		.intensity_sram_chipselect       (<connected-to-intensity_sram_chipselect>),       //                     .chipselect
+		.intensity_sram_clken            (<connected-to-intensity_sram_clken>),            //                     .clken
+		.intensity_sram_write            (<connected-to-intensity_sram_write>),            //                     .write
+		.intensity_sram_readdata         (<connected-to-intensity_sram_readdata>),         //                     .readdata
+		.intensity_sram_writedata        (<connected-to-intensity_sram_writedata>),        //                     .writedata
 		.memory_mem_a                    (<connected-to-memory_mem_a>),                    //               memory.mem_a
 		.memory_mem_ba                   (<connected-to-memory_mem_ba>),                   //                     .mem_ba
 		.memory_mem_ck                   (<connected-to-memory_mem_ck>),                   //                     .mem_ck
@@ -71,20 +77,16 @@
 		.memory_mem_odt                  (<connected-to-memory_mem_odt>),                  //                     .mem_odt
 		.memory_mem_dm                   (<connected-to-memory_mem_dm>),                   //                     .mem_dm
 		.memory_oct_rzqin                (<connected-to-memory_oct_rzqin>),                //                     .oct_rzqin
-		.intensity_sram_address          (<connected-to-intensity_sram_address>),          //       intensity_sram.address
-		.intensity_sram_chipselect       (<connected-to-intensity_sram_chipselect>),       //                     .chipselect
-		.intensity_sram_clken            (<connected-to-intensity_sram_clken>),            //                     .clken
-		.intensity_sram_write            (<connected-to-intensity_sram_write>),            //                     .write
-		.intensity_sram_readdata         (<connected-to-intensity_sram_readdata>),         //                     .readdata
-		.intensity_sram_writedata        (<connected-to-intensity_sram_writedata>),        //                     .writedata
-		.system_pll_ref_clk_clk          (<connected-to-system_pll_ref_clk_clk>),          //   system_pll_ref_clk.clk
-		.system_pll_ref_reset_reset      (<connected-to-system_pll_ref_reset_reset>),      // system_pll_ref_reset.reset
 		.result_sram_address             (<connected-to-result_sram_address>),             //          result_sram.address
 		.result_sram_clken               (<connected-to-result_sram_clken>),               //                     .clken
 		.result_sram_chipselect          (<connected-to-result_sram_chipselect>),          //                     .chipselect
 		.result_sram_write               (<connected-to-result_sram_write>),               //                     .write
 		.result_sram_readdata            (<connected-to-result_sram_readdata>),            //                     .readdata
 		.result_sram_writedata           (<connected-to-result_sram_writedata>),           //                     .writedata
-		.result_sram_byteenable          (<connected-to-result_sram_byteenable>)           //                     .byteenable
+		.result_sram_byteenable          (<connected-to-result_sram_byteenable>),          //                     .byteenable
+		.system_pll_ref_clk_clk          (<connected-to-system_pll_ref_clk_clk>),          //   system_pll_ref_clk.clk
+		.system_pll_ref_reset_reset      (<connected-to-system_pll_ref_reset_reset>),      // system_pll_ref_reset.reset
+		.ctrl_reg_f2h_export             (<connected-to-ctrl_reg_f2h_export>),             //         ctrl_reg_f2h.export
+		.ctrl_reg_h2f_export             (<connected-to-ctrl_reg_h2f_export>)              //         ctrl_reg_h2f.export
 	);
 

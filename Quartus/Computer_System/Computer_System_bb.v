@@ -56,6 +56,12 @@ module Computer_System (
 	hps_io_hps_io_gpio_inst_GPIO53,
 	hps_io_hps_io_gpio_inst_GPIO54,
 	hps_io_hps_io_gpio_inst_GPIO61,
+	intensity_sram_address,
+	intensity_sram_chipselect,
+	intensity_sram_clken,
+	intensity_sram_write,
+	intensity_sram_readdata,
+	intensity_sram_writedata,
 	memory_mem_a,
 	memory_mem_ba,
 	memory_mem_ck,
@@ -72,21 +78,17 @@ module Computer_System (
 	memory_mem_odt,
 	memory_mem_dm,
 	memory_oct_rzqin,
-	intensity_sram_address,
-	intensity_sram_chipselect,
-	intensity_sram_clken,
-	intensity_sram_write,
-	intensity_sram_readdata,
-	intensity_sram_writedata,
-	system_pll_ref_clk_clk,
-	system_pll_ref_reset_reset,
 	result_sram_address,
 	result_sram_clken,
 	result_sram_chipselect,
 	result_sram_write,
 	result_sram_readdata,
 	result_sram_writedata,
-	result_sram_byteenable);	
+	result_sram_byteenable,
+	system_pll_ref_clk_clk,
+	system_pll_ref_reset_reset,
+	ctrl_reg_f2h_export,
+	ctrl_reg_h2f_export);	
 
 	output		hps_io_hps_io_emac1_inst_TX_CLK;
 	output		hps_io_hps_io_emac1_inst_TXD0;
@@ -144,6 +146,12 @@ module Computer_System (
 	inout		hps_io_hps_io_gpio_inst_GPIO53;
 	inout		hps_io_hps_io_gpio_inst_GPIO54;
 	inout		hps_io_hps_io_gpio_inst_GPIO61;
+	input	[15:0]	intensity_sram_address;
+	input		intensity_sram_chipselect;
+	input		intensity_sram_clken;
+	input		intensity_sram_write;
+	output	[7:0]	intensity_sram_readdata;
+	input	[7:0]	intensity_sram_writedata;
 	output	[14:0]	memory_mem_a;
 	output	[2:0]	memory_mem_ba;
 	output		memory_mem_ck;
@@ -160,14 +168,6 @@ module Computer_System (
 	output		memory_mem_odt;
 	output	[3:0]	memory_mem_dm;
 	input		memory_oct_rzqin;
-	input	[15:0]	intensity_sram_address;
-	input		intensity_sram_chipselect;
-	input		intensity_sram_clken;
-	input		intensity_sram_write;
-	output	[7:0]	intensity_sram_readdata;
-	input	[7:0]	intensity_sram_writedata;
-	input		system_pll_ref_clk_clk;
-	input		system_pll_ref_reset_reset;
 	input	[10:0]	result_sram_address;
 	input		result_sram_clken;
 	input		result_sram_chipselect;
@@ -175,4 +175,8 @@ module Computer_System (
 	output	[31:0]	result_sram_readdata;
 	input	[31:0]	result_sram_writedata;
 	input	[3:0]	result_sram_byteenable;
+	input		system_pll_ref_clk_clk;
+	input		system_pll_ref_reset_reset;
+	input	[7:0]	ctrl_reg_f2h_export;
+	output	[7:0]	ctrl_reg_h2f_export;
 endmodule

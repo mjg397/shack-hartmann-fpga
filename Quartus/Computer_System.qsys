@@ -33,6 +33,38 @@
          type = "int";
       }
    }
+   element ctrl_reg_f2h
+   {
+      datum _sortIndex
+      {
+         value = "6";
+         type = "int";
+      }
+   }
+   element ctrl_reg_f2h.s1
+   {
+      datum baseAddress
+      {
+         value = "8192";
+         type = "String";
+      }
+   }
+   element ctrl_reg_h2f
+   {
+      datum _sortIndex
+      {
+         value = "7";
+         type = "int";
+      }
+   }
+   element ctrl_reg_h2f.s1
+   {
+      datum baseAddress
+      {
+         value = "8208";
+         type = "String";
+      }
+   }
    element dma_1
    {
       datum _sortIndex
@@ -125,6 +157,16 @@
  <parameter name="timeStamp" value="0" />
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
+ <interface
+   name="ctrl_reg_f2h"
+   internal="ctrl_reg_f2h.external_connection"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="ctrl_reg_h2f"
+   internal="ctrl_reg_h2f.external_connection"
+   type="conduit"
+   dir="end" />
  <interface name="hps_io" internal="ARM_A9_HPS.hps_io" type="conduit" dir="end" />
  <interface
    name="intensity_sram"
@@ -689,6 +731,42 @@
   <parameter name="gui_refclk" value="50.0" />
   <parameter name="other_boards" value="None" />
  </module>
+ <module
+   name="ctrl_reg_f2h"
+   kind="altera_avalon_pio"
+   version="18.1"
+   enabled="1">
+  <parameter name="bitClearingEdgeCapReg" value="false" />
+  <parameter name="bitModifyingOutReg" value="false" />
+  <parameter name="captureEdge" value="false" />
+  <parameter name="clockRate" value="100000000" />
+  <parameter name="direction" value="Input" />
+  <parameter name="edgeType" value="RISING" />
+  <parameter name="generateIRQ" value="false" />
+  <parameter name="irqType" value="LEVEL" />
+  <parameter name="resetValue" value="0" />
+  <parameter name="simDoTestBenchWiring" value="false" />
+  <parameter name="simDrivenValue" value="0" />
+  <parameter name="width" value="8" />
+ </module>
+ <module
+   name="ctrl_reg_h2f"
+   kind="altera_avalon_pio"
+   version="18.1"
+   enabled="1">
+  <parameter name="bitClearingEdgeCapReg" value="false" />
+  <parameter name="bitModifyingOutReg" value="false" />
+  <parameter name="captureEdge" value="false" />
+  <parameter name="clockRate" value="100000000" />
+  <parameter name="direction" value="Output" />
+  <parameter name="edgeType" value="RISING" />
+  <parameter name="generateIRQ" value="false" />
+  <parameter name="irqType" value="LEVEL" />
+  <parameter name="resetValue" value="0" />
+  <parameter name="simDoTestBenchWiring" value="false" />
+  <parameter name="simDrivenValue" value="0" />
+  <parameter name="width" value="8" />
+ </module>
  <module name="dma_1" kind="altera_avalon_dma" version="18.1" enabled="1">
   <parameter name="allowByteTransactions" value="false" />
   <parameter name="allowDoubleWordTransactions" value="false" />
@@ -799,6 +877,24 @@
    kind="avalon"
    version="18.1"
    start="ARM_A9_HPS.h2f_axi_master"
+   end="ctrl_reg_f2h.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x2000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="18.1"
+   start="ARM_A9_HPS.h2f_axi_master"
+   end="ctrl_reg_h2f.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x2010" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="18.1"
+   start="ARM_A9_HPS.h2f_axi_master"
    end="result_sram.s2">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x0000" />
@@ -872,6 +968,16 @@
    kind="clock"
    version="18.1"
    start="System_PLL.sys_clk"
+   end="ctrl_reg_f2h.clk" />
+ <connection
+   kind="clock"
+   version="18.1"
+   start="System_PLL.sys_clk"
+   end="ctrl_reg_h2f.clk" />
+ <connection
+   kind="clock"
+   version="18.1"
+   start="System_PLL.sys_clk"
    end="intensity_sram.clk1" />
  <connection
    kind="clock"
@@ -917,6 +1023,16 @@
    kind="reset"
    version="18.1"
    start="ARM_A9_HPS.h2f_reset"
+   end="ctrl_reg_f2h.reset" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="ARM_A9_HPS.h2f_reset"
+   end="ctrl_reg_h2f.reset" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="ARM_A9_HPS.h2f_reset"
    end="intensity_sram.reset1" />
  <connection
    kind="reset"
@@ -943,6 +1059,16 @@
    version="18.1"
    start="System_PLL.reset_source"
    end="dma_2.reset" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="System_PLL.reset_source"
+   end="ctrl_reg_f2h.reset" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="System_PLL.reset_source"
+   end="ctrl_reg_h2f.reset" />
  <connection
    kind="reset"
    version="18.1"

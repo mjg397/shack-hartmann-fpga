@@ -56,6 +56,12 @@
 			hps_io_hps_io_gpio_inst_GPIO53  : inout std_logic                     := 'X';             -- hps_io_gpio_inst_GPIO53
 			hps_io_hps_io_gpio_inst_GPIO54  : inout std_logic                     := 'X';             -- hps_io_gpio_inst_GPIO54
 			hps_io_hps_io_gpio_inst_GPIO61  : inout std_logic                     := 'X';             -- hps_io_gpio_inst_GPIO61
+			intensity_sram_address          : in    std_logic_vector(15 downto 0) := (others => 'X'); -- address
+			intensity_sram_chipselect       : in    std_logic                     := 'X';             -- chipselect
+			intensity_sram_clken            : in    std_logic                     := 'X';             -- clken
+			intensity_sram_write            : in    std_logic                     := 'X';             -- write
+			intensity_sram_readdata         : out   std_logic_vector(7 downto 0);                     -- readdata
+			intensity_sram_writedata        : in    std_logic_vector(7 downto 0)  := (others => 'X'); -- writedata
 			memory_mem_a                    : out   std_logic_vector(14 downto 0);                    -- mem_a
 			memory_mem_ba                   : out   std_logic_vector(2 downto 0);                     -- mem_ba
 			memory_mem_ck                   : out   std_logic;                                        -- mem_ck
@@ -72,21 +78,17 @@
 			memory_mem_odt                  : out   std_logic;                                        -- mem_odt
 			memory_mem_dm                   : out   std_logic_vector(3 downto 0);                     -- mem_dm
 			memory_oct_rzqin                : in    std_logic                     := 'X';             -- oct_rzqin
-			intensity_sram_address          : in    std_logic_vector(15 downto 0) := (others => 'X'); -- address
-			intensity_sram_chipselect       : in    std_logic                     := 'X';             -- chipselect
-			intensity_sram_clken            : in    std_logic                     := 'X';             -- clken
-			intensity_sram_write            : in    std_logic                     := 'X';             -- write
-			intensity_sram_readdata         : out   std_logic_vector(7 downto 0);                     -- readdata
-			intensity_sram_writedata        : in    std_logic_vector(7 downto 0)  := (others => 'X'); -- writedata
-			system_pll_ref_clk_clk          : in    std_logic                     := 'X';             -- clk
-			system_pll_ref_reset_reset      : in    std_logic                     := 'X';             -- reset
 			result_sram_address             : in    std_logic_vector(10 downto 0) := (others => 'X'); -- address
 			result_sram_clken               : in    std_logic                     := 'X';             -- clken
 			result_sram_chipselect          : in    std_logic                     := 'X';             -- chipselect
 			result_sram_write               : in    std_logic                     := 'X';             -- write
 			result_sram_readdata            : out   std_logic_vector(31 downto 0);                    -- readdata
 			result_sram_writedata           : in    std_logic_vector(31 downto 0) := (others => 'X'); -- writedata
-			result_sram_byteenable          : in    std_logic_vector(3 downto 0)  := (others => 'X')  -- byteenable
+			result_sram_byteenable          : in    std_logic_vector(3 downto 0)  := (others => 'X'); -- byteenable
+			system_pll_ref_clk_clk          : in    std_logic                     := 'X';             -- clk
+			system_pll_ref_reset_reset      : in    std_logic                     := 'X';             -- reset
+			ctrl_reg_f2h_export             : in    std_logic_vector(7 downto 0)  := (others => 'X'); -- export
+			ctrl_reg_h2f_export             : out   std_logic_vector(7 downto 0)                      -- export
 		);
 	end component Computer_System;
 
@@ -148,6 +150,12 @@
 			hps_io_hps_io_gpio_inst_GPIO53  => CONNECTED_TO_hps_io_hps_io_gpio_inst_GPIO53,  --                     .hps_io_gpio_inst_GPIO53
 			hps_io_hps_io_gpio_inst_GPIO54  => CONNECTED_TO_hps_io_hps_io_gpio_inst_GPIO54,  --                     .hps_io_gpio_inst_GPIO54
 			hps_io_hps_io_gpio_inst_GPIO61  => CONNECTED_TO_hps_io_hps_io_gpio_inst_GPIO61,  --                     .hps_io_gpio_inst_GPIO61
+			intensity_sram_address          => CONNECTED_TO_intensity_sram_address,          --       intensity_sram.address
+			intensity_sram_chipselect       => CONNECTED_TO_intensity_sram_chipselect,       --                     .chipselect
+			intensity_sram_clken            => CONNECTED_TO_intensity_sram_clken,            --                     .clken
+			intensity_sram_write            => CONNECTED_TO_intensity_sram_write,            --                     .write
+			intensity_sram_readdata         => CONNECTED_TO_intensity_sram_readdata,         --                     .readdata
+			intensity_sram_writedata        => CONNECTED_TO_intensity_sram_writedata,        --                     .writedata
 			memory_mem_a                    => CONNECTED_TO_memory_mem_a,                    --               memory.mem_a
 			memory_mem_ba                   => CONNECTED_TO_memory_mem_ba,                   --                     .mem_ba
 			memory_mem_ck                   => CONNECTED_TO_memory_mem_ck,                   --                     .mem_ck
@@ -164,20 +172,16 @@
 			memory_mem_odt                  => CONNECTED_TO_memory_mem_odt,                  --                     .mem_odt
 			memory_mem_dm                   => CONNECTED_TO_memory_mem_dm,                   --                     .mem_dm
 			memory_oct_rzqin                => CONNECTED_TO_memory_oct_rzqin,                --                     .oct_rzqin
-			intensity_sram_address          => CONNECTED_TO_intensity_sram_address,          --       intensity_sram.address
-			intensity_sram_chipselect       => CONNECTED_TO_intensity_sram_chipselect,       --                     .chipselect
-			intensity_sram_clken            => CONNECTED_TO_intensity_sram_clken,            --                     .clken
-			intensity_sram_write            => CONNECTED_TO_intensity_sram_write,            --                     .write
-			intensity_sram_readdata         => CONNECTED_TO_intensity_sram_readdata,         --                     .readdata
-			intensity_sram_writedata        => CONNECTED_TO_intensity_sram_writedata,        --                     .writedata
-			system_pll_ref_clk_clk          => CONNECTED_TO_system_pll_ref_clk_clk,          --   system_pll_ref_clk.clk
-			system_pll_ref_reset_reset      => CONNECTED_TO_system_pll_ref_reset_reset,      -- system_pll_ref_reset.reset
 			result_sram_address             => CONNECTED_TO_result_sram_address,             --          result_sram.address
 			result_sram_clken               => CONNECTED_TO_result_sram_clken,               --                     .clken
 			result_sram_chipselect          => CONNECTED_TO_result_sram_chipselect,          --                     .chipselect
 			result_sram_write               => CONNECTED_TO_result_sram_write,               --                     .write
 			result_sram_readdata            => CONNECTED_TO_result_sram_readdata,            --                     .readdata
 			result_sram_writedata           => CONNECTED_TO_result_sram_writedata,           --                     .writedata
-			result_sram_byteenable          => CONNECTED_TO_result_sram_byteenable           --                     .byteenable
+			result_sram_byteenable          => CONNECTED_TO_result_sram_byteenable,          --                     .byteenable
+			system_pll_ref_clk_clk          => CONNECTED_TO_system_pll_ref_clk_clk,          --   system_pll_ref_clk.clk
+			system_pll_ref_reset_reset      => CONNECTED_TO_system_pll_ref_reset_reset,      -- system_pll_ref_reset.reset
+			ctrl_reg_f2h_export             => CONNECTED_TO_ctrl_reg_f2h_export,             --         ctrl_reg_f2h.export
+			ctrl_reg_h2f_export             => CONNECTED_TO_ctrl_reg_h2f_export              --         ctrl_reg_h2f.export
 		);
 

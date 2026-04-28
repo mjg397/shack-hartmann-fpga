@@ -13,7 +13,7 @@
   </columns>
  </systemtable>
  <library
-   expandedCategories="Library/Basic Functions,Project,Library,Library/Basic Functions/On Chip Memory" />
+   expandedCategories="Project,Library/Processors and Peripherals/Peripherals,Library,Library/Processors and Peripherals" />
  <window width="3868" height="2320" x="-14" y="-14" />
  <generation block_symbol_file="0" greybox="0" simulation="NONE" />
 </preferences>

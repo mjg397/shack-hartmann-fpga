@@ -33,7 +33,7 @@ module ematrix_accumulator #(
     input  wire signed [26:0] y_slope,   // Q4.23
 
     // flattened output bus: mode m occupies bits [m*27 +: 27]
-    output reg  [26:0] zernike_out [0:NUM_MODES-1],     /* synthesis keep */ // 10 × 27 bits, Q4.23 per mode
+    output reg  [269:0] zernike_out,     // 10 × 27 bits, Q4.23 per mode
     output reg          done
 );
 
@@ -56,8 +56,8 @@ localparam [SUB_BITS-1:0] LAST_SUB = NUM_SUBS - 1;  // 8'hC3 = 195
 // Declared unsigned [17:0]; $signed() cast is applied at point of use so
 // $readmemh loads raw bits without sign-extension surprises.
 // ---------------------------------------------------------------------------
-reg [17:0] e_rom_x [0:(NUM_MODES * NUM_SUBS)-1]; /* synthesis keep */
-reg [17:0] e_rom_y [0:(NUM_MODES * NUM_SUBS)-1]; /* synthesis keep */
+reg [17:0] e_rom_x [0:(NUM_MODES * NUM_SUBS)-1];
+reg [17:0] e_rom_y [0:(NUM_MODES * NUM_SUBS)-1];
 
 initial begin
     $readmemh("C:/Users/sjbar/OneDrive/Desktop/ECE5760/shack-hartmann-fpga/src/e_matrix_x.hex", e_rom_x);
@@ -80,7 +80,7 @@ reg [SUB_BITS-1:0] sub_counter;
 // The product MSB is bit [44]; it is used (not the operand MSBs) to
 // sign-extend to ACC_WIDTH.
 // ---------------------------------------------------------------------------
-wire signed [ACC_WIDTH-1:0] mac_sum [0:NUM_MODES-1]; /* synthesis keep */
+wire signed [ACC_WIDTH-1:0] mac_sum [0:NUM_MODES-1];
 
 genvar m;
 generate
@@ -90,8 +90,8 @@ generate
         wire signed [17:0] ey = $signed(e_rom_y[m * NUM_SUBS + sub_counter]);
 
         // 18-bit signed × 27-bit signed = 45-bit signed (exact, no overflow)
-        wire signed [44:0] prod_x = ex * $signed(x_slope); /* synthesis keep */
-        wire signed [44:0] prod_y = ey * $signed(y_slope); /* synthesis keep */
+        wire signed [44:0] prod_x = ex * $signed(x_slope);
+        wire signed [44:0] prod_y = ey * $signed(y_slope);
 
         // Sign-extend each 45-bit product to ACC_WIDTH using the product MSB [44]
         assign mac_sum[m] = {{10{prod_x[44]}}, prod_x}
@@ -123,10 +123,9 @@ always @(posedge clk) begin
         state       <= STATE_IDLE;
         sub_counter <= 0;
         done        <= 0;
-        for (i = 0; i < NUM_MODES; i = i + 1) begin
-            acc[i]         <= 0;
-            zernike_out[i] <=0;
-        end 
+        zernike_out <= 0;
+        for (i = 0; i < NUM_MODES; i = i + 1)
+            acc[i] <= 0;
     end
     else begin
         done <= 0;  // default: de-assert every cycle
@@ -146,7 +145,7 @@ always @(posedge clk) begin
                         //   [39:17] = 23 fractional bits
                         for (i = 0; i < NUM_MODES; i = i + 1) begin
                             acc[i]                  <= acc_next[i];
-                            zernike_out[i] <= acc_next[i][43:17];
+                            zernike_out[i*27 +: 27] <= acc_next[i][43:17];
                         end
                         state <= STATE_DONE;
                     end

@@ -7,6 +7,7 @@ module streaming_emulator #(
   input wire clk,
   input wire reset,
   input wire [7:0] rdata,
+  input wire start,
   
   output reg [15:0] raddr,
   output reg [7:0] data,
@@ -26,9 +27,9 @@ module streaming_emulator #(
   // Instantiate into ROM
   reg [7:0] mem [0:65535];
 
-  initial begin
-      $readmemh("C:/Users/sjbar/OneDrive/Desktop/ECE5760/shack-hartmann-fpga/image_rotating.hex", mem);
-  end
+//  initial begin
+//      $readmemh("C:/Users/sjbar/OneDrive/Desktop/ECE5760/shack-hartmann-fpga/image_rotating.hex", mem);
+//  end
 
   // state machine for pixel input
   localparam STATE_FRAME_INIT          = 2'b00;
@@ -57,7 +58,7 @@ module streaming_emulator #(
           fv <= 1;
           line_counter <= 0;
           row_counter <= 0;
-          state <= STATE_ACTIVE_FRAME;
+          state <= start ? STATE_ACTIVE_FRAME : STATE_FRAME_INIT;
         end
 
         STATE_ACTIVE_FRAME: begin

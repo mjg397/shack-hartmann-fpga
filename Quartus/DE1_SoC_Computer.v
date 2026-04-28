@@ -403,6 +403,9 @@ HexDigit Digit3(HEX3, hex3_hex0[15:12]);
  wire frame_complete_w;
  wire clk;
  assign clk = CLOCK_50;
+ 
+ wire [7:0] ctrl_reg_h2f;
+ wire [7:0] ctrl_reg_f2h;
 
 
  assign frame_complete_w = frame_complete;
@@ -412,6 +415,7 @@ HexDigit Digit3(HEX3, hex3_hex0[15:12]);
 	  .clk            (clk),
 	  .reset          (reset),
 	  .rdata				(intensity_rdata),
+	  .start				(ctrl_reg_h2f[0]),
 	  
 	  .raddr				(intensity_addr),
 	  .data           (streamer_data),
@@ -486,8 +490,10 @@ HexDigit Digit3(HEX3, hex3_hex0[15:12]);
 	  .new_subapeture         (new_subapeture)
  );
 
- (*keep*) wire [26:0] zernike_out[9:0]; /* synthesis keep */
+ (*keep*) wire [269:0] zernike_out;
  (*keep*) wire done; /* synthesis keep */
+ 
+ assign ctrl_reg_f2h[0] = done;
 
  ematrix_accumulator em
  (
@@ -526,6 +532,17 @@ HexDigit Digit3(HEX3, hex3_hex0[15:12]);
  reg	 		resw_start;
  reg  [4:0] resw_state;
  
+ genvar i;
+ generate
+	for (i = 0; i < 10; i = i + 1) begin : zernike_assignment
+		always @(posedge clk) begin
+			if (done) begin
+				zernike_out_reg[i] <= zernike_out[ ((i + 1) * 27) - 1 : i * 27];
+			end
+		end
+	
+	end
+ endgenerate
  
  // Result writing FSM
  always @(*) begin
@@ -579,9 +596,6 @@ HexDigit Digit3(HEX3, hex3_hex0[15:12]);
 		intensity_wdata <= 8'd0;
 	end
 	else begin
-		if (done) begin
-			zernike_out_reg <= zernike_out;
-		end
 		
 		if (new_subapeture) begin
 			resw_start <= 1'b1;
@@ -628,6 +642,9 @@ Computer_System The_System (
 	.result_sram_readdata		(result_rdata),            		//                     .readdata
 	.result_sram_writedata		(result_wdata),           			//                     .writedata
 	.result_sram_byteenable		(result_bytesel),						//							  .byteenable
+	
+	.ctrl_reg_h2f_export			(ctrl_reg_h2f),
+	.ctrl_reg_f2h_export			(ctrl_reg_f2h),
 	
 	////////////////////////////////////
 	// HPS Side
