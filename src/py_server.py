@@ -13,7 +13,7 @@ DUMP_DIR = "debug_dumps"
 ENABLE_DUMPS = False
 CLIENT_TIMEOUT_SEC = 5.0
 
-bind_ip = "10.48.143.64" 
+bind_ip = "10.41.230.185" 
 bind_port = 80
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
