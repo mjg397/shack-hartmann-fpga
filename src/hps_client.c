@@ -50,7 +50,7 @@ uint32_t zernike_coeffs[10];
 // h2f bus
 // RAM FPGA port s2
 // main bus addess 0x0800_0000
-volatile uint8_t * sram_ptr = NULL ;
+volatile uint32_t * sram_ptr = NULL ;
 void *sram_virtual_base;
 
 volatile uint8_t * ctrl_reg_f2h = NULL;
@@ -193,6 +193,21 @@ static void dump_buffer(const char *base_name, const void *buf, size_t len, size
 
     fclose(ft);
 #endif
+}
+
+static int dump_signed_decimal_u32_array(const char *path, const uint32_t *arr, size_t count)
+{
+    FILE *f = fopen(path, "w");
+    if (f == NULL) {
+        return -1;
+    }
+
+    for (size_t i = 0; i < count; i++) {
+        fprintf(f, "%d\n", (int32_t)arr[i]);
+    }
+
+    fclose(f);
+    return 0;
 }
 
 // Socket helpers
@@ -443,7 +458,7 @@ int main(int argc, char **argv)
 		return(1);
 	}
     // Get the address that maps to the RAM buffer
-	sram_ptr = (volatile uint8_t *)(sram_virtual_base);
+	sram_ptr = (volatile uint32_t *)(sram_virtual_base);
     ctrl_reg_f2h = (volatile uint8_t *)(sram_virtual_base + CTRL_REG_F2H_OFFSET);
     ctrl_reg_h2f = (volatile uint8_t *)(sram_virtual_base + CTRL_REG_H2F_OFFSET);
     
@@ -537,13 +552,11 @@ int main(int argc, char **argv)
 
     while (*ctrl_reg_f2h == 0) WAIT; // wait for results to be ready in mem.
 
-    // rn we're printing output
-    for (i = 0; i < 1034; i++) {
-        if (fprintf(output, "0x%02X\n", sram_ptr[i * 4]) < 0) {
-            printf("Write failed at byte %d\n", i);
-            break;
-        }
-    }
+    *ctrl_reg_h2f = 1u; // reset go bit to zero
+
+    sleep(2);
+
+    printf("Compute done \n");
 
     // write output to result arrays
     // Values are 4.23 fixed point (1 sign bit + 3 integer bits + 23 fractional bits = 27 bits).
@@ -551,15 +564,31 @@ int main(int argc, char **argv)
 
     for (i = 0; i < 1034; i++) {
         if (i < 512) {
-            slopes[i] = SIGN_EXTEND_4_23(*(sram_ptr + (i * sizeof(slopes[i]))));
+            slopes[i] = SIGN_EXTEND_4_23(sram_ptr[i]); // *(sram_ptr + (i * sizeof(slopes[i])))
         } else if (i < 1024) {
-            centroids[i - 512] = SIGN_EXTEND_4_23(*(sram_ptr + (i * sizeof(centroids[i - 512]))));
+            centroids[i - 512] = SIGN_EXTEND_4_23(sram_ptr[i]); // *(sram_ptr + (i * sizeof(centroids[i - 512])))
         } else if (i < 1034) {
-            zernike_coeffs[i - 1024] = SIGN_EXTEND_4_23(*(sram_ptr + (i * sizeof(zernike_coeffs[i - 1024]))));
+            zernike_coeffs[i - 1024] = SIGN_EXTEND_4_23(sram_ptr[i]); // *(sram_ptr + (i * sizeof(zernike_coeffs[i - 1024])))
         }
     }
 
-    fabricate_results();
+    for (int k = 0; k < 512; k++) {
+        printf("slope %d : %d", k, (int32_t)slopes[k]);
+    }
+
+    if (dump_signed_decimal_u32_array("slopes_signed_decimal.txt", slopes, 512) != 0) {
+        printf("Failed to dump slopes to file\n");
+    }
+
+    if (dump_signed_decimal_u32_array("centroids_signed_decimal.txt", centroids, 512) != 0) {
+        printf("Failed to dump centroids to file\n");
+    }
+
+    if (dump_signed_decimal_u32_array("zernikes_signed_decimal.txt", zernike_coeffs, 10) != 0) {
+        printf("Failed to dump zernikes to file\n");
+    }
+
+    // fabricate_results();
 
     send_shwfs(sockfd); // return data to python
 
