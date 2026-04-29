@@ -1,5 +1,7 @@
 	component Computer_System is
 		port (
+			ctrl_reg_f2h_export             : in    std_logic_vector(7 downto 0)  := (others => 'X'); -- export
+			ctrl_reg_h2f_export             : out   std_logic_vector(7 downto 0);                     -- export
 			hps_io_hps_io_emac1_inst_TX_CLK : out   std_logic;                                        -- hps_io_emac1_inst_TX_CLK
 			hps_io_hps_io_emac1_inst_TXD0   : out   std_logic;                                        -- hps_io_emac1_inst_TXD0
 			hps_io_hps_io_emac1_inst_TXD1   : out   std_logic;                                        -- hps_io_emac1_inst_TXD1
@@ -87,13 +89,14 @@
 			result_sram_byteenable          : in    std_logic_vector(3 downto 0)  := (others => 'X'); -- byteenable
 			system_pll_ref_clk_clk          : in    std_logic                     := 'X';             -- clk
 			system_pll_ref_reset_reset      : in    std_logic                     := 'X';             -- reset
-			ctrl_reg_f2h_export             : in    std_logic_vector(7 downto 0)  := (others => 'X'); -- export
-			ctrl_reg_h2f_export             : out   std_logic_vector(7 downto 0)                      -- export
+			clk_10_clk                      : out   std_logic                                         -- clk
 		);
 	end component Computer_System;
 
 	u0 : component Computer_System
 		port map (
+			ctrl_reg_f2h_export             => CONNECTED_TO_ctrl_reg_f2h_export,             --         ctrl_reg_f2h.export
+			ctrl_reg_h2f_export             => CONNECTED_TO_ctrl_reg_h2f_export,             --         ctrl_reg_h2f.export
 			hps_io_hps_io_emac1_inst_TX_CLK => CONNECTED_TO_hps_io_hps_io_emac1_inst_TX_CLK, --               hps_io.hps_io_emac1_inst_TX_CLK
 			hps_io_hps_io_emac1_inst_TXD0   => CONNECTED_TO_hps_io_hps_io_emac1_inst_TXD0,   --                     .hps_io_emac1_inst_TXD0
 			hps_io_hps_io_emac1_inst_TXD1   => CONNECTED_TO_hps_io_hps_io_emac1_inst_TXD1,   --                     .hps_io_emac1_inst_TXD1
@@ -181,7 +184,6 @@
 			result_sram_byteenable          => CONNECTED_TO_result_sram_byteenable,          --                     .byteenable
 			system_pll_ref_clk_clk          => CONNECTED_TO_system_pll_ref_clk_clk,          --   system_pll_ref_clk.clk
 			system_pll_ref_reset_reset      => CONNECTED_TO_system_pll_ref_reset_reset,      -- system_pll_ref_reset.reset
-			ctrl_reg_f2h_export             => CONNECTED_TO_ctrl_reg_f2h_export,             --         ctrl_reg_f2h.export
-			ctrl_reg_h2f_export             => CONNECTED_TO_ctrl_reg_h2f_export              --         ctrl_reg_h2f.export
+			clk_10_clk                      => CONNECTED_TO_clk_10_clk                       --               clk_10.clk
 		);
 

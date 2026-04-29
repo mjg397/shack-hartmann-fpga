@@ -1,5 +1,5 @@
 Assembler report for DE1_SoC_Computer
-Tue Apr 28 14:51:42 2026
+Wed Apr 29 16:38:47 2026
 Quartus Prime Version 18.1.0 Build 625 09/12/2018 SJ Lite Edition
 
 
@@ -9,9 +9,10 @@ Quartus Prime Version 18.1.0 Build 625 09/12/2018 SJ Lite Edition
   1. Legal Notice
   2. Assembler Summary
   3. Assembler Settings
-  4. Assembler Generated Files
-  5. Assembler Device Options: C:/Users/sjbar/shack-hartmann-fpga/Quartus/DE1_SoC_Computer.sof
-  6. Assembler Messages
+  4. Assembler Encrypted IP Cores Summary
+  5. Assembler Generated Files
+  6. Assembler Device Options: C:/Users/sjbar/shack-hartmann-fpga/Quartus/DE1_SoC_Computer.sof
+  7. Assembler Messages
 
 
 
@@ -37,7 +38,7 @@ refer to the applicable agreement for further details.
 +---------------------------------------------------------------+
 ; Assembler Summary                                             ;
 +-----------------------+---------------------------------------+
-; Assembler Status      ; Successful - Tue Apr 28 14:51:42 2026 ;
+; Assembler Status      ; Successful - Wed Apr 29 16:38:47 2026 ;
 ; Revision Name         ; DE1_SoC_Computer                      ;
 ; Top-level Entity Name ; DE1_SoC_Computer                      ;
 ; Family                ; Cyclone V                             ;
@@ -50,6 +51,16 @@ refer to the applicable agreement for further details.
 +--------+---------+---------------+
 ; Option ; Setting ; Default Value ;
 +--------+---------+---------------+
+
+
++------------------------------------------------+
+; Assembler Encrypted IP Cores Summary           ;
++--------+------------------------+--------------+
+; Vendor ; IP Core Name           ; License Type ;
++--------+------------------------+--------------+
+; Altera ; Signal Tap (6AF7 BCE1) ; Licensed     ;
+; Altera ; Signal Tap (6AF7 BCEC) ; Licensed     ;
++--------+------------------------+--------------+
 
 
 +-----------------------------------------------------------------+
@@ -66,8 +77,8 @@ refer to the applicable agreement for further details.
 +----------------+--------------------------------------------------------------------------+
 ; Option         ; Setting                                                                  ;
 +----------------+--------------------------------------------------------------------------+
-; JTAG usercode  ; 0x03CDC0DF                                                               ;
-; Checksum       ; 0x03CDC0DF                                                               ;
+; JTAG usercode  ; 0x07A7CA7E                                                               ;
+; Checksum       ; 0x07A7CA7E                                                               ;
 +----------------+--------------------------------------------------------------------------+
 
 
@@ -77,14 +88,14 @@ refer to the applicable agreement for further details.
 Info: *******************************************************************
 Info: Running Quartus Prime Assembler
     Info: Version 18.1.0 Build 625 09/12/2018 SJ Lite Edition
-    Info: Processing started: Tue Apr 28 14:51:20 2026
+    Info: Processing started: Wed Apr 29 16:38:26 2026
 Info: Command: quartus_asm --read_settings_files=off --write_settings_files=off DE1_SoC_Computer -c DE1_SoC_Computer
 Info (115030): Assembler is generating device programming files
 Info (11878): Hard Processor Subsystem configuration has not changed and a Preloader software update is not required
 Info: Quartus Prime Assembler was successful. 0 errors, 0 warnings
-    Info: Peak virtual memory: 5104 megabytes
-    Info: Processing ended: Tue Apr 28 14:51:43 2026
-    Info: Elapsed time: 00:00:23
-    Info: Total CPU time (on all processors): 00:00:19
+    Info: Peak virtual memory: 5212 megabytes
+    Info: Processing ended: Wed Apr 29 16:38:47 2026
+    Info: Elapsed time: 00:00:21
+    Info: Total CPU time (on all processors): 00:00:22
 
 

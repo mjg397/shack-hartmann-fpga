@@ -1,5 +1,7 @@
 
 module Computer_System (
+	ctrl_reg_f2h_export,
+	ctrl_reg_h2f_export,
 	hps_io_hps_io_emac1_inst_TX_CLK,
 	hps_io_hps_io_emac1_inst_TXD0,
 	hps_io_hps_io_emac1_inst_TXD1,
@@ -87,9 +89,10 @@ module Computer_System (
 	result_sram_byteenable,
 	system_pll_ref_clk_clk,
 	system_pll_ref_reset_reset,
-	ctrl_reg_f2h_export,
-	ctrl_reg_h2f_export);	
+	clk_10_clk);	
 
+	input	[7:0]	ctrl_reg_f2h_export;
+	output	[7:0]	ctrl_reg_h2f_export;
 	output		hps_io_hps_io_emac1_inst_TX_CLK;
 	output		hps_io_hps_io_emac1_inst_TXD0;
 	output		hps_io_hps_io_emac1_inst_TXD1;
@@ -177,6 +180,5 @@ module Computer_System (
 	input	[3:0]	result_sram_byteenable;
 	input		system_pll_ref_clk_clk;
 	input		system_pll_ref_reset_reset;
-	input	[7:0]	ctrl_reg_f2h_export;
-	output	[7:0]	ctrl_reg_h2f_export;
+	output		clk_10_clk;
 endmodule

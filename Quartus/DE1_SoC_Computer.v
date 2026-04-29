@@ -402,10 +402,13 @@ HexDigit Digit3(HEX3, hex3_hex0[15:12]);
  wire streamer_valid;
  wire frame_complete_w;
  wire clk;
- assign clk = CLOCK_50;
+// assign clk = CLOCK_50;
  
  wire [7:0] ctrl_reg_h2f;
  wire [7:0] ctrl_reg_f2h;
+ 
+ wire reset;
+ assign reset = ~KEY[0];
 
 
  assign frame_complete_w = frame_complete;
@@ -528,9 +531,9 @@ HexDigit Digit3(HEX3, hex3_hex0[15:12]);
  localparam RESULT_W_CY = 4'd4;
  localparam RESULT_W_DONE = 4'd5;
  
- reg  [4:0] resw_next_state;
- reg	 		resw_start;
- reg  [4:0] resw_state;
+ (*preserve, noprune*) reg  [4:0] resw_next_state;
+ (*preserve, noprune*) reg	 		resw_start;
+ (*preserve, noprune*) reg  [4:0] resw_state;
  
  genvar i;
  generate
@@ -555,62 +558,119 @@ HexDigit Digit3(HEX3, hex3_hex0[15:12]);
 		RESULT_W_DONE:	resw_next_state = RESULT_W_WAIT;
 	endcase
  end
- 
- always @(posedge clk) begin
-	if (resw_state == RESULT_W_WAIT) begin
-		result_wdata <= 32'd0;
-		result_addr <= 11'd0;
-		result_write <= 1'b0;
-		resw_write_idx <= 8'd0;
-	end
-	else if (resw_state == RESULT_W_SX) begin
-		result_wdata <= x_slopes;
-		result_addr <= resw_write_idx + SLOPE_X_OFFSET;
-		result_write <= 1'b1;
-	end
-	else if (resw_state == RESULT_W_SY) begin
-		result_wdata <= y_slopes;
-		result_addr <= resw_write_idx + SLOPE_Y_OFFSET;
-		result_write <= 1'b1;
-	end
-	else if (resw_state == RESULT_W_CX) begin
-		result_wdata <= x_centroid;
-		result_addr <= resw_write_idx + CENTROID_X_OFFSET;
-		result_write <= 1'b1;
-	end
-	else if (resw_state == RESULT_W_CY) begin
-		result_wdata <= y_centroid;
-		result_addr <= resw_write_idx + CENTROID_Y_OFFSET;
-		result_write <= 1'b1;
-	end
-	else if (resw_state == RESULT_W_DONE) begin
-		resw_write_idx <= resw_write_idx + 8'd1;
-		result_write <= 1'b0;
-	end
- end
+// 
+// always @(posedge clk) begin
+//	 
+//	if (resw_state == RESULT_W_WAIT) begin
+//		result_wdata <= 32'd0;
+//		result_addr <= 11'd0;
+//		result_write <= 1'b0;
+//	end
+//	else if (resw_state == RESULT_W_SX) begin
+//		result_wdata <= x_slopes;
+//		result_addr <= resw_write_idx + SLOPE_X_OFFSET;
+//		result_write <= 1'b1;
+//	end
+//	else if (resw_state == RESULT_W_SY) begin
+//		result_wdata <= y_slopes;
+//		result_addr <= resw_write_idx + SLOPE_Y_OFFSET;
+//		result_write <= 1'b1;
+//	end
+//	else if (resw_state == RESULT_W_CX) begin
+//		result_wdata <= x_centroid;
+//		result_addr <= resw_write_idx + CENTROID_X_OFFSET;
+//		result_write <= 1'b1;
+//	end
+//	else if (resw_state == RESULT_W_CY) begin
+//		result_wdata <= y_centroid;
+//		result_addr <= resw_write_idx + CENTROID_Y_OFFSET;
+//		result_write <= 1'b1;
+//	end
+//	else if (resw_state == RESULT_W_DONE) begin
+//		resw_write_idx <= resw_write_idx + 8'd1;
+//		result_write <= 1'b0;
+//	end
+// end
+
+always @(posedge clk) begin
+    if (reset) begin
+        intensity_write  <= 1'b0;
+        intensity_wdata  <= 8'd0;
+        resw_state       <= RESULT_W_WAIT;
+        resw_write_idx   <= 8'd0;
+        resw_start       <= 1'b0;
+        result_write     <= 1'b0;
+        result_wdata     <= 32'd0;
+        result_addr      <= 11'd0;
+    end
+    else begin
+        resw_state <= resw_next_state;
+        
+        // resw_start
+        resw_start <= new_subapeture ? 1'b1 : 1'b0;
+        
+        // Capture outputs
+        x_centroid_out <= x_centroid;
+        y_centroid_out <= y_centroid;
+        x_slopes_out   <= x_slopes;
+        y_slopes_out   <= y_slopes;
+
+        // FSM datapath
+        case (resw_state)
+            RESULT_W_WAIT: begin
+                result_wdata <= 32'd0;
+                result_addr  <= 11'd0;
+                result_write <= 1'b0;
+            end
+            RESULT_W_SX: begin
+                result_wdata <= x_slopes;
+                result_addr  <= resw_write_idx + SLOPE_X_OFFSET;
+                result_write <= 1'b1;
+            end
+            RESULT_W_SY: begin
+                result_wdata <= y_slopes;
+                result_addr  <= resw_write_idx + SLOPE_Y_OFFSET;
+                result_write <= 1'b1;
+            end
+            RESULT_W_CX: begin
+                result_wdata <= x_centroid;
+                result_addr  <= resw_write_idx + CENTROID_X_OFFSET;
+                result_write <= 1'b1;
+            end
+            RESULT_W_CY: begin
+                result_wdata <= y_centroid;
+                result_addr  <= resw_write_idx + CENTROID_Y_OFFSET;
+                result_write <= 1'b1;
+            end
+            RESULT_W_DONE: begin
+                resw_write_idx <= resw_write_idx + 8'd1;
+                result_write   <= 1'b0;
+            end
+        endcase
+    end
+end
 
  // Intensity reading logic
- always @(posedge clk) begin
-	if (reset) begin
-		intensity_write <= 1'b0;
-		intensity_wdata <= 8'd0;
-	end
-	else begin
-		
-		if (new_subapeture) begin
-			resw_start <= 1'b1;
-		end
-		else begin
-			resw_start <= 1'b0;
-		end
-		
-		x_centroid_out <= x_centroid;
-		y_centroid_out <= y_centroid;
-		x_slopes_out <= x_slopes;
-		y_slopes_out <= y_slopes;
-		
-	end
- end
+// always @(posedge clk) begin
+//	if (reset) begin
+//		intensity_write <= 1'b0;
+//		intensity_wdata <= 8'd0;
+//	end
+//	else begin		
+//		if (new_subapeture) begin
+//			resw_start <= 1'b1;
+//		end
+//		else begin
+//			resw_start <= 1'b0;
+//		end
+//		
+//		x_centroid_out <= x_centroid;
+//		y_centroid_out <= y_centroid;
+//		x_slopes_out <= x_slopes;
+//		y_slopes_out <= y_slopes;
+//		
+//	end
+// end
 
 
 //=======================================================
@@ -626,6 +686,9 @@ Computer_System The_System (
 	// Global signals
 	.system_pll_ref_clk_clk					(CLOCK_50),
 	.system_pll_ref_reset_reset			(1'b0),
+	
+	// SHWFS Pipeline Clock
+	.clk_10_clk									(clk),
 	
 	
 	.intensity_sram_address			(intensity_addr),            	//       intensity_sram.address

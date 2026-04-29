@@ -1,12 +1,13 @@
 # # File gsaved with Nlview version 6.3.8  2013-12-19 bk=1.2992 VDI=34 GEI=35
 # 
-preplace inst Computer_System.dma_1 -pg 1 -lvl 11 -y 50
+preplace inst Computer_System.dma_1 -pg 1 -lvl 11 -y 60
+preplace inst Computer_System.ctrl_reg_h2f -pg 1 -lvl 18 -y 520
 preplace inst Computer_System.ARM_A9_HPS.uart1 -pg 1
 preplace inst Computer_System.ARM_A9_HPS.fpgamgr -pg 1
 preplace inst Computer_System.ARM_A9_HPS.sysmgr -pg 1
 preplace inst Computer_System.ARM_A9_HPS.f2s_periph_ref_clk -pg 1
 preplace inst Computer_System -pg 1 -lvl 1 -y 40 -regy -20
-preplace inst Computer_System.dma_2 -pg 1 -lvl 11 -y 230
+preplace inst Computer_System.dma_2 -pg 1 -lvl 11 -y 280
 preplace inst Computer_System.ARM_A9_HPS.scu -pg 1
 preplace inst Computer_System.ARM_A9_HPS.gpio0 -pg 1
 preplace inst Computer_System.ARM_A9_HPS.dma -pg 1
@@ -22,27 +23,27 @@ preplace inst Computer_System.ARM_A9_HPS.usb1 -pg 1
 preplace inst Computer_System.ARM_A9_HPS.gpio2 -pg 1
 preplace inst Computer_System.ARM_A9_HPS.timer1 -pg 1
 preplace inst Computer_System.ARM_A9_HPS.arm_a9_1 -pg 1
-preplace inst Computer_System.result_sram -pg 1 -lvl 18 -y 300
+preplace inst Computer_System.result_sram -pg 1 -lvl 18 -y 370
 preplace inst Computer_System.ARM_A9_HPS.l3regs -pg 1
 preplace inst Computer_System.ARM_A9_HPS.timer2 -pg 1
 preplace inst Computer_System.ARM_A9_HPS.clkmgr -pg 1
 preplace inst Computer_System.ARM_A9_HPS.arm_gic_0 -pg 1
 preplace inst Computer_System.ARM_A9_HPS.clk_0 -pg 1
-preplace inst Computer_System.System_PLL -pg 1 -lvl 1 -y 1960
+preplace inst Computer_System.System_PLL -pg 1 -lvl 1 -y 2010
 preplace inst Computer_System.ARM_A9_HPS.gmac0 -pg 1
 preplace inst Computer_System.ARM_A9_HPS.timer3 -pg 1
 preplace inst Computer_System.ARM_A9_HPS.rstmgr -pg 1
 preplace inst Computer_System.ARM_A9_HPS.f2s_sdram_ref_clk -pg 1
 preplace inst Computer_System.ARM_A9_HPS.bridges -pg 1
 preplace inst Computer_System.ARM_A9_HPS.hps_io.border -pg 1
-preplace inst Computer_System.ARM_A9_HPS -pg 1 -lvl 17 -y 70
+preplace inst Computer_System.ARM_A9_HPS -pg 1 -lvl 17 -y 100
 preplace inst Computer_System.System_PLL.sys_pll -pg 1
 preplace inst Computer_System.ARM_A9_HPS.axi_ocram -pg 1
 preplace inst Computer_System.ARM_A9_HPS.gmac1 -pg 1
 preplace inst Computer_System.System_PLL.reset_from_locked -pg 1
 preplace inst Computer_System.ARM_A9_HPS.qspi -pg 1
 preplace inst Computer_System.ARM_A9_HPS.spim0 -pg 1
-preplace inst Computer_System.intensity_sram -pg 1 -lvl 18 -y 150
+preplace inst Computer_System.intensity_sram -pg 1 -lvl 18 -y 220
 preplace inst Computer_System.ARM_A9_HPS.sdrctl -pg 1
 preplace inst Computer_System.ARM_A9_HPS.spim1 -pg 1
 preplace inst Computer_System.ARM_A9_HPS.i2c0 -pg 1
@@ -55,21 +56,24 @@ preplace inst Computer_System.ARM_A9_HPS.sdmmc -pg 1
 preplace inst Computer_System.ARM_A9_HPS.i2c2 -pg 1
 preplace inst Computer_System.ARM_A9_HPS.wd_timer1 -pg 1
 preplace inst Computer_System.ARM_A9_HPS.eosc2 -pg 1
+preplace inst Computer_System.ctrl_reg_f2h -pg 1 -lvl 18 -y 110
 preplace inst Computer_System.ARM_A9_HPS.axi_sdram -pg 1
 preplace inst Computer_System.ARM_A9_HPS.i2c3 -pg 1
 preplace inst Computer_System.ARM_A9_HPS.hps_io -pg 1
 preplace inst Computer_System.ARM_A9_HPS.uart0 -pg 1
-preplace netloc EXPORT<net_container>Computer_System</net_container>(SLAVE)Computer_System.memory,(SLAVE)ARM_A9_HPS.memory) 1 0 17 NJ 200 NJ 200 NJ 200 NJ 200 NJ 200 NJ 200 NJ 200 NJ 200 NJ 200 NJ 200 NJ 200 NJ 180 NJ 180 NJ 180 NJ 180 NJ 180 NJ
-preplace netloc EXPORT<net_container>Computer_System</net_container>(SLAVE)intensity_sram.s2,(SLAVE)Computer_System.intensity_sram) 1 0 18 NJ 180 NJ 180 NJ 180 NJ 180 NJ 180 NJ 180 NJ 180 NJ 180 NJ 180 NJ 180 NJ 180 NJ 160 NJ 160 NJ 160 NJ 160 NJ 160 NJ 260 NJ
-preplace netloc FAN_OUT<net_container>Computer_System</net_container>(SLAVE)result_sram.clk2,(SLAVE)intensity_sram.clk1,(SLAVE)intensity_sram.clk2,(SLAVE)ARM_A9_HPS.f2h_axi_clock,(SLAVE)ARM_A9_HPS.h2f_lw_axi_clock,(SLAVE)result_sram.clk1,(SLAVE)dma_1.clk,(SLAVE)dma_2.clk,(MASTER)System_PLL.sys_clk,(SLAVE)ARM_A9_HPS.h2f_axi_clock) 1 1 17 360 430 NJ 430 NJ 430 NJ 430 NJ 430 NJ 430 NJ 430 NJ 430 NJ 430 3140 430 NJ 430 NJ 430 NJ 430 NJ 430 NJ 430 3920 280 4330
-preplace netloc EXPORT<net_container>Computer_System</net_container>(SLAVE)Computer_System.system_pll_ref_reset,(SLAVE)System_PLL.ref_reset) 1 0 1 NJ
-preplace netloc EXPORT<net_container>Computer_System</net_container>(SLAVE)result_sram.s1,(SLAVE)Computer_System.result_sram) 1 0 18 NJ 220 NJ 220 NJ 220 NJ 220 NJ 220 NJ 220 NJ 220 NJ 220 NJ 220 NJ 220 NJ 220 NJ 390 NJ 390 NJ 390 NJ 390 NJ 390 NJ 390 NJ
-preplace netloc POINT_TO_POINT<net_container>Computer_System</net_container>(MASTER)ARM_A9_HPS.h2f_axi_master,(SLAVE)result_sram.s2) 1 17 1 4310
-preplace netloc FAN_IN<net_container>Computer_System</net_container>(MASTER)dma_2.write_master,(SLAVE)ARM_A9_HPS.f2h_axi_slave,(MASTER)dma_1.read_master) 1 11 6 3620 60 NJ 60 NJ 60 NJ 60 NJ 60 NJ
-preplace netloc EXPORT<net_container>Computer_System</net_container>(SLAVE)ARM_A9_HPS.hps_io,(SLAVE)Computer_System.hps_io) 1 0 17 NJ 40 NJ 40 NJ 40 NJ 40 NJ 40 NJ 40 NJ 40 NJ 40 NJ 40 NJ 40 NJ 40 NJ 80 NJ 80 NJ 80 NJ 80 NJ 80 NJ
+preplace netloc EXPORT<net_container>Computer_System</net_container>(SLAVE)ctrl_reg_f2h.external_connection,(SLAVE)Computer_System.ctrl_reg_f2h) 1 0 18 NJ 190 NJ 190 NJ 190 NJ 190 NJ 190 NJ 190 NJ 190 NJ 190 NJ 190 NJ 190 NJ 190 NJ 190 NJ 190 NJ 190 NJ 190 NJ 190 NJ 310 NJ
+preplace netloc FAN_OUT<net_container>Computer_System</net_container>(SLAVE)ctrl_reg_f2h.s1,(SLAVE)ctrl_reg_h2f.s1,(MASTER)ARM_A9_HPS.h2f_axi_master,(SLAVE)result_sram.s2) 1 17 1 4290
+preplace netloc EXPORT<net_container>Computer_System</net_container>(SLAVE)Computer_System.memory,(SLAVE)ARM_A9_HPS.memory) 1 0 17 NJ 250 NJ 250 NJ 250 NJ 250 NJ 250 NJ 250 NJ 250 NJ 250 NJ 250 NJ 250 NJ 250 NJ 230 NJ 230 NJ 230 NJ 230 NJ 230 NJ
+preplace netloc EXPORT<net_container>Computer_System</net_container>(SLAVE)intensity_sram.s2,(SLAVE)Computer_System.intensity_sram) 1 0 18 NJ 230 NJ 230 NJ 230 NJ 230 NJ 230 NJ 230 NJ 230 NJ 230 NJ 230 NJ 230 NJ 230 NJ 210 NJ 210 NJ 210 NJ 210 NJ 210 NJ 330 NJ
+preplace netloc INTERCONNECT<net_container>Computer_System</net_container>(SLAVE)ctrl_reg_h2f.reset,(SLAVE)result_sram.reset1,(SLAVE)result_sram.reset2,(SLAVE)intensity_sram.reset2,(MASTER)ARM_A9_HPS.h2f_reset,(SLAVE)dma_1.reset,(SLAVE)ctrl_reg_f2h.reset,(SLAVE)dma_2.reset,(SLAVE)intensity_sram.reset1,(MASTER)System_PLL.reset_source) 1 1 17 NJ 2020 NJ 2020 NJ 2020 NJ 2020 NJ 2020 NJ 2020 NJ 2020 NJ 2020 NJ 2020 3160 400 NJ 400 NJ 400 NJ 400 NJ 400 NJ 400 NJ 400 4370
+preplace netloc FAN_OUT<net_container>Computer_System</net_container>(SLAVE)ARM_A9_HPS.f2h_axi_clock,(SLAVE)ARM_A9_HPS.h2f_axi_clock,(MASTER)System_PLL.sys_clk,(SLAVE)intensity_sram.clk1,(SLAVE)result_sram.clk1,(SLAVE)dma_1.clk,(SLAVE)ctrl_reg_f2h.clk,(SLAVE)intensity_sram.clk2,(SLAVE)dma_2.clk,(SLAVE)result_sram.clk2,(SLAVE)ctrl_reg_h2f.clk,(SLAVE)ARM_A9_HPS.h2f_lw_axi_clock) 1 1 17 NJ 2060 NJ 2060 NJ 2060 NJ 2060 NJ 2060 NJ 2060 NJ 2060 NJ 2060 NJ 2060 3140 30 NJ 110 NJ 110 NJ 110 NJ 110 NJ 110 3960 290 4330
+preplace netloc FAN_IN<net_container>Computer_System</net_container>(MASTER)dma_1.write_master,(MASTER)dma_2.read_master,(SLAVE)intensity_sram.s1) 1 11 7 3580 350 NJ 350 NJ 350 NJ 350 NJ 350 NJ 350 4350
+preplace netloc FAN_IN<net_container>Computer_System</net_container>(MASTER)dma_2.write_master,(MASTER)dma_1.read_master,(SLAVE)ARM_A9_HPS.f2h_axi_slave) 1 11 6 3600 150 NJ 150 NJ 150 NJ 150 NJ 150 NJ
+preplace netloc EXPORT<net_container>Computer_System</net_container>(SLAVE)System_PLL.ref_reset,(SLAVE)Computer_System.system_pll_ref_reset) 1 0 1 NJ
 preplace netloc EXPORT<net_container>Computer_System</net_container>(SLAVE)System_PLL.ref_clk,(SLAVE)Computer_System.system_pll_ref_clk) 1 0 1 NJ
-preplace netloc FAN_IN<net_container>Computer_System</net_container>(MASTER)dma_2.read_master,(MASTER)dma_1.write_master,(SLAVE)intensity_sram.s1) 1 11 7 3600 410 NJ 410 NJ 410 NJ 410 NJ 410 NJ 410 4290
-preplace netloc INTERCONNECT<net_container>Computer_System</net_container>(MASTER)ARM_A9_HPS.h2f_reset,(SLAVE)dma_2.reset,(SLAVE)intensity_sram.reset2,(SLAVE)intensity_sram.reset1,(SLAVE)dma_1.reset,(SLAVE)result_sram.reset1,(MASTER)System_PLL.reset_source,(SLAVE)result_sram.reset2) 1 1 17 380 450 NJ 450 NJ 450 NJ 450 NJ 450 NJ 450 NJ 450 NJ 450 NJ 450 3160 450 NJ 450 NJ 450 NJ 450 NJ 450 NJ 450 NJ 450 4270
-preplace netloc FAN_OUT<net_container>Computer_System</net_container>(SLAVE)dma_1.control_port_slave,(MASTER)ARM_A9_HPS.h2f_lw_axi_master,(SLAVE)dma_2.control_port_slave) 1 10 8 3180 160 NJ 140 NJ 140 NJ 140 NJ 140 NJ 140 NJ 240 4250
-levelinfo -pg 1 0 130 4480
-levelinfo -hier Computer_System 140 210 620 1040 1480 1890 2370 2840 2940 2960 3120 3370 3700 3800 3820 3840 3860 4060 4370 4470
+preplace netloc EXPORT<net_container>Computer_System</net_container>(SLAVE)Computer_System.result_sram,(SLAVE)result_sram.s1) 1 0 18 NJ 460 NJ 460 NJ 460 NJ 460 NJ 460 NJ 460 NJ 460 NJ 460 NJ 460 NJ 460 NJ 460 NJ 460 NJ 460 NJ 460 NJ 460 NJ 460 NJ 460 NJ
+preplace netloc EXPORT<net_container>Computer_System</net_container>(SLAVE)Computer_System.hps_io,(SLAVE)ARM_A9_HPS.hps_io) 1 0 17 NJ 50 NJ 50 NJ 50 NJ 50 NJ 50 NJ 50 NJ 50 NJ 50 NJ 50 NJ 50 NJ 50 NJ 130 NJ 130 NJ 130 NJ 130 NJ 130 NJ
+preplace netloc EXPORT<net_container>Computer_System</net_container>(SLAVE)ctrl_reg_h2f.external_connection,(SLAVE)Computer_System.ctrl_reg_h2f) 1 0 18 NJ 550 NJ 550 NJ 550 NJ 550 NJ 550 NJ 550 NJ 550 NJ 550 NJ 550 NJ 550 NJ 550 NJ 550 NJ 550 NJ 550 NJ 550 NJ 550 NJ 550 NJ
+preplace netloc FAN_OUT<net_container>Computer_System</net_container>(MASTER)ARM_A9_HPS.h2f_lw_axi_master,(SLAVE)dma_2.control_port_slave,(SLAVE)dma_1.control_port_slave) 1 10 8 3180 170 NJ 170 NJ 170 NJ 170 NJ 170 NJ 170 NJ 270 4270
+levelinfo -pg 1 0 130 4570
+levelinfo -hier Computer_System 140 210 620 1040 1480 1890 2370 2840 2940 2960 3120 3370 3700 3800 3820 3840 3860 4080 4410 4560
