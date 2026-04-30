@@ -11,7 +11,14 @@ SLOPE_SIZE = 4
 ZERNIKE_SIZE = 4
 DUMP_DIR = "debug_dumps"
 ENABLE_DUMPS = False
+RESULT_DUMP_DIR = "output_dumps"
 CLIENT_TIMEOUT_SEC = 5.0
+
+NUM_SUBAPERTURES_SIDE = 16
+NUM_SUBAPERTURES = NUM_SUBAPERTURES_SIDE * NUM_SUBAPERTURES_SIDE
+NUM_PACKED_XY = NUM_SUBAPERTURES * 2
+NUM_ZERNIKE = 10
+Q4_23_SCALE = float(1 << 23)
 
 bind_ip = "10.41.230.185" 
 bind_port = 80
@@ -28,6 +35,8 @@ print(f"[+] Listening on port {bind_ip} : {bind_port}")
 
 if ENABLE_DUMPS:
     os.makedirs(DUMP_DIR, exist_ok=True)
+
+os.makedirs(RESULT_DUMP_DIR, exist_ok=True)
 
 
 def summarize_array_for_c(name, arr):
@@ -152,6 +161,46 @@ def dump_bytes(base_name, payload, elem_size=1, words_per_row=16):
             f.write(f"{word:0{hex_digits}X} ")
         f.write("\n")
 
+
+def decode_q4_23_from_bytes(payload, expected_count):
+    values_i32 = np.frombuffer(payload, dtype="<i4", count=expected_count)
+    return values_i32.astype(np.float64) / Q4_23_SCALE
+
+
+def unpack_xy_vectors(packed_values, n_vectors):
+    if packed_values.size != (2 * n_vectors):
+        raise ValueError(
+            f"Expected {2 * n_vectors} packed XY values, got {packed_values.size}"
+        )
+
+    x_vals = packed_values[:n_vectors]
+    y_vals = packed_values[n_vectors:]
+    return np.column_stack((x_vals, y_vals))
+
+
+def dump_fpga_float_results(slopes_xy, centroids_xy, zernikes):
+    np.savetxt(
+        os.path.join(RESULT_DUMP_DIR, "slopes_xy_float.txt"),
+        slopes_xy,
+        fmt="%.10f",
+        header="x_slope y_slope",
+        comments="",
+    )
+    np.savetxt(
+        os.path.join(RESULT_DUMP_DIR, "centroids_xy_float.txt"),
+        centroids_xy,
+        fmt="%.10f",
+        header="x_centroid y_centroid",
+        comments="",
+    )
+    np.savetxt(
+        os.path.join(RESULT_DUMP_DIR, "zernikes_float.txt"),
+        zernikes,
+        fmt="%.10f",
+        header="zernike_coeff",
+        comments="",
+    )
+
 #client handling thread
 def handle_client(client_socket): 
     #printing what the client sends 
@@ -193,7 +242,7 @@ def handle_client(client_socket):
 
                 # Now recieve 512 centroid vector, 512 slope vector, and 10 zernike vector
                 print("receiving centroids")
-                centroid_bytes = recv_exact(client_socket, 512 * CENTROID_SIZE)
+                centroid_bytes = recv_exact(client_socket, NUM_PACKED_XY * CENTROID_SIZE)
 
                 if centroid_bytes is None:
                     print("Client disconnected before delivering centroid vector. ")
@@ -205,7 +254,7 @@ def handle_client(client_socket):
                 print("     Centroids received and acked.")
 
                 print("receiving slopes")
-                slope_bytes = recv_exact(client_socket, 512 * SLOPE_SIZE)
+                slope_bytes = recv_exact(client_socket, NUM_PACKED_XY * SLOPE_SIZE)
                 if slope_bytes is None:
                     print("Client disconnected before delivering slope vector. ")
                     break
@@ -216,7 +265,7 @@ def handle_client(client_socket):
                 print("     Slopes received and acked.")
 
                 print("receiving zernike coefficients")
-                zernike_bytes = recv_exact(client_socket, 10 * ZERNIKE_SIZE)
+                zernike_bytes = recv_exact(client_socket, NUM_ZERNIKE * ZERNIKE_SIZE)
                 if zernike_bytes is None:
                     print("Client disconnected before delivering zernike vector. ")
                     break
@@ -226,8 +275,18 @@ def handle_client(client_socket):
                 client_socket.sendall(b"zernike_done\n")
                 print("     Zernike coefficients received and acked.")
 
-                # now we have centroid_bytes, slope_bytes, and zernike_bytes
-                # run visualization
+                # Decode returned Q4.23 fixed-point values into float arrays.
+                centroids_q423 = decode_q4_23_from_bytes(centroid_bytes, NUM_PACKED_XY)
+                slopes_q423 = decode_q4_23_from_bytes(slope_bytes, NUM_PACKED_XY)
+                zernikes_q423 = decode_q4_23_from_bytes(zernike_bytes, NUM_ZERNIKE)
+
+                # Packed format: [X0..X255, Y0..Y255] for both slopes and centroids.
+                centroids_xy = unpack_xy_vectors(centroids_q423, NUM_SUBAPERTURES)
+                slopes_xy = unpack_xy_vectors(slopes_q423, NUM_SUBAPERTURES)
+
+                dump_fpga_float_results(slopes_xy, centroids_xy, zernikes_q423)
+                print(f"     Float outputs written under: {RESULT_DUMP_DIR}")
+                print(f"     slopes_xy shape={slopes_xy.shape}, centroids_xy shape={centroids_xy.shape}, zernikes shape={zernikes_q423.shape}")
 
             case _:
                 print("Pattern not recognized")
