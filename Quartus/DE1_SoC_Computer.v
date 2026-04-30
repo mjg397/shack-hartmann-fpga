@@ -408,24 +408,29 @@ HexDigit Digit3(HEX3, hex3_hex0[15:12]);
  wire [7:0] ctrl_reg_f2h;
  
  wire reset;
- assign reset = ~KEY[0];
-
 
  assign frame_complete_w = frame_complete;
 
+ reg [1:0] start_sync;
+ always @(posedge clk)
+    start_sync <= {start_sync[0], ctrl_reg_h2f[0]};
+
+ wire start_synced = start_sync[1];
+ 
+
  streaming_emulator streamer 
  (
-	  .clk            (clk),
-	  .reset          (reset),
-	  .rdata				(intensity_rdata),
-	  .start				(ctrl_reg_h2f[0]),
+	  .clk            	(clk),
+	  .reset          	(reset),
+	  .rdata		  	(intensity_rdata),
+	  .start		  	(start_synced),
 	  
-	  .raddr				(intensity_addr),
-	  .data           (streamer_data),
-	  .fv             (streamer_fv),
-	  .lv             (streamer_lv),
-	  .frame_complete (frame_complete),
-	  .valid          (streamer_valid)
+	  .raddr		  	(intensity_addr),
+	  .data           	(streamer_data),
+	  .fv             	(streamer_fv),
+	  .lv             	(streamer_lv),
+	  .frame_complete 	(frame_complete),
+	  .valid          	(streamer_valid)
  );
 
  wire full_frame_complete_accumulator;
@@ -558,39 +563,6 @@ HexDigit Digit3(HEX3, hex3_hex0[15:12]);
 		RESULT_W_DONE:	resw_next_state = RESULT_W_WAIT;
 	endcase
  end
-// 
-// always @(posedge clk) begin
-//	 
-//	if (resw_state == RESULT_W_WAIT) begin
-//		result_wdata <= 32'd0;
-//		result_addr <= 11'd0;
-//		result_write <= 1'b0;
-//	end
-//	else if (resw_state == RESULT_W_SX) begin
-//		result_wdata <= x_slopes;
-//		result_addr <= resw_write_idx + SLOPE_X_OFFSET;
-//		result_write <= 1'b1;
-//	end
-//	else if (resw_state == RESULT_W_SY) begin
-//		result_wdata <= y_slopes;
-//		result_addr <= resw_write_idx + SLOPE_Y_OFFSET;
-//		result_write <= 1'b1;
-//	end
-//	else if (resw_state == RESULT_W_CX) begin
-//		result_wdata <= x_centroid;
-//		result_addr <= resw_write_idx + CENTROID_X_OFFSET;
-//		result_write <= 1'b1;
-//	end
-//	else if (resw_state == RESULT_W_CY) begin
-//		result_wdata <= y_centroid;
-//		result_addr <= resw_write_idx + CENTROID_Y_OFFSET;
-//		result_write <= 1'b1;
-//	end
-//	else if (resw_state == RESULT_W_DONE) begin
-//		resw_write_idx <= resw_write_idx + 8'd1;
-//		result_write <= 1'b0;
-//	end
-// end
 
 always @(posedge clk) begin
     if (reset) begin
@@ -650,28 +622,22 @@ always @(posedge clk) begin
     end
 end
 
- // Intensity reading logic
-// always @(posedge clk) begin
-//	if (reset) begin
-//		intensity_write <= 1'b0;
-//		intensity_wdata <= 8'd0;
-//	end
-//	else begin		
-//		if (new_subapeture) begin
-//			resw_start <= 1'b1;
-//		end
-//		else begin
-//			resw_start <= 1'b0;
-//		end
-//		
-//		x_centroid_out <= x_centroid;
-//		y_centroid_out <= y_centroid;
-//		x_slopes_out <= x_slopes;
-//		y_slopes_out <= y_slopes;
-//		
-//	end
-// end
+wire reset_from_key;
+wire reset_from_hps;
 
+async_reset key_reset_sync (
+    .clk         (clk),
+    .reset_async (~KEY[0]),
+    .reset_sync  (reset_from_key)
+);
+
+async_reset hps_reset_sync (
+    .clk         (clk),
+    .reset_async (ctrl_reg_h2f[1]),  // bit 1 -> reset (bit 0 -> start)
+    .reset_sync  (reset_from_hps)
+);
+
+assign reset = reset_from_key | reset_from_hps;
 
 //=======================================================
 //  Structural coding

@@ -39,6 +39,13 @@ module streaming_emulator #(
 
   reg [1:0] state;
 
+  reg start_latch;
+  always @(posedge clk) begin
+      if (reset)                              start_latch <= 0;
+      else if (start)                         start_latch <= 1;
+      else if (state == STATE_ACTIVE_FRAME)   start_latch <= 0;  // consume it
+  end
+
   always @(posedge clk) begin
     if (reset == 1) begin
       state <= STATE_FRAME_INIT;
@@ -58,7 +65,8 @@ module streaming_emulator #(
           fv <= 1;
           line_counter <= 0;
           row_counter <= 0;
-          state <= start ? STATE_ACTIVE_FRAME : STATE_FRAME_INIT;
+          state <= start_latch ? STATE_ACTIVE_FRAME : STATE_FRAME_INIT;
+          frame_complete <= 0;
         end
 
         STATE_ACTIVE_FRAME: begin
@@ -79,7 +87,7 @@ module streaming_emulator #(
         STATE_HOROZONTAL_BLANKING: begin
           lv <= 0;
           line_counter <= 0;
-          h_blank_counter = h_blank_counter + 1;
+          h_blank_counter <= h_blank_counter + 1;
           if (h_blank_counter == HBLANK - 1) begin
             h_blank_counter <= 0;
             row_counter <= row_counter + 1;

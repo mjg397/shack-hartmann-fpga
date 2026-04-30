@@ -17,6 +17,7 @@
 #include <sys/mman.h>
 #include <sys/time.h> 
 #include <math.h> 
+#include <unistd.h>
 
 #define SIGN_EXTEND_4_23(v) \
     (((v) & (1u << 26)) ? ((v) | 0xF8000000u) : ((v) & 0x07FFFFFFu))
@@ -414,6 +415,13 @@ void send_shwfs(int sockfd) {
     printf("    Zernike coeffs received. \n");
 }
 
+static void fpga_reset(volatile uint8_t *ctrl_reg_h2f)
+{
+    *ctrl_reg_h2f |= (1u << 1);   // assert reset bit (bit 1)
+    usleep(100);                   // hold > 2 pipeline clock cycles (safe margin)
+    *ctrl_reg_h2f &= ~(1u << 1);  // deassert
+}
+
 // entry point
 int main(int argc, char **argv)
 {
@@ -539,7 +547,11 @@ int main(int argc, char **argv)
     // send ack to fpga? start compute
     // wait for results
 
-    *ctrl_reg_h2f = 1u; // signal bit 0 in ctrl reg
+    fpga_reset(ctrl_reg_h2f);
+
+    *ctrl_reg_h2f |= 1u; // signal bit 0 in ctrl reg
+    usleep(10);
+    *ctrl_reg_h2f &= ~1u; // reset bit 0 (go bit)
 
     FILE *output = fopen("read_out_coeffs.hex", "w");
     if (output == NULL) {
@@ -550,9 +562,7 @@ int main(int argc, char **argv)
     }
     // read results back from FPGA mem
 
-    while (*ctrl_reg_f2h == 0) WAIT; // wait for results to be ready in mem.
-
-    *ctrl_reg_h2f = 1u; // reset go bit to zero
+    while (*ctrl_reg_f2h == 0) WAIT; // wait for results to be ready in mem
 
     sleep(2);
 

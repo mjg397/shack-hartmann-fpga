@@ -54,7 +54,7 @@ module slope_calculation (
   end
 
   // high every time a new subap appears
-    reg [7:0] current_subap;
+  reg [7:0] current_subap;
   always @(posedge clk) begin
     if (rst) begin
       current_subap <= 0;
