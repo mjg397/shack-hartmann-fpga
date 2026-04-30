@@ -1,4 +1,5 @@
 	Computer_System u0 (
+		.clk_25_clk                      (<connected-to-clk_25_clk>),                      //               clk_25.clk
 		.ctrl_reg_f2h_export             (<connected-to-ctrl_reg_f2h_export>),             //         ctrl_reg_f2h.export
 		.ctrl_reg_h2f_export             (<connected-to-ctrl_reg_h2f_export>),             //         ctrl_reg_h2f.export
 		.hps_io_hps_io_emac1_inst_TX_CLK (<connected-to-hps_io_hps_io_emac1_inst_TX_CLK>), //               hps_io.hps_io_emac1_inst_TX_CLK
@@ -87,7 +88,6 @@
 		.result_sram_writedata           (<connected-to-result_sram_writedata>),           //                     .writedata
 		.result_sram_byteenable          (<connected-to-result_sram_byteenable>),          //                     .byteenable
 		.system_pll_ref_clk_clk          (<connected-to-system_pll_ref_clk_clk>),          //   system_pll_ref_clk.clk
-		.system_pll_ref_reset_reset      (<connected-to-system_pll_ref_reset_reset>),      // system_pll_ref_reset.reset
-		.clk_10_clk                      (<connected-to-clk_10_clk>)                       //               clk_10.clk
+		.system_pll_ref_reset_reset      (<connected-to-system_pll_ref_reset_reset>)       // system_pll_ref_reset.reset
 	);
 

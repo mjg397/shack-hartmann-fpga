@@ -4,7 +4,7 @@
 
 `timescale 1 ps / 1 ps
 module Computer_System (
-		output wire        clk_10_clk,                      //               clk_10.clk
+		output wire        clk_25_clk,                      //               clk_25.clk
 		input  wire [7:0]  ctrl_reg_f2h_export,             //         ctrl_reg_f2h.export
 		output wire [7:0]  ctrl_reg_h2f_export,             //         ctrl_reg_h2f.export
 		output wire        hps_io_hps_io_emac1_inst_TX_CLK, //               hps_io.hps_io_emac1_inst_TX_CLK
@@ -96,7 +96,7 @@ module Computer_System (
 		input  wire        system_pll_ref_reset_reset       // system_pll_ref_reset.reset
 	);
 
-	wire          system_pll_sys_clk_clk;                                // System_PLL:sys_clk_clk -> [ARM_A9_HPS:f2h_axi_clk, ARM_A9_HPS:h2f_axi_clk, ARM_A9_HPS:h2f_lw_axi_clk, ctrl_reg_f2h:clk, ctrl_reg_h2f:clk, dma_1:clk, dma_2:clk, intensity_sram:clk, intensity_sram:clk2, mm_interconnect_0:System_PLL_sys_clk_clk, mm_interconnect_1:System_PLL_sys_clk_clk, mm_interconnect_2:System_PLL_sys_clk_clk, mm_interconnect_3:System_PLL_sys_clk_clk, pll_0:refclk, result_sram:clk, result_sram:clk2, rst_controller:clk, rst_controller_002:clk]
+	wire          system_pll_sys_clk_clk;                                // System_PLL:sys_clk_clk -> [ARM_A9_HPS:f2h_axi_clk, ARM_A9_HPS:h2f_axi_clk, ARM_A9_HPS:h2f_lw_axi_clk, ctrl_reg_f2h:clk, ctrl_reg_h2f:clk, dma_1:clk, dma_2:clk, intensity_sram:clk, mm_interconnect_0:System_PLL_sys_clk_clk, mm_interconnect_1:System_PLL_sys_clk_clk, mm_interconnect_2:System_PLL_sys_clk_clk, mm_interconnect_3:System_PLL_sys_clk_clk, pll_0:refclk, result_sram:clk2, rst_controller:clk, rst_controller_003:clk]
 	wire    [1:0] arm_a9_hps_h2f_axi_master_awburst;                     // ARM_A9_HPS:h2f_AWBURST -> mm_interconnect_0:ARM_A9_HPS_h2f_axi_master_awburst
 	wire    [3:0] arm_a9_hps_h2f_axi_master_arlen;                       // ARM_A9_HPS:h2f_ARLEN -> mm_interconnect_0:ARM_A9_HPS_h2f_axi_master_arlen
 	wire   [15:0] arm_a9_hps_h2f_axi_master_wstrb;                       // ARM_A9_HPS:h2f_WSTRB -> mm_interconnect_0:ARM_A9_HPS_h2f_axi_master_wstrb
@@ -263,12 +263,14 @@ module Computer_System (
 	wire          mm_interconnect_3_intensity_sram_s1_clken;             // mm_interconnect_3:intensity_sram_s1_clken -> intensity_sram:clken
 	wire   [31:0] arm_a9_hps_f2h_irq0_irq;                               // irq_mapper:sender_irq -> ARM_A9_HPS:f2h_irq_p0
 	wire   [31:0] arm_a9_hps_f2h_irq1_irq;                               // irq_mapper_001:sender_irq -> ARM_A9_HPS:f2h_irq_p1
-	wire          rst_controller_reset_out_reset;                        // rst_controller:reset_out -> [ctrl_reg_f2h:reset_n, ctrl_reg_h2f:reset_n, dma_1:system_reset_n, dma_2:system_reset_n, intensity_sram:reset, intensity_sram:reset2, mm_interconnect_0:ctrl_reg_f2h_reset_reset_bridge_in_reset_reset, mm_interconnect_1:dma_1_reset_reset_bridge_in_reset_reset, mm_interconnect_2:dma_1_reset_reset_bridge_in_reset_reset, mm_interconnect_3:dma_2_reset_reset_bridge_in_reset_reset, result_sram:reset, result_sram:reset2, rst_translator:in_reset]
-	wire          rst_controller_reset_out_reset_req;                    // rst_controller:reset_req -> [intensity_sram:reset_req, intensity_sram:reset_req2, result_sram:reset_req, result_sram:reset_req2, rst_translator:reset_req_in]
-	wire          arm_a9_hps_h2f_reset_reset;                            // ARM_A9_HPS:h2f_rst_n -> [rst_controller:reset_in0, rst_controller_001:reset_in0, rst_controller_002:reset_in0]
-	wire          system_pll_reset_source_reset;                         // System_PLL:reset_source_reset -> [rst_controller:reset_in1, rst_controller_001:reset_in1]
-	wire          rst_controller_001_reset_out_reset;                    // rst_controller_001:reset_out -> pll_0:rst
-	wire          rst_controller_002_reset_out_reset;                    // rst_controller_002:reset_out -> [mm_interconnect_0:ARM_A9_HPS_h2f_axi_master_agent_clk_reset_reset_bridge_in_reset_reset, mm_interconnect_1:ARM_A9_HPS_h2f_lw_axi_master_agent_clk_reset_reset_bridge_in_reset_reset, mm_interconnect_2:ARM_A9_HPS_f2h_axi_slave_agent_reset_sink_reset_bridge_in_reset_reset]
+	wire          rst_controller_reset_out_reset;                        // rst_controller:reset_out -> [ctrl_reg_f2h:reset_n, ctrl_reg_h2f:reset_n, dma_1:system_reset_n, dma_2:system_reset_n, intensity_sram:reset, mm_interconnect_0:ctrl_reg_f2h_reset_reset_bridge_in_reset_reset, mm_interconnect_1:dma_1_reset_reset_bridge_in_reset_reset, mm_interconnect_2:dma_1_reset_reset_bridge_in_reset_reset, mm_interconnect_3:dma_2_reset_reset_bridge_in_reset_reset, result_sram:reset2, rst_translator:in_reset]
+	wire          rst_controller_reset_out_reset_req;                    // rst_controller:reset_req -> [intensity_sram:reset_req, result_sram:reset_req2, rst_translator:reset_req_in]
+	wire          arm_a9_hps_h2f_reset_reset;                            // ARM_A9_HPS:h2f_rst_n -> [rst_controller:reset_in0, rst_controller_001:reset_in0, rst_controller_002:reset_in0, rst_controller_003:reset_in0]
+	wire          system_pll_reset_source_reset;                         // System_PLL:reset_source_reset -> [rst_controller:reset_in1, rst_controller_001:reset_in1, rst_controller_002:reset_in1]
+	wire          rst_controller_001_reset_out_reset;                    // rst_controller_001:reset_out -> [intensity_sram:reset2, result_sram:reset]
+	wire          rst_controller_001_reset_out_reset_req;                // rst_controller_001:reset_req -> [intensity_sram:reset_req2, result_sram:reset_req]
+	wire          rst_controller_002_reset_out_reset;                    // rst_controller_002:reset_out -> pll_0:rst
+	wire          rst_controller_003_reset_out_reset;                    // rst_controller_003:reset_out -> [mm_interconnect_0:ARM_A9_HPS_h2f_axi_master_agent_clk_reset_reset_bridge_in_reset_reset, mm_interconnect_1:ARM_A9_HPS_h2f_lw_axi_master_agent_clk_reset_reset_bridge_in_reset_reset, mm_interconnect_2:ARM_A9_HPS_f2h_axi_slave_agent_reset_sink_reset_bridge_in_reset_reset]
 
 	Computer_System_ARM_A9_HPS #(
 		.F2S_Width (2),
@@ -553,21 +555,21 @@ module Computer_System (
 		.write2      (intensity_sram_write),                           //       .write
 		.readdata2   (intensity_sram_readdata),                        //       .readdata
 		.writedata2  (intensity_sram_writedata),                       //       .writedata
-		.clk2        (system_pll_sys_clk_clk),                         //   clk2.clk
-		.reset2      (rst_controller_reset_out_reset),                 // reset2.reset
-		.reset_req2  (rst_controller_reset_out_reset_req),             //       .reset_req
+		.clk2        (clk_25_clk),                                     //   clk2.clk
+		.reset2      (rst_controller_001_reset_out_reset),             // reset2.reset
+		.reset_req2  (rst_controller_001_reset_out_reset_req),         //       .reset_req
 		.freeze      (1'b0)                                            // (terminated)
 	);
 
 	Computer_System_pll_0 pll_0 (
 		.refclk   (system_pll_sys_clk_clk),             //  refclk.clk
-		.rst      (rst_controller_001_reset_out_reset), //   reset.reset
-		.outclk_0 (clk_10_clk),                         // outclk0.clk
+		.rst      (rst_controller_002_reset_out_reset), //   reset.reset
+		.outclk_0 (clk_25_clk),                         // outclk0.clk
 		.locked   ()                                    //  locked.export
 	);
 
 	Computer_System_result_sram result_sram (
-		.clk         (system_pll_sys_clk_clk),                      //   clk1.clk
+		.clk         (clk_25_clk),                                  //   clk1.clk
 		.address     (result_sram_address),                         //     s1.address
 		.clken       (result_sram_clken),                           //       .clken
 		.chipselect  (result_sram_chipselect),                      //       .chipselect
@@ -575,8 +577,8 @@ module Computer_System (
 		.readdata    (result_sram_readdata),                        //       .readdata
 		.writedata   (result_sram_writedata),                       //       .writedata
 		.byteenable  (result_sram_byteenable),                      //       .byteenable
-		.reset       (rst_controller_reset_out_reset),              // reset1.reset
-		.reset_req   (rst_controller_reset_out_reset_req),          //       .reset_req
+		.reset       (rst_controller_001_reset_out_reset),          // reset1.reset
+		.reset_req   (rst_controller_001_reset_out_reset_req),      //       .reset_req
 		.address2    (mm_interconnect_0_result_sram_s2_address),    //     s2.address
 		.chipselect2 (mm_interconnect_0_result_sram_s2_chipselect), //       .chipselect
 		.clken2      (mm_interconnect_0_result_sram_s2_clken),      //       .clken
@@ -628,7 +630,7 @@ module Computer_System (
 		.ARM_A9_HPS_h2f_axi_master_rvalid                                      (arm_a9_hps_h2f_axi_master_rvalid),             //                                                                .rvalid
 		.ARM_A9_HPS_h2f_axi_master_rready                                      (arm_a9_hps_h2f_axi_master_rready),             //                                                                .rready
 		.System_PLL_sys_clk_clk                                                (system_pll_sys_clk_clk),                       //                                              System_PLL_sys_clk.clk
-		.ARM_A9_HPS_h2f_axi_master_agent_clk_reset_reset_bridge_in_reset_reset (rst_controller_002_reset_out_reset),           // ARM_A9_HPS_h2f_axi_master_agent_clk_reset_reset_bridge_in_reset.reset
+		.ARM_A9_HPS_h2f_axi_master_agent_clk_reset_reset_bridge_in_reset_reset (rst_controller_003_reset_out_reset),           // ARM_A9_HPS_h2f_axi_master_agent_clk_reset_reset_bridge_in_reset.reset
 		.ctrl_reg_f2h_reset_reset_bridge_in_reset_reset                        (rst_controller_reset_out_reset),               //                        ctrl_reg_f2h_reset_reset_bridge_in_reset.reset
 		.ctrl_reg_f2h_s1_address                                               (mm_interconnect_0_ctrl_reg_f2h_s1_address),    //                                                 ctrl_reg_f2h_s1.address
 		.ctrl_reg_f2h_s1_readdata                                              (mm_interconnect_0_ctrl_reg_f2h_s1_readdata),   //                                                                .readdata
@@ -684,7 +686,7 @@ module Computer_System (
 		.ARM_A9_HPS_h2f_lw_axi_master_rvalid                                      (arm_a9_hps_h2f_lw_axi_master_rvalid),                   //                                                                   .rvalid
 		.ARM_A9_HPS_h2f_lw_axi_master_rready                                      (arm_a9_hps_h2f_lw_axi_master_rready),                   //                                                                   .rready
 		.System_PLL_sys_clk_clk                                                   (system_pll_sys_clk_clk),                                //                                                 System_PLL_sys_clk.clk
-		.ARM_A9_HPS_h2f_lw_axi_master_agent_clk_reset_reset_bridge_in_reset_reset (rst_controller_002_reset_out_reset),                    // ARM_A9_HPS_h2f_lw_axi_master_agent_clk_reset_reset_bridge_in_reset.reset
+		.ARM_A9_HPS_h2f_lw_axi_master_agent_clk_reset_reset_bridge_in_reset_reset (rst_controller_003_reset_out_reset),                    // ARM_A9_HPS_h2f_lw_axi_master_agent_clk_reset_reset_bridge_in_reset.reset
 		.dma_1_reset_reset_bridge_in_reset_reset                                  (rst_controller_reset_out_reset),                        //                                  dma_1_reset_reset_bridge_in_reset.reset
 		.dma_1_control_port_slave_address                                         (mm_interconnect_1_dma_1_control_port_slave_address),    //                                           dma_1_control_port_slave.address
 		.dma_1_control_port_slave_write                                           (mm_interconnect_1_dma_1_control_port_slave_write),      //                                                                   .write
@@ -738,7 +740,7 @@ module Computer_System (
 		.ARM_A9_HPS_f2h_axi_slave_rvalid                                       (mm_interconnect_2_arm_a9_hps_f2h_axi_slave_rvalid),  //                                                                .rvalid
 		.ARM_A9_HPS_f2h_axi_slave_rready                                       (mm_interconnect_2_arm_a9_hps_f2h_axi_slave_rready),  //                                                                .rready
 		.System_PLL_sys_clk_clk                                                (system_pll_sys_clk_clk),                             //                                              System_PLL_sys_clk.clk
-		.ARM_A9_HPS_f2h_axi_slave_agent_reset_sink_reset_bridge_in_reset_reset (rst_controller_002_reset_out_reset),                 // ARM_A9_HPS_f2h_axi_slave_agent_reset_sink_reset_bridge_in_reset.reset
+		.ARM_A9_HPS_f2h_axi_slave_agent_reset_sink_reset_bridge_in_reset_reset (rst_controller_003_reset_out_reset),                 // ARM_A9_HPS_f2h_axi_slave_agent_reset_sink_reset_bridge_in_reset.reset
 		.dma_1_reset_reset_bridge_in_reset_reset                               (rst_controller_reset_out_reset),                     //                               dma_1_reset_reset_bridge_in_reset.reset
 		.dma_1_read_master_address                                             (dma_1_read_master_address),                          //                                               dma_1_read_master.address
 		.dma_1_read_master_waitrequest                                         (dma_1_read_master_waitrequest),                      //                                                                .waitrequest
@@ -854,6 +856,69 @@ module Computer_System (
 
 	altera_reset_controller #(
 		.NUM_RESET_INPUTS          (2),
+		.OUTPUT_RESET_SYNC_EDGES   ("deassert"),
+		.SYNC_DEPTH                (2),
+		.RESET_REQUEST_PRESENT     (1),
+		.RESET_REQ_WAIT_TIME       (1),
+		.MIN_RST_ASSERTION_TIME    (3),
+		.RESET_REQ_EARLY_DSRT_TIME (1),
+		.USE_RESET_REQUEST_IN0     (0),
+		.USE_RESET_REQUEST_IN1     (0),
+		.USE_RESET_REQUEST_IN2     (0),
+		.USE_RESET_REQUEST_IN3     (0),
+		.USE_RESET_REQUEST_IN4     (0),
+		.USE_RESET_REQUEST_IN5     (0),
+		.USE_RESET_REQUEST_IN6     (0),
+		.USE_RESET_REQUEST_IN7     (0),
+		.USE_RESET_REQUEST_IN8     (0),
+		.USE_RESET_REQUEST_IN9     (0),
+		.USE_RESET_REQUEST_IN10    (0),
+		.USE_RESET_REQUEST_IN11    (0),
+		.USE_RESET_REQUEST_IN12    (0),
+		.USE_RESET_REQUEST_IN13    (0),
+		.USE_RESET_REQUEST_IN14    (0),
+		.USE_RESET_REQUEST_IN15    (0),
+		.ADAPT_RESET_REQUEST       (0)
+	) rst_controller_001 (
+		.reset_in0      (~arm_a9_hps_h2f_reset_reset),            // reset_in0.reset
+		.reset_in1      (system_pll_reset_source_reset),          // reset_in1.reset
+		.clk            (clk_25_clk),                             //       clk.clk
+		.reset_out      (rst_controller_001_reset_out_reset),     // reset_out.reset
+		.reset_req      (rst_controller_001_reset_out_reset_req), //          .reset_req
+		.reset_req_in0  (1'b0),                                   // (terminated)
+		.reset_req_in1  (1'b0),                                   // (terminated)
+		.reset_in2      (1'b0),                                   // (terminated)
+		.reset_req_in2  (1'b0),                                   // (terminated)
+		.reset_in3      (1'b0),                                   // (terminated)
+		.reset_req_in3  (1'b0),                                   // (terminated)
+		.reset_in4      (1'b0),                                   // (terminated)
+		.reset_req_in4  (1'b0),                                   // (terminated)
+		.reset_in5      (1'b0),                                   // (terminated)
+		.reset_req_in5  (1'b0),                                   // (terminated)
+		.reset_in6      (1'b0),                                   // (terminated)
+		.reset_req_in6  (1'b0),                                   // (terminated)
+		.reset_in7      (1'b0),                                   // (terminated)
+		.reset_req_in7  (1'b0),                                   // (terminated)
+		.reset_in8      (1'b0),                                   // (terminated)
+		.reset_req_in8  (1'b0),                                   // (terminated)
+		.reset_in9      (1'b0),                                   // (terminated)
+		.reset_req_in9  (1'b0),                                   // (terminated)
+		.reset_in10     (1'b0),                                   // (terminated)
+		.reset_req_in10 (1'b0),                                   // (terminated)
+		.reset_in11     (1'b0),                                   // (terminated)
+		.reset_req_in11 (1'b0),                                   // (terminated)
+		.reset_in12     (1'b0),                                   // (terminated)
+		.reset_req_in12 (1'b0),                                   // (terminated)
+		.reset_in13     (1'b0),                                   // (terminated)
+		.reset_req_in13 (1'b0),                                   // (terminated)
+		.reset_in14     (1'b0),                                   // (terminated)
+		.reset_req_in14 (1'b0),                                   // (terminated)
+		.reset_in15     (1'b0),                                   // (terminated)
+		.reset_req_in15 (1'b0)                                    // (terminated)
+	);
+
+	altera_reset_controller #(
+		.NUM_RESET_INPUTS          (2),
 		.OUTPUT_RESET_SYNC_EDGES   ("none"),
 		.SYNC_DEPTH                (2),
 		.RESET_REQUEST_PRESENT     (0),
@@ -877,11 +942,11 @@ module Computer_System (
 		.USE_RESET_REQUEST_IN14    (0),
 		.USE_RESET_REQUEST_IN15    (0),
 		.ADAPT_RESET_REQUEST       (0)
-	) rst_controller_001 (
+	) rst_controller_002 (
 		.reset_in0      (~arm_a9_hps_h2f_reset_reset),        // reset_in0.reset
 		.reset_in1      (system_pll_reset_source_reset),      // reset_in1.reset
 		.clk            (),                                   //       clk.clk
-		.reset_out      (rst_controller_001_reset_out_reset), // reset_out.reset
+		.reset_out      (rst_controller_002_reset_out_reset), // reset_out.reset
 		.reset_req      (),                                   // (terminated)
 		.reset_req_in0  (1'b0),                               // (terminated)
 		.reset_req_in1  (1'b0),                               // (terminated)
@@ -940,10 +1005,10 @@ module Computer_System (
 		.USE_RESET_REQUEST_IN14    (0),
 		.USE_RESET_REQUEST_IN15    (0),
 		.ADAPT_RESET_REQUEST       (0)
-	) rst_controller_002 (
+	) rst_controller_003 (
 		.reset_in0      (~arm_a9_hps_h2f_reset_reset),        // reset_in0.reset
 		.clk            (system_pll_sys_clk_clk),             //       clk.clk
-		.reset_out      (rst_controller_002_reset_out_reset), // reset_out.reset
+		.reset_out      (rst_controller_003_reset_out_reset), // reset_out.reset
 		.reset_req      (),                                   // (terminated)
 		.reset_req_in0  (1'b0),                               // (terminated)
 		.reset_in1      (1'b0),                               // (terminated)

@@ -1,5 +1,6 @@
 	component Computer_System is
 		port (
+			clk_25_clk                      : out   std_logic;                                        -- clk
 			ctrl_reg_f2h_export             : in    std_logic_vector(7 downto 0)  := (others => 'X'); -- export
 			ctrl_reg_h2f_export             : out   std_logic_vector(7 downto 0);                     -- export
 			hps_io_hps_io_emac1_inst_TX_CLK : out   std_logic;                                        -- hps_io_emac1_inst_TX_CLK
@@ -88,13 +89,13 @@
 			result_sram_writedata           : in    std_logic_vector(31 downto 0) := (others => 'X'); -- writedata
 			result_sram_byteenable          : in    std_logic_vector(3 downto 0)  := (others => 'X'); -- byteenable
 			system_pll_ref_clk_clk          : in    std_logic                     := 'X';             -- clk
-			system_pll_ref_reset_reset      : in    std_logic                     := 'X';             -- reset
-			clk_10_clk                      : out   std_logic                                         -- clk
+			system_pll_ref_reset_reset      : in    std_logic                     := 'X'              -- reset
 		);
 	end component Computer_System;
 
 	u0 : component Computer_System
 		port map (
+			clk_25_clk                      => CONNECTED_TO_clk_25_clk,                      --               clk_25.clk
 			ctrl_reg_f2h_export             => CONNECTED_TO_ctrl_reg_f2h_export,             --         ctrl_reg_f2h.export
 			ctrl_reg_h2f_export             => CONNECTED_TO_ctrl_reg_h2f_export,             --         ctrl_reg_h2f.export
 			hps_io_hps_io_emac1_inst_TX_CLK => CONNECTED_TO_hps_io_hps_io_emac1_inst_TX_CLK, --               hps_io.hps_io_emac1_inst_TX_CLK
@@ -183,7 +184,6 @@
 			result_sram_writedata           => CONNECTED_TO_result_sram_writedata,           --                     .writedata
 			result_sram_byteenable          => CONNECTED_TO_result_sram_byteenable,          --                     .byteenable
 			system_pll_ref_clk_clk          => CONNECTED_TO_system_pll_ref_clk_clk,          --   system_pll_ref_clk.clk
-			system_pll_ref_reset_reset      => CONNECTED_TO_system_pll_ref_reset_reset,      -- system_pll_ref_reset.reset
-			clk_10_clk                      => CONNECTED_TO_clk_10_clk                       --               clk_10.clk
+			system_pll_ref_reset_reset      => CONNECTED_TO_system_pll_ref_reset_reset       -- system_pll_ref_reset.reset
 		);
 

@@ -170,7 +170,7 @@ HEX5[5] <= <VCC>
 HEX5[6] <= <VCC>
 IRDA_RXD => ~NO_FANOUT~
 IRDA_TXD <= <GND>
-KEY[0] => reset.IN5
+KEY[0] => _.IN1
 KEY[1] => ~NO_FANOUT~
 KEY[2] => ~NO_FANOUT~
 KEY[3] => ~NO_FANOUT~
@@ -479,7 +479,9 @@ clk => line_counter[4].CLK
 clk => line_counter[5].CLK
 clk => line_counter[6].CLK
 clk => line_counter[7].CLK
-clk => state~5.DATAIN
+clk => start_latch.CLK
+clk => state~4.DATAIN
+reset => start_latch.OUTPUTSELECT
 reset => state.OUTPUTSELECT
 reset => state.OUTPUTSELECT
 reset => state.OUTPUTSELECT
@@ -545,8 +547,7 @@ rdata[4] => data.DATAB
 rdata[5] => data.DATAB
 rdata[6] => data.DATAB
 rdata[7] => data.DATAB
-start => Selector10.IN3
-start => Selector9.IN0
+start => start_latch.OUTPUTSELECT
 raddr[0] <= raddr[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 raddr[1] <= raddr[1]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 raddr[2] <= raddr[2]~reg0.DB_MAX_OUTPUT_PORT_TYPE
@@ -48298,8 +48299,32 @@ zernike_out[269] <= zernike_out[269]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 done <= done~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
+|DE1_SoC_Computer|async_reset:key_reset_sync
+reset_async => sync_ff[0].DATAIN
+clk => reset_count[0].CLK
+clk => reset_count[1].CLK
+clk => reset_count[2].CLK
+clk => reset_count[3].CLK
+clk => sync_d.CLK
+clk => sync_ff[0].CLK
+clk => sync_ff[1].CLK
+reset_sync <= Equal0.DB_MAX_OUTPUT_PORT_TYPE
+
+
+|DE1_SoC_Computer|async_reset:hps_reset_sync
+reset_async => sync_ff[0].DATAIN
+clk => reset_count[0].CLK
+clk => reset_count[1].CLK
+clk => reset_count[2].CLK
+clk => reset_count[3].CLK
+clk => sync_d.CLK
+clk => sync_ff[0].CLK
+clk => sync_ff[1].CLK
+reset_sync <= Equal0.DB_MAX_OUTPUT_PORT_TYPE
+
+
 |DE1_SoC_Computer|Computer_System:The_System
-clk_10_clk <= Computer_System_pll_0:pll_0.outclk_0
+clk_25_clk <= clk_25_clk.DB_MAX_OUTPUT_PORT_TYPE
 ctrl_reg_f2h_export[0] => ctrl_reg_f2h_export[0].IN1
 ctrl_reg_f2h_export[1] => ctrl_reg_f2h_export[1].IN1
 ctrl_reg_f2h_export[2] => ctrl_reg_f2h_export[2].IN1
@@ -140858,12 +140883,68 @@ reset_req_in12 => ~NO_FANOUT~
 reset_req_in13 => ~NO_FANOUT~
 reset_req_in14 => ~NO_FANOUT~
 reset_req_in15 => ~NO_FANOUT~
+clk => clk.IN2
+reset_out <= r_sync_rst.DB_MAX_OUTPUT_PORT_TYPE
+reset_req <= r_early_rst.DB_MAX_OUTPUT_PORT_TYPE
+
+
+|DE1_SoC_Computer|Computer_System:The_System|altera_reset_controller:rst_controller_001|altera_reset_synchronizer:alt_rst_sync_uq1
+reset_in => altera_reset_synchronizer_int_chain_out.PRESET
+reset_in => altera_reset_synchronizer_int_chain[0].PRESET
+reset_in => altera_reset_synchronizer_int_chain[1].PRESET
+clk => altera_reset_synchronizer_int_chain_out.CLK
+clk => altera_reset_synchronizer_int_chain[0].CLK
+clk => altera_reset_synchronizer_int_chain[1].CLK
+reset_out <= altera_reset_synchronizer_int_chain_out.DB_MAX_OUTPUT_PORT_TYPE
+
+
+|DE1_SoC_Computer|Computer_System:The_System|altera_reset_controller:rst_controller_001|altera_reset_synchronizer:alt_rst_req_sync_uq1
+reset_in => altera_reset_synchronizer_int_chain[1].DATAIN
+clk => altera_reset_synchronizer_int_chain_out.CLK
+clk => altera_reset_synchronizer_int_chain[0].CLK
+clk => altera_reset_synchronizer_int_chain[1].CLK
+reset_out <= altera_reset_synchronizer_int_chain_out.DB_MAX_OUTPUT_PORT_TYPE
+
+
+|DE1_SoC_Computer|Computer_System:The_System|altera_reset_controller:rst_controller_002
+reset_in0 => merged_reset.IN0
+reset_in1 => merged_reset.IN1
+reset_in2 => merged_reset.IN1
+reset_in3 => merged_reset.IN1
+reset_in4 => merged_reset.IN1
+reset_in5 => merged_reset.IN1
+reset_in6 => merged_reset.IN1
+reset_in7 => merged_reset.IN1
+reset_in8 => merged_reset.IN1
+reset_in9 => merged_reset.IN1
+reset_in10 => merged_reset.IN1
+reset_in11 => merged_reset.IN1
+reset_in12 => merged_reset.IN1
+reset_in13 => merged_reset.IN1
+reset_in14 => merged_reset.IN1
+reset_in15 => merged_reset.IN1
+reset_req_in0 => ~NO_FANOUT~
+reset_req_in1 => ~NO_FANOUT~
+reset_req_in2 => ~NO_FANOUT~
+reset_req_in3 => ~NO_FANOUT~
+reset_req_in4 => ~NO_FANOUT~
+reset_req_in5 => ~NO_FANOUT~
+reset_req_in6 => ~NO_FANOUT~
+reset_req_in7 => ~NO_FANOUT~
+reset_req_in8 => ~NO_FANOUT~
+reset_req_in9 => ~NO_FANOUT~
+reset_req_in10 => ~NO_FANOUT~
+reset_req_in11 => ~NO_FANOUT~
+reset_req_in12 => ~NO_FANOUT~
+reset_req_in13 => ~NO_FANOUT~
+reset_req_in14 => ~NO_FANOUT~
+reset_req_in15 => ~NO_FANOUT~
 clk => ~NO_FANOUT~
 reset_out <= merged_reset.DB_MAX_OUTPUT_PORT_TYPE
 reset_req <= <GND>
 
 
-|DE1_SoC_Computer|Computer_System:The_System|altera_reset_controller:rst_controller_002
+|DE1_SoC_Computer|Computer_System:The_System|altera_reset_controller:rst_controller_003
 reset_in0 => merged_reset.IN0
 reset_in1 => merged_reset.IN1
 reset_in2 => merged_reset.IN1
@@ -140901,7 +140982,7 @@ reset_out <= altera_reset_synchronizer:alt_rst_sync_uq1.reset_out
 reset_req <= altera_reset_synchronizer:alt_rst_req_sync_uq1.reset_out
 
 
-|DE1_SoC_Computer|Computer_System:The_System|altera_reset_controller:rst_controller_002|altera_reset_synchronizer:alt_rst_sync_uq1
+|DE1_SoC_Computer|Computer_System:The_System|altera_reset_controller:rst_controller_003|altera_reset_synchronizer:alt_rst_sync_uq1
 reset_in => altera_reset_synchronizer_int_chain_out.PRESET
 reset_in => altera_reset_synchronizer_int_chain[0].PRESET
 reset_in => altera_reset_synchronizer_int_chain[1].PRESET
@@ -140911,7 +140992,7 @@ clk => altera_reset_synchronizer_int_chain[1].CLK
 reset_out <= altera_reset_synchronizer_int_chain_out.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|DE1_SoC_Computer|Computer_System:The_System|altera_reset_controller:rst_controller_002|altera_reset_synchronizer:alt_rst_req_sync_uq1
+|DE1_SoC_Computer|Computer_System:The_System|altera_reset_controller:rst_controller_003|altera_reset_synchronizer:alt_rst_req_sync_uq1
 reset_in => altera_reset_synchronizer_int_chain[1].DATAIN
 clk => altera_reset_synchronizer_int_chain_out.CLK
 clk => altera_reset_synchronizer_int_chain[0].CLK
