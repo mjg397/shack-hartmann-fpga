@@ -592,10 +592,10 @@ always @(posedge clk) begin
         x_slopes_out   <= x_slopes;
         y_slopes_out   <= y_slopes;
 
-			if (done && resw_state == RESULT_W_WAIT)
-				write_zernike_latch <= 1'b1;
-			else if (resw_state == RESULT_W_ZK)
-				write_zernike_latch <= 1'b0;
+	if (done && resw_state == RESULT_W_WAIT)
+		write_zernike_latch <= 1'b1;
+	else if (resw_state == RESULT_W_ZK)
+		write_zernike_latch <= 1'b0;
 
         // FSM datapath
         case (resw_state)
