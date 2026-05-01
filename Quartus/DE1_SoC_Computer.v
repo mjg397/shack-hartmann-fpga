@@ -534,11 +534,14 @@ HexDigit Digit3(HEX3, hex3_hex0[15:12]);
  localparam RESULT_W_SY = 4'd2;
  localparam RESULT_W_CX = 4'd3;
  localparam RESULT_W_CY = 4'd4;
- localparam RESULT_W_DONE = 4'd5;
+ localparam RESULT_W_ZK = 4'd5;
+ localparam RESULT_W_DONE = 4'd6;
  
  (*preserve, noprune*) reg  [4:0] resw_next_state;
- (*preserve, noprune*) reg	 		resw_start;
+ (*preserve, noprune*) reg	 		 resw_start;
  (*preserve, noprune*) reg  [4:0] resw_state;
+ (*preserve, noprune*) reg 		 write_zernike_latch;
+ (*preserve, noprune*) reg  [3:0] write_zernike_count;
  
  genvar i;
  generate
@@ -559,7 +562,8 @@ HexDigit Digit3(HEX3, hex3_hex0[15:12]);
 		RESULT_W_SX:	resw_next_state = RESULT_W_SY;
 		RESULT_W_SY: 	resw_next_state = RESULT_W_CX;
 		RESULT_W_CX:	resw_next_state = RESULT_W_CY;
-		RESULT_W_CY:	resw_next_state = RESULT_W_DONE;
+		RESULT_W_CY:	resw_next_state = write_zernike_latch ? RESULT_W_ZK : RESULT_W_DONE;
+		RESULT_W_ZK:	resw_next_state = write_zernike_count == 4'd9 ? RESULT_W_DONE : RESULT_W_ZK;
 		RESULT_W_DONE:	resw_next_state = RESULT_W_WAIT;
 	endcase
  end
@@ -574,6 +578,7 @@ always @(posedge clk) begin
         result_write     <= 1'b0;
         result_wdata     <= 32'd0;
         result_addr      <= 11'd0;
+		write_zernike_latch <= 1'b0;
     end
     else begin
         resw_state <= resw_next_state;
@@ -587,12 +592,18 @@ always @(posedge clk) begin
         x_slopes_out   <= x_slopes;
         y_slopes_out   <= y_slopes;
 
+			if (done && resw_state == RESULT_W_WAIT)
+				write_zernike_latch <= 1'b1;
+			else if (resw_state == RESULT_W_ZK)
+				write_zernike_latch <= 1'b0;
+
         // FSM datapath
         case (resw_state)
             RESULT_W_WAIT: begin
                 result_wdata <= 32'd0;
                 result_addr  <= 11'd0;
                 result_write <= 1'b0;
+				write_zernike_count <= 4'd0;
             end
             RESULT_W_SX: begin
                 result_wdata <= x_slopes;
@@ -614,6 +625,12 @@ always @(posedge clk) begin
                 result_addr  <= resw_write_idx + CENTROID_Y_OFFSET;
                 result_write <= 1'b1;
             end
+				RESULT_W_ZK: begin
+					write_zernike_count <= write_zernike_count + 4'd1;
+					result_wdata <= zernike_out_reg[write_zernike_count];
+					result_addr <= write_zernike_count + ZERNIKE_OFFSET;
+					result_write <= 1'b1;
+				end
             RESULT_W_DONE: begin
                 resw_write_idx <= resw_write_idx + 8'd1;
                 result_write   <= 1'b0;
