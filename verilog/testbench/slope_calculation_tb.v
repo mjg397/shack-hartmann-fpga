@@ -1,19 +1,26 @@
 `timescale 1ns/1ns
 
-module slope_calculation_tb.v();
-    reg        clk_100,
-    reg        reset,
-    reg [7:0] subapetures_completed,
-    reg       frame_complete,
-    reg [26:0] rec_intensity,
-    reg [19:0] x_intensity,
-    reg [19:0] y_intensity,
-    wire signed [26:0] x_centroid,
-    wire signed [26:0] y_centroid,
-    wire signed [26:0] x_slope,
-    wire signed [26:0] y_slope,
-    wire         new_subapeture
+module slope_calculation_tb;
 
+  // ---------------- CLOCK + RESET ----------------
+  reg clk_100;
+  reg reset;
+
+  // ---------------- INPUTS ----------------
+  reg [7:0] subapetures_completed;
+  reg frame_complete;
+  reg [26:0] rec_intensity;
+  reg [19:0] x_intensity;
+  reg [19:0] y_intensity;
+
+  // ---------------- OUTPUTS ----------------
+  wire signed [26:0] x_centroid;
+  wire signed [26:0] y_centroid;
+  wire signed [26:0] x_slope;
+  wire signed [26:0] y_slope;
+  wire new_subapeture;
+
+  // ---------------- DUT ----------------
   slope_calculation DUT (
     .clk(clk_100),
     .rst(reset),
@@ -29,21 +36,188 @@ module slope_calculation_tb.v();
     .new_subapeture(new_subapeture)
   );
 
-  // Initialize the clk and reset
+  // ---------------- CLOCK ----------------
+  initial clk_100 = 0;
+  always #5 clk_100 = ~clk_100;
+
+  // ---------------- INITIAL RESET ----------------
   initial begin
-    clk_100 <= 0;
-    reset <= 1;
-    #10
-    reset <= 0;
+    reset = 1;
+    subapetures_completed = 0;
+    frame_complete = 0;
+    rec_intensity = 0;
+    x_intensity = 0;
+    y_intensity = 0;
+
+    #20;
+    reset = 0;
   end
 
-  //Toggle the clock
-  always begin
-    #5
-    clk_100  = !clk_100;
+  // =========================================================
+  // TASK: APPLY INPUTS
+  // =========================================================
+  task apply_input;
+    input [7:0] subap;
+    input [26:0] rec;
+    input [19:0] xi;
+    input [19:0] yi;
+    begin
+      subapetures_completed = subap;
+      rec_intensity = rec;
+      x_intensity = xi;
+      y_intensity = yi;
+    end
+  endtask
+
+  // =========================================================
+  // TASK: PRINT OUTPUTS
+  // =========================================================
+  task print_outputs;
+    input integer id;
+    begin
+      $display("------------------------------------------------");
+      $display("TEST %0d", id);
+      $display("Inputs:");
+      $display("  subap = %0d rec = %0d x = %0d y = %0d",
+                subapetures_completed, rec_intensity,
+                x_intensity, y_intensity);
+
+      $display("Outputs:");
+      $display("  x_centroid = %0d", x_centroid);
+      $display("  y_centroid = %0d", y_centroid);
+      $display("  x_slope    = %0d", x_slope);
+      $display("  y_slope    = %0d", y_slope);
+      $display("  new_subap  = %0d", new_subapeture);
+    end
+  endtask
+
+  // =========================================================
+  // ALL TESTS (BEHAVIOR COVERAGE)
+  // =========================================================
+  task run_all_tests;
+  begin
+    $display("========== START TESTS ==========");
+
+    // RESET BEHAVIOR
+    reset = 1;
+    apply_input(0, 0, 0, 0);
+    #10;
+    reset = 0;
+    #10;
+    print_outputs(1);
+
+    // ZERO INPUT
+    apply_input(1, 0, 0, 0);
+    #10;
+    print_outputs(2);
+
+    // NORMAL SMALL VALUES
+    apply_input(2, 100, 10, 20);
+    #10;
+    print_outputs(3);
+
+    // SYMMETRY CASE
+    apply_input(3, 200, 50, 50);
+    #10;
+    print_outputs(4);
+
+    // MEDIUM VALUES
+    apply_input(4, 500, 123, 456);
+    #10;
+    print_outputs(5);
+
+    // LARGE VALUES STRESS
+    apply_input(5, 5000, 10000, 20000);
+    #10;
+    print_outputs(6);
+
+    // MAX EDGE CASE
+    apply_input(6, 27'h7FFFFFF, 20'hFFFFF, 20'hFFFFF);
+    #10;
+    print_outputs(7);
+
+    // LOW SIGNAL PRECISION TEST
+    apply_input(7, 10, 1, 2);
+    #10;
+    print_outputs(8);
+
+    // SUBAPERTURE EDGE TEST
+    subapetures_completed = 0;
+    apply_input(8, 100, 30, 40);
+    #10;
+    print_outputs(9);
+
+    subapetures_completed = 1;
+    #10;
+    print_outputs(9);
+
+    // DYNAMIC CHANGE TEST
+    apply_input(9, 100, 10, 20);
+    #10;
+    apply_input(10, 200, 30, 60);
+    #10;
+    apply_input(11, 300, 90, 10);
+    #10;
+    print_outputs(10);
+
+    $display("========== TESTS COMPLETE ==========");
   end
- 
+  endtask
+
+  // ---------------- START ----------------
+  initial begin
+    #25; // wait for reset release
+    run_all_tests();
+    $finish;
+  end
+
 endmodule
+// `timescale 1ns/1ns
+
+// module slope_calculation_tb.v();
+//     reg        clk_100,
+//     reg        reset,
+//     reg [7:0] subapetures_completed,
+//     reg       frame_complete,
+//     reg [26:0] rec_intensity,
+//     reg [19:0] x_intensity,
+//     reg [19:0] y_intensity,
+//     wire signed [26:0] x_centroid,
+//     wire signed [26:0] y_centroid,
+//     wire signed [26:0] x_slope,
+//     wire signed [26:0] y_slope,
+//     wire         new_subapeture
+
+//   slope_calculation DUT (
+//     .clk(clk_100),
+//     .rst(reset),
+//     .subapetures_completed(subapetures_completed),
+//     .frame_complete(frame_complete),
+//     .rec_intensity(rec_intensity),
+//     .x_intensity(x_intensity),
+//     .y_intensity(y_intensity),
+//     .x_centroid(x_centroid),
+//     .y_centroid(y_centroid),
+//     .x_slope(x_slope),
+//     .y_slope(y_slope),
+//     .new_subapeture(new_subapeture)
+//   );
+
+//   // Initialize the clk and reset
+//   initial begin
+//     clk_100 <= 0;
+//     reset <= 1;
+//     #10
+//     reset <= 0;
+//   end
+
+//   //Toggle the clock
+//   always begin
+//     #5
+//     clk_100  = !clk_100;
+//   end
+ 
+// endmodule
 
 
 module slope_calculation (
