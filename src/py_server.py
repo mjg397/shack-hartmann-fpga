@@ -3,11 +3,11 @@ import threading
 import os
 from shwfs_utils import (
     generate_shwfs_case,
+    quantize_shwfs_image,
     reshape_subaperture_xy,
-    run_fpga_like_estimation,
+    run_hcipy_estimation,
 )
 # from e_matrix_lib import generate_e_matrix
-from ematrixgen2 import gen_E_matrix, valid_mask as FPGA_RECONSTRUCTION_MASK
 import numpy as np
 
 CENTROID_SIZE = 4
@@ -24,8 +24,6 @@ SUBAPERTURE_PIXELS = 16
 NUM_PACKED_XY = NUM_SUBAPERTURES * 2
 NUM_ZERNIKE = 10
 Q4_23_SCALE = float(1 << 23)
-FPGA_E_MATRIX_Q1_16 = gen_E_matrix()
-FPGA_RECONSTRUCTION_MASK = np.asarray(FPGA_RECONSTRUCTION_MASK, dtype=bool)
 
 bind_ip = "10.48.69.89" 
 bind_port = 80
@@ -263,34 +261,30 @@ def dump_fpga_float_results(slopes_xy_grid, centroids_xy_grid, zernikes, mode_la
     )
 
 
-def dump_python_reference_results(slopes_xy_grid):
-    save_xy_grid(
-        os.path.join(RESULT_DUMP_DIR, "python_reference_slopes_grid.txt"),
-        slopes_xy_grid,
-        "x_slope",
-        "y_slope",
+def dump_hcipy_zernike_results(zernikes, mode_labels):
+    save_zernike_coefficients(
+        os.path.join(RESULT_DUMP_DIR, "hcipy_zernikes_named.txt"),
+        zernikes,
+        mode_labels,
+        "hcipy",
     )
 
 
-def dump_slope_comparison_results(fpga_slopes_grid, reference_slopes_grid):
-    save_xy_grid(
-        os.path.join(RESULT_DUMP_DIR, "slope_error_grid.txt"),
-        fpga_slopes_grid - reference_slopes_grid,
-        "x_error",
-        "y_error",
+def dump_zernike_comparison(fpga_coeffs, hcipy_coeffs, mode_labels):
+    comparison = np.column_stack((hcipy_coeffs, fpga_coeffs, fpga_coeffs - hcipy_coeffs))
+    header = "hcipy_coeff fpga_coeff error"
+    np.savetxt(
+        os.path.join(RESULT_DUMP_DIR, "zernike_comparison.txt"),
+        comparison,
+        fmt="%.10f",
+        header=header,
+        comments="",
     )
-
-
-def summarize_xy_error(name, fpga_xy, reference_xy, mask_flat, scope_label):
-    error = fpga_xy - reference_xy
-    valid_error = error[mask_flat]
-    rms_x = np.sqrt(np.mean(valid_error[:, 0] ** 2))
-    rms_y = np.sqrt(np.mean(valid_error[:, 1] ** 2))
-    rms_mag = np.sqrt(np.mean(np.sum(valid_error ** 2, axis=1)))
-    print(
-        f"     {name} RMS error over {scope_label}: "
-        f"x={rms_x:.6e}, y={rms_y:.6e}, |xy|={rms_mag:.6e}"
-    )
+    for label, hcipy_coeff, fpga_coeff in zip(mode_labels, hcipy_coeffs, fpga_coeffs):
+        print(
+            f"     {label:<12} HCIPy={hcipy_coeff:.6e} "
+            f"FPGA={fpga_coeff:.6e} err={(fpga_coeff - hcipy_coeff):.6e}"
+        )
 
 
 #client handling thread
@@ -311,13 +305,8 @@ def handle_client(client_socket):
         match request_s:
             case "start":
                 remove_result_files(
-                    "python_reference_slopes_grid.txt",
-                    "slope_error_grid.txt",
                     "fpga_reconstruction_mask_grid.txt",
-                    "hcipy_slopes_grid.txt",
-                    "hcipy_centroids_grid.txt",
                     "hcipy_zernikes_named.txt",
-                    "centroid_error_grid.txt",
                     "zernike_comparison.txt",
                     "fpga_results.png",
                     "fpga_ao_demo.png",
@@ -329,15 +318,16 @@ def handle_client(client_socket):
                     num_zernike=NUM_ZERNIKE,
                     demo_image_path=None,
                 )
-                python_reference = run_fpga_like_estimation(
+                hcipy_estimation = run_hcipy_estimation(
                     image=simulation["image_aber"],
-                    num_subapertures_side=NUM_SUBAPERTURES_SIDE,
-                    subaperture_pixels=SUBAPERTURE_PIXELS,
-                    reconstruction_mask=FPGA_RECONSTRUCTION_MASK,
-                    reconstruction_matrix_q1_16=FPGA_E_MATRIX_Q1_16,
+                    estimator=simulation["estimator"],
+                    reference_slopes=simulation["slopes_ref"],
+                    reconstruction_matrix=simulation["reconstruction_matrix"],
+                    zernike_modes=simulation["zernike_modes"],
+                    aperture=simulation["aperture"],
                 )
 
-                interp_coeffs = np.asarray(python_reference["quantized_image"], dtype=np.uint8)
+                interp_coeffs = quantize_shwfs_image(simulation["image_aber"])
                 coeff_payload = interp_coeffs.tobytes(order="C")
                 dump_bytes("py_sent_coeffs", coeff_payload, elem_size=1, words_per_row=256)
 
@@ -420,43 +410,25 @@ def handle_client(client_socket):
                 centroids_xy_grid = reshape_subaperture_xy(centroids_xy, NUM_SUBAPERTURES_SIDE)
                 slopes_xy_grid = reshape_subaperture_xy(slopes_xy, NUM_SUBAPERTURES_SIDE)
 
-                python_reference_slopes_grid = np.asarray(python_reference["slopes_grid"], dtype=np.float64)
-                python_reference_slopes_xy = np.asarray(python_reference["slopes_xy"], dtype=np.float64)
-                reconstruction_mask_grid = FPGA_RECONSTRUCTION_MASK.reshape(NUM_SUBAPERTURES_SIDE, NUM_SUBAPERTURES_SIDE)
-                all_subapertures_mask = np.ones(NUM_SUBAPERTURES, dtype=bool)
-
-                save_mask_grid(
-                    os.path.join(RESULT_DUMP_DIR, "fpga_reconstruction_mask_grid.txt"),
-                    reconstruction_mask_grid,
-                    "used_in_reconstruction",
-                )
-
                 dump_fpga_float_results(
                     slopes_xy_grid,
                     centroids_xy_grid,
                     zernikes_q423,
                     simulation["mode_labels"],
                 )
-                dump_python_reference_results(
-                    python_reference_slopes_grid,
+                dump_hcipy_zernike_results(
+                    hcipy_estimation["estimated_coeffs"],
+                    simulation["mode_labels"],
                 )
-                dump_slope_comparison_results(
-                    slopes_xy_grid,
-                    python_reference_slopes_grid,
+                dump_zernike_comparison(
+                    zernikes_q423,
+                    hcipy_estimation["estimated_coeffs"],
+                    simulation["mode_labels"],
                 )
-
-                summarize_xy_error("Slope", slopes_xy, python_reference_slopes_xy, all_subapertures_mask, "all 256 subapertures")
 
                 print(f"     Float outputs written under: {RESULT_DUMP_DIR}")
-                print(
-                    f"     Python FPGA-like slopes computed for all {NUM_SUBAPERTURES} subapertures"
-                )
-                print(
-                    f"     Python FPGA-like reconstruction uses {int(FPGA_RECONSTRUCTION_MASK.sum())}/"
-                    f"{FPGA_RECONSTRUCTION_MASK.size} subapertures from the E-matrix validity mask"
-                )
-                print("     Centroid comparison skipped: HDL centroid representation is known to differ")
-                print("     Zernike comparison skipped: HDL Zernike output is not valid yet")
+                print("     HCIPy Zernike reference computed from the HCIPy estimator pipeline")
+                print("     Centroid and slope comparisons skipped; only Zernike outputs are being compared")
                 print(
                     f"     slope grid shape={slopes_xy_grid.shape}, "
                     f"centroid grid shape={centroids_xy_grid.shape}, "
