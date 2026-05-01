@@ -1,8 +1,5 @@
 """
 Shack-Hartmann WFS — E Matrix (Reconstruction Matrix) Generator
-
-Notation
---------
   N : number of Zernike modes
   M : number of valid sub-apertures
   W : gradient matrix,       shape (2M x N)
