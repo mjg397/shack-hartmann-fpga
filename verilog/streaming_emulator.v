@@ -6,9 +6,6 @@ module streaming_emulator #(
 )(
   input wire clk,
   input wire reset,
-  input wire [7:0] rdata,
-  
-  output reg [15:0] raddr,
   output reg [7:0] data,
   output reg fv,
   output reg lv,
@@ -27,7 +24,7 @@ module streaming_emulator #(
   reg [7:0] mem [0:65535];
 
   initial begin
-      $readmemh("C:/Users/sjbar/OneDrive/Desktop/ECE5760/shack-hartmann-fpga/image_rotating.hex", mem);
+      $readmemh("C:/Users/mjg397/image_rotating.hex", mem);
   end
 
   // state machine for pixel input
@@ -48,7 +45,6 @@ module streaming_emulator #(
       lv <= 0;
       fv <= 0;
       frame_complete <= 0;
-		raddr <= 16'd0;
     end
 
     else begin
@@ -61,9 +57,7 @@ module streaming_emulator #(
         end
 
         STATE_ACTIVE_FRAME: begin
-			 data <= rdata;
-			 raddr <= row_counter * HSIZE + line_counter;
-//          data <= mem[row_counter * HSIZE + line_counter];
+          data <= mem[row_counter * HSIZE + line_counter];
           line_counter <= line_counter + 1;
           lv <= 1;
           if ((line_counter == HSIZE - 1) && (row_counter == VSIZE - 1)) begin
@@ -78,7 +72,7 @@ module streaming_emulator #(
         STATE_HOROZONTAL_BLANKING: begin
           lv <= 0;
           line_counter <= 0;
-          h_blank_counter <= h_blank_counter + 1;
+          h_blank_counter = h_blank_counter + 1;
           if (h_blank_counter == HBLANK - 1) begin
             h_blank_counter <= 0;
             row_counter <= row_counter + 1;
@@ -101,4 +95,3 @@ module streaming_emulator #(
     end
   end
 endmodule
-
