@@ -34,7 +34,7 @@ from types import SimpleNamespace
 
 def load_vlt_demo_scene(size=256):
     """Load a VLT image from ./VLT_Images and resize to (size, size) grayscale."""
-    import matplotlib.pyplot as plt
+    plt = _import_pyplot(interactive=False)
 
     image_dir = Path(__file__).resolve().parent.parent / "VLT_Images"
     for name in ("eso1322a.jpg", "eso1131a.jpg"):
@@ -74,6 +74,18 @@ def _estimate_subaperture_pitch(sub_positions, num_lenslets):
     if positive_delta_x.size > 0:
         return positive_delta_x.min()
     return np.ptp(x_coords) / max(num_lenslets - 1, 1)
+
+
+def _import_pyplot(interactive=True):
+    """Import pyplot with a non-interactive backend for file-only rendering."""
+    import matplotlib
+
+    if not interactive and matplotlib.get_backend().lower() != "agg":
+        matplotlib.use("Agg", force=True)
+
+    import matplotlib.pyplot as plt
+
+    return plt
 
 
 def _default_mode_labels(num_zernike):
@@ -143,6 +155,33 @@ def _convolve_with_psf(image, psf):
     return np.clip(out, 0.0, None)
 
 
+def quantize_shwfs_image(image, out_min=0, out_max=255):
+    """Match the server's detector-image quantization before sending pixels to the FPGA."""
+    image_array = np.asarray(image)
+    if image_array.dtype == np.uint8:
+        return image_array.copy()
+
+    image_array = np.asarray(image_array, dtype=np.float64)
+    image_min = float(image_array.min())
+    image_max = float(image_array.max())
+    if image_max <= image_min:
+        return np.zeros_like(image_array, dtype=np.uint8)
+
+    return np.interp(image_array, (image_min, image_max), (out_min, out_max)).astype(np.uint8)
+
+
+def _compute_reciprocal_q27(total_intensity):
+    """Approximate the FPGA reciprocal output format using rounded Q0.27 values."""
+    if total_intensity <= 0:
+        return (1 << 27) - 1
+    return min((1 << 27) - 1, int(round((1 << 27) / total_intensity)))
+
+
+def _compute_centroid_q4_23(weighted_intensity, reciprocal_q27):
+    """Mirror the FPGA centroid multiplier that converts 20.0 x 0.27 into Q4.23."""
+    return (int(weighted_intensity) * int(reciprocal_q27)) >> 4
+
+
 # ---------------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------------
@@ -159,7 +198,7 @@ def generate_shwfs_case(
     Returns a dictionary containing the detector image, calibration products,
     optical model objects, and reference data needed for HCIPy/FPGA comparison.
     """
-    import matplotlib.pyplot as plt
+    plt = _import_pyplot(interactive=False)
 
     telescope_diameter = 8.0
     central_obscuration = 1.2
@@ -431,6 +470,87 @@ def build_fpga_estimation(
         "sub_positions": make_fpga_subaperture_positions(shwfs, num_lenslets),
     }
 
+
+def run_fpga_like_estimation(
+    image,
+    num_subapertures_side=16,
+    subaperture_pixels=16,
+    slope_reference_pixels=None,
+    fraction_bits=23,
+    reconstruction_mask=None,
+    reconstruction_matrix_q1_16=None,
+):
+    """
+    Mirror the FPGA centroid and slope procedure on the quantized detector image.
+
+    The FPGA processes every 16x16 subaperture tile on the transmitted 8-bit
+    image, computes CoG centroids in local pixel coordinates, and subtracts a
+    fixed 7.5-pixel reference (for a 16-pixel tile) to form slopes.
+    """
+    quantized_image = quantize_shwfs_image(image)
+    detector_pixels = num_subapertures_side * subaperture_pixels
+    image_grid = np.asarray(quantized_image, dtype=np.uint8).reshape(detector_pixels, detector_pixels)
+
+    if slope_reference_pixels is None:
+        slope_reference_pixels = (subaperture_pixels - 1) / 2.0
+
+    scale = 1 << fraction_bits
+    slope_reference_q4_23 = int(round(slope_reference_pixels * scale))
+
+    x_indices = np.arange(subaperture_pixels, dtype=np.int64)[None, :]
+    y_indices = np.arange(subaperture_pixels, dtype=np.int64)[:, None]
+
+    centroids_q4_23 = np.zeros((num_subapertures_side * num_subapertures_side, 2), dtype=np.int64)
+    slopes_q4_23 = np.zeros((num_subapertures_side * num_subapertures_side, 2), dtype=np.int64)
+
+    for subap_row in range(num_subapertures_side):
+        row_slice = slice(subap_row * subaperture_pixels, (subap_row + 1) * subaperture_pixels)
+        for subap_col in range(num_subapertures_side):
+            col_slice = slice(subap_col * subaperture_pixels, (subap_col + 1) * subaperture_pixels)
+            tile = image_grid[row_slice, col_slice].astype(np.int64)
+            total_intensity = int(tile.sum())
+            x_weighted = int((tile * x_indices).sum())
+            y_weighted = int((tile * y_indices).sum())
+
+            reciprocal_q27 = _compute_reciprocal_q27(total_intensity)
+            x_centroid_q4_23 = _compute_centroid_q4_23(x_weighted, reciprocal_q27) if total_intensity > 0 else 0
+            y_centroid_q4_23 = _compute_centroid_q4_23(y_weighted, reciprocal_q27) if total_intensity > 0 else 0
+
+            subap_index = subap_row * num_subapertures_side + subap_col
+            centroids_q4_23[subap_index, 0] = x_centroid_q4_23
+            centroids_q4_23[subap_index, 1] = y_centroid_q4_23
+            slopes_q4_23[subap_index, 0] = x_centroid_q4_23 - slope_reference_q4_23
+            slopes_q4_23[subap_index, 1] = y_centroid_q4_23 - slope_reference_q4_23
+
+    centroids_xy = centroids_q4_23.astype(np.float64) / scale
+    slopes_xy = slopes_q4_23.astype(np.float64) / scale
+
+    estimated_coeffs_q4_23 = None
+    estimated_coeffs = None
+    if reconstruction_mask is not None and reconstruction_matrix_q1_16 is not None:
+        reconstruction_mask = np.asarray(reconstruction_mask, dtype=bool).ravel()
+        valid_slopes_q4_23 = slopes_q4_23[reconstruction_mask]
+        slope_vector_q4_23 = np.empty(valid_slopes_q4_23.shape[0] * 2, dtype=np.int64)
+        slope_vector_q4_23[0::2] = valid_slopes_q4_23[:, 0]
+        slope_vector_q4_23[1::2] = valid_slopes_q4_23[:, 1]
+
+        mac_sum_q5_39 = np.asarray(reconstruction_matrix_q1_16, dtype=np.int64) @ slope_vector_q4_23
+        estimated_coeffs_q4_23 = mac_sum_q5_39 >> 17
+        estimated_coeffs = estimated_coeffs_q4_23.astype(np.float64) / scale
+
+    return {
+        "quantized_image": quantized_image,
+        "centroids_q4_23": centroids_q4_23,
+        "slopes_q4_23": slopes_q4_23,
+        "centroids_xy": centroids_xy,
+        "slopes_xy": slopes_xy,
+        "centroids_grid": centroids_xy.reshape(num_subapertures_side, num_subapertures_side, 2),
+        "slopes_grid": slopes_xy.reshape(num_subapertures_side, num_subapertures_side, 2),
+        "slope_reference_pixels": slope_reference_pixels,
+        "estimated_coeffs_q4_23": estimated_coeffs_q4_23,
+        "estimated_coeffs": estimated_coeffs,
+    }
+
 def run_hcipy_estimation(
     image,
     estimator,
@@ -548,7 +668,7 @@ def generate_shwfs_visualizations(
     dict
         Saved figure paths and Strehl / residual metrics.
     """
-    import matplotlib.pyplot as plt
+    plt = _import_pyplot(interactive=show_plots)
 
     slope_x = estimation["slope_x"]
     slope_y = estimation["slope_y"]

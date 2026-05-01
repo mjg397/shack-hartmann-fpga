@@ -7,8 +7,8 @@ module slope_calculation (
     input wire [26:0] rec_intensity,
     input wire [19:0] x_intensity,
     input wire [19:0] y_intensity,
-    output reg signed [27:0] x_centroid,
-    output reg signed [27:0] y_centroid,
+    output reg signed [26:0] x_centroid,
+    output reg signed [26:0] y_centroid,
     output reg signed [26:0] x_slope,
     output reg signed [26:0] y_slope,
     output reg         new_subapeture
@@ -44,8 +44,8 @@ module slope_calculation (
         x_slope    <= 0;
         y_slope    <= 0;
     end else begin
-        x_centroid <= $signed(x_centroid_mult);
-        y_centroid <= $signed(y_centroid_mult);
+        x_centroid <= x_centroid_mult[26:0];
+        y_centroid <= y_centroid_mult[26:0];
 
         // Truncate slope to 27-bit signed (4.23)
         x_slope <= raw_x_slope[26:0];
