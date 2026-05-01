@@ -3,7 +3,7 @@
  <debug showDebugMenu="0" />
  <systemtable filter="All Interfaces">
   <columns>
-   <connections preferredWidth="239" />
+   <connections preferredWidth="255" />
    <irq preferredWidth="47" />
    <name preferredWidth="694" />
    <description preferredWidth="583" />
@@ -12,8 +12,7 @@
    <endaddress preferredWidth="239" />
   </columns>
  </systemtable>
- <library
-   expandedCategories="Library/Basic Functions,Library,Library/Basic Functions/Configuration and Programming,Library/Basic Functions/Clocks; PLLs and Resets,Library/Basic Functions/Clocks; PLLs and Resets/PLL,Project" />
- <window width="2588" height="1420" x="-2574" y="-14" />
+ <library expandedCategories="Library,Project" />
+ <window width="1707" height="1019" x="0" y="0" />
  <generation block_symbol_file="0" greybox="0" simulation="NONE" />
 </preferences>

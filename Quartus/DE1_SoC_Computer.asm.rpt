@@ -1,5 +1,5 @@
 Assembler report for DE1_SoC_Computer
-Wed Apr 29 16:38:47 2026
+Thu Apr 30 19:04:24 2026
 Quartus Prime Version 18.1.0 Build 625 09/12/2018 SJ Lite Edition
 
 
@@ -38,7 +38,7 @@ refer to the applicable agreement for further details.
 +---------------------------------------------------------------+
 ; Assembler Summary                                             ;
 +-----------------------+---------------------------------------+
-; Assembler Status      ; Successful - Wed Apr 29 16:38:47 2026 ;
+; Assembler Status      ; Successful - Thu Apr 30 19:04:24 2026 ;
 ; Revision Name         ; DE1_SoC_Computer                      ;
 ; Top-level Entity Name ; DE1_SoC_Computer                      ;
 ; Family                ; Cyclone V                             ;
@@ -77,8 +77,8 @@ refer to the applicable agreement for further details.
 +----------------+--------------------------------------------------------------------------+
 ; Option         ; Setting                                                                  ;
 +----------------+--------------------------------------------------------------------------+
-; JTAG usercode  ; 0x07A7CA7E                                                               ;
-; Checksum       ; 0x07A7CA7E                                                               ;
+; JTAG usercode  ; 0x07BB835B                                                               ;
+; Checksum       ; 0x07BB835B                                                               ;
 +----------------+--------------------------------------------------------------------------+
 
 
@@ -88,14 +88,14 @@ refer to the applicable agreement for further details.
 Info: *******************************************************************
 Info: Running Quartus Prime Assembler
     Info: Version 18.1.0 Build 625 09/12/2018 SJ Lite Edition
-    Info: Processing started: Wed Apr 29 16:38:26 2026
+    Info: Processing started: Thu Apr 30 19:04:04 2026
 Info: Command: quartus_asm --read_settings_files=off --write_settings_files=off DE1_SoC_Computer -c DE1_SoC_Computer
 Info (115030): Assembler is generating device programming files
 Info (11878): Hard Processor Subsystem configuration has not changed and a Preloader software update is not required
 Info: Quartus Prime Assembler was successful. 0 errors, 0 warnings
-    Info: Peak virtual memory: 5212 megabytes
-    Info: Processing ended: Wed Apr 29 16:38:47 2026
-    Info: Elapsed time: 00:00:21
-    Info: Total CPU time (on all processors): 00:00:22
+    Info: Peak virtual memory: 5226 megabytes
+    Info: Processing ended: Thu Apr 30 19:04:24 2026
+    Info: Elapsed time: 00:00:20
+    Info: Total CPU time (on all processors): 00:00:20
 
 

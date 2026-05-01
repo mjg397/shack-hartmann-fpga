@@ -654,7 +654,7 @@ Computer_System The_System (
 	.system_pll_ref_reset_reset			(1'b0),
 	
 	// SHWFS Pipeline Clock
-	.clk_10_clk									(clk),
+	.clk_25_clk									(clk),
 	
 	
 	.intensity_sram_address			(intensity_addr),            	//       intensity_sram.address
