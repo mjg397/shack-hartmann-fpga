@@ -9,6 +9,7 @@ Shack-Hartmann WFS — E Matrix (Reconstruction Matrix) Generator
 import numpy as np
 from math import factorial
 
+
 # =============================================================================
 # STEP 1 — Parameters
 # =============================================================================
