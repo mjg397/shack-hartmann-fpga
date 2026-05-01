@@ -32,6 +32,7 @@ PUPIL_RADIUS              = TELESCOPE_DIAMETER / 2.0
 # STEP 2 — Pupil grid and aperture mask
 # =============================================================================
 
+
 lenslet_coords_1d = np.linspace(-1.0, 1.0, NUM_LENSLETS_ACROSS, endpoint=True)
 lx, ly   = np.meshgrid(lenslet_coords_1d, lenslet_coords_1d)
 lx_flat  = lx.ravel()
