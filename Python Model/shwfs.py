@@ -48,78 +48,21 @@ from hcipy import (
     NoiselessDetector,
     Magnifier,
     make_zernike_basis,
-    imshow_field,
 )
 
 import warnings
 warnings.filterwarnings('ignore', category=DeprecationWarning)
 
 import numpy as np
-import matplotlib.pyplot as plt
 import scipy.ndimage as ndimage
 from pathlib import Path
+import sys
 
+SRC_DIR = Path(__file__).resolve().parents[1] / "src"
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
 
-def load_vlt_demo_scene(size=256):
-    """Load and normalize a VLT image from ./VLT_Images for AO demo rendering."""
-    image_dir = Path("VLT_Images")
-    candidates = [
-        image_dir / "eso1322a.jpg",
-        image_dir / "eso1131a.jpg",
-    ]
-
-    for path in candidates:
-        if path.exists():
-            img = plt.imread(path)
-            if img.ndim == 3:
-                # Convert RGB/RGBA to luminance.
-                img = 0.2126 * img[..., 0] + 0.7152 * img[..., 1] + 0.0722 * img[..., 2]
-            img = np.asarray(img, dtype=float)
-
-            # Resize to simulation grid while keeping content centered.
-            zoom_y = size / img.shape[0]
-            zoom_x = size / img.shape[1]
-            zoom_factor = min(zoom_y, zoom_x)
-            resized = ndimage.zoom(img, zoom_factor, order=1)
-
-            out = np.zeros((size, size), dtype=float)
-            y0 = max((size - resized.shape[0]) // 2, 0)
-            x0 = max((size - resized.shape[1]) // 2, 0)
-            y1 = min(y0 + resized.shape[0], size)
-            x1 = min(x0 + resized.shape[1], size)
-
-            src_y0 = max((resized.shape[0] - size) // 2, 0)
-            src_x0 = max((resized.shape[1] - size) // 2, 0)
-            src_y1 = src_y0 + (y1 - y0)
-            src_x1 = src_x0 + (x1 - x0)
-
-            out[y0:y1, x0:x1] = resized[src_y0:src_y1, src_x0:src_x1]
-            out -= out.min()
-            out /= (out.max() + 1e-30)
-
-            print(f"AO demo scene loaded from {path}")
-            return out
-
-    raise FileNotFoundError(
-        "No VLT demo image found in ./VLT_Images. Expected one of: eso1322a.jpg, eso1131a.jpg"
-    )
-
-
-def psf_from_opd(opd_m, aperture_mask, wavelength):
-    """Compute a normalized PSF from OPD and aperture using scalar Fraunhofer FFT."""
-    phase = (2.0 * np.pi / wavelength) * opd_m
-    pupil = aperture_mask * np.exp(1j * phase)
-    ef = np.fft.fftshift(np.fft.fft2(pupil))
-    psf = np.abs(ef) ** 2
-    psf /= psf.sum() + 1e-30
-    return psf
-
-
-def convolve_with_psf(image, psf):
-    """Circular convolution using FFT; PSF is centered and shifted to kernel origin."""
-    kernel = np.fft.ifftshift(psf)
-    out = np.fft.ifft2(np.fft.fft2(image) * np.fft.fft2(kernel)).real
-    return np.clip(out, 0.0, None)
+from shwfs_utils import generate_shwfs_visualizations, run_hcipy_estimation
 
 
 # ===========================================================================
@@ -420,12 +363,19 @@ image_aber = camera.read_out()
 #   misalignment) and leaves only the aberration-induced shift.
 #   This subtraction is done in-line on the FPGA immediately after each
 #   centroid is computed.  The result is a (2 × N_subs) slope vector.
-slopes_aber  = shwfse.estimate([image_aber])
-slopes_delta = slopes_aber - slopes_ref   # (2, N_subs) — replicated by FPGA
+estimation = run_hcipy_estimation(
+    image=image_aber,
+    estimator=shwfse,
+    reference_slopes=slopes_ref,
+    reconstruction_matrix=RM,
+    zernike_modes=zernike_modes,
+    aperture=VLT_aperture,
+    measured_opd_field=opd_field,
+    shwfs=shwfs,
+)
 
-sx = slopes_delta[0, :]
-sy = slopes_delta[1, :]
-sub_positions = shwfs.mla_grid.subset(shwfse.estimation_subapertures)
+slopes_aber = estimation["slopes_aber"]
+slopes_delta = estimation["slopes_delta"]   # (2, N_subs) — replicated by FPGA
 
 # ---------------------------------------------------------------------------
 # 7. Reconstruct Zernike coefficients
@@ -457,153 +407,36 @@ print("Slopes: \n", slopes_aber)
 np.set_printoptions(threshold=np.inf, linewidth=200, precision=6, suppress=True)
 print(np.asarray(slopes_aber))
 
-# HOST resumes: build OPD map from returned coefficients for display/logging.
-recon_opd       = sum(c * m for c, m in zip(estimated_coeffs, zernike_modes))
-recon_opd_field = VLT_aperture * recon_opd
-
-residual_field  = opd_field - recon_opd_field
-
 # ===========================================================================
 # HOST-SIDE CODE (resumes)
 # Results returned from the FPGA are displayed and compared to ground truth.
 # ===========================================================================
 
-# ---------------------------------------------------------------------------
-# 8. Display
-# ---------------------------------------------------------------------------
-fig, axes = plt.subplots(2, 3, figsize=(16, 10))
-fig.suptitle("Shack-Hartmann WFS Simulation (HCIPy)", fontsize=14, fontweight='bold')
+recon_opd_field = estimation["reconstructed_opd_field"]
+residual_field = estimation["residual_field"]
 
-# Row 0 ── sensor images and slope field ────────────────────────────────────
-plt.sca(axes[0, 0])
-imshow_field(image_ref, cmap='inferno')
-plt.title("SHWFS image — flat wavefront")
-plt.colorbar(label='counts')
-
-plt.sca(axes[0, 1])
-imshow_field(image_aber, cmap='inferno')
-plt.title("SHWFS image — aberrated wavefront")
-plt.colorbar(label='counts')
-
-plt.sca(axes[0, 2])
-imshow_field(image_aber, cmap='inferno', alpha=0.4)
-# Estimate typical subaperture spacing from nearest-neighbour distances
-_x = sub_positions.x
-_y = sub_positions.y
-_dx = np.diff(np.sort(np.unique(np.round(_x * 1e6).astype(int)))) * 1e-6
-pitch = _dx[_dx > 0].min() if len(_dx[_dx > 0]) > 0 else (np.ptp(_x) / (num_lenslets - 1))
-mag_max = np.hypot(sx, sy).max() + 1e-30
-arrow_scale = pitch * 1.5 / mag_max
-plt.quiver(
-    sub_positions.x, sub_positions.y,
-    sx * arrow_scale, sy * arrow_scale,
-    color='cyan', scale=1, scale_units='xy', angles='xy', width=0.003,
+figure_info = generate_shwfs_visualizations(
+    image_ref=image_ref,
+    image_aber=image_aber,
+    estimation=estimation,
+    aperture=VLT_aperture,
+    input_opd_field=opd_field,
+    true_coeffs=true_coeffs,
+    mode_labels=mode_labels,
+    wavelength=wavelength_wfs,
+    num_lenslets=num_lenslets,
+    results_path="shwfs_results.png",
+    ao_demo_path="shwfs_ao_demo.png",
+    show_plots=True,
 )
-plt.title("Differential slope field")
 
-# Row 1 ── wavefronts and Zernike bar chart ─────────────────────────────────
-vmax_nm = np.abs(opd_field[VLT_aperture > 0.5]).max() * 1e9
-
-plt.sca(axes[1, 0])
-imshow_field(opd_field * 1e9, cmap='RdBu', vmin=-vmax_nm, vmax=vmax_nm,
-             mask=VLT_aperture)
-plt.title("Input OPD [nm]")
-plt.colorbar(label='nm')
-
-plt.sca(axes[1, 1])
-imshow_field(recon_opd_field * 1e9, cmap='RdBu', vmin=-vmax_nm, vmax=vmax_nm,
-             mask=VLT_aperture)
-plt.title("Reconstructed OPD [nm]")
-plt.colorbar(label='nm')
-
-plt.sca(axes[1, 2])
-x     = np.arange(NUM_ZERNIKE)
-width = 0.35
-plt.bar(x - width / 2, true_coeffs * 1e9,      width, label='True',      color='steelblue')
-plt.bar(x + width / 2, estimated_coeffs * 1e9,  width, label='Estimated', color='tomato')
-plt.xticks(x, mode_labels, rotation=45, ha='right', fontsize=8)
-plt.ylabel("Coefficient [nm]")
-plt.title("Zernike coefficients")
-plt.legend(loc='upper right')
-plt.axhline(0, color='k', linewidth=0.6)
-
-plt.tight_layout()
-plt.savefig("shwfs_results.png", dpi=150, bbox_inches='tight')
-print("Figure saved to shwfs_results.png")
-plt.show()
-
-# ---------------------------------------------------------------------------
-# 9. Numerical summary
-# ---------------------------------------------------------------------------
-print("\n--- Zernike coefficient comparison ---")
-print(f"{'Mode':<14} {'True [nm]':>12} {'Estimated [nm]':>15} {'Error [nm]':>12}")
-print("-" * 58)
-for label, tc, ec in zip(mode_labels, true_coeffs, estimated_coeffs):
-    print(f"{label:<14} {tc*1e9:>12.2f} {ec*1e9:>15.2f} {(ec-tc)*1e9:>12.2f}")
-
-residual_rms = np.std(residual_field[VLT_aperture > 0.5])
+if figure_info["results_path"] is not None:
+    print(f"Figure saved to {figure_info['results_path']}")
+if figure_info["ao_demo_path"] is not None:
+    print(f"AO demo figure saved to {figure_info['ao_demo_path']}")
+residual_rms = figure_info["residual_rms"]
 print(f"\nResidual OPD RMS inside pupil = {residual_rms*1e9:.2f} nm")
-
-# ---------------------------------------------------------------------------
-# 10. AO image demo (object -> aberrated telescope image -> corrected image)
-# ---------------------------------------------------------------------------
-scene = load_vlt_demo_scene(size=num_pupil_pixels)
-
-ap_mask = np.asarray(VLT_aperture, dtype=float).reshape(num_pupil_pixels, num_pupil_pixels)
-opd_true_m = np.asarray(opd_field, dtype=float).reshape(num_pupil_pixels, num_pupil_pixels)
-opd_recon_m = np.asarray(recon_opd_field, dtype=float).reshape(num_pupil_pixels, num_pupil_pixels)
-opd_resid_m = np.asarray(residual_field, dtype=float).reshape(num_pupil_pixels, num_pupil_pixels)
-
-psf_dl = psf_from_opd(np.zeros_like(opd_true_m), ap_mask, wavelength_wfs)
-psf_ab = psf_from_opd(opd_true_m, ap_mask, wavelength_wfs)
-
-# Simulated correction applies the negative reconstructed OPD,
-# leaving residual OPD = true - reconstructed.
-psf_corr = psf_from_opd(opd_resid_m, ap_mask, wavelength_wfs)
-
-img_ab = convolve_with_psf(scene, psf_ab)
-img_corr = convolve_with_psf(scene, psf_corr)
-img_dl = convolve_with_psf(scene, psf_dl)
-
-img_ab /= img_ab.max() + 1e-30
-img_corr /= img_corr.max() + 1e-30
-img_dl /= img_dl.max() + 1e-30
-
-strehl_ab = psf_ab.max() / (psf_dl.max() + 1e-30)
-strehl_corr = psf_corr.max() / (psf_dl.max() + 1e-30)
-
-fig2, ax2 = plt.subplots(2, 3, figsize=(16, 10))
-fig2.suptitle("AO Imaging Demo: Aberrated vs Corrected Telescope Image", fontsize=14, fontweight='bold')
-
-ax2[0, 0].imshow(scene, cmap='gray', origin='lower')
-ax2[0, 0].set_title("Reference object (VLT image)")
-ax2[0, 0].axis('off')
-
-ax2[0, 1].imshow(img_ab, cmap='gray', origin='lower')
-ax2[0, 1].set_title("Aberrated image")
-ax2[0, 1].axis('off')
-
-ax2[0, 2].imshow(img_corr, cmap='gray', origin='lower')
-ax2[0, 2].set_title("Corrected image (from reconstructed OPD)")
-ax2[0, 2].axis('off')
-
-ax2[1, 0].imshow(np.log10(psf_ab + 1e-12), cmap='magma', origin='lower')
-ax2[1, 0].set_title("log10 PSF (aberrated)")
-ax2[1, 0].axis('off')
-
-ax2[1, 1].imshow(np.log10(psf_corr + 1e-12), cmap='magma', origin='lower')
-ax2[1, 1].set_title("log10 PSF (corrected)")
-ax2[1, 1].axis('off')
-
-ax2[1, 2].imshow(np.log10(psf_dl + 1e-12), cmap='magma', origin='lower')
-ax2[1, 2].set_title("log10 PSF (diffraction-limited)")
-ax2[1, 2].axis('off')
-
-fig2.text(0.5, 0.01,
-          f"Strehl (aberrated): {strehl_ab:.3f}   |   Strehl (corrected): {strehl_corr:.3f}",
-          ha='center', fontsize=11)
-
-plt.tight_layout(rect=[0, 0.03, 1, 0.97])
-plt.savefig("shwfs_ao_demo.png", dpi=150, bbox_inches='tight')
-print("AO demo figure saved to shwfs_ao_demo.png")
-plt.show()
+print(
+    f"Strehl (aberrated): {figure_info['strehl_ab']:.3f}   |   "
+    f"Strehl (corrected): {figure_info['strehl_corr']:.3f}"
+)

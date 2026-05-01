@@ -1,7 +1,15 @@
 import socket 
 import threading 
 import os
-from shwfs_utils import generate_aberrated_image
+from shwfs_utils import (
+    build_fpga_estimation,
+    collapse_xy_grid,
+    expand_valid_subaperture_array,
+    generate_shwfs_case,
+    generate_shwfs_visualizations,
+    reshape_subaperture_xy,
+    run_hcipy_estimation,
+)
 # from e_matrix_lib import generate_e_matrix
 from ematrixgen2 import gen_E_matrix
 import numpy as np
@@ -16,6 +24,7 @@ CLIENT_TIMEOUT_SEC = 5.0
 
 NUM_SUBAPERTURES_SIDE = 16
 NUM_SUBAPERTURES = NUM_SUBAPERTURES_SIDE * NUM_SUBAPERTURES_SIDE
+SUBAPERTURE_PIXELS = 16
 NUM_PACKED_XY = NUM_SUBAPERTURES * 2
 NUM_ZERNIKE = 10
 Q4_23_SCALE = float(1 << 23)
@@ -178,28 +187,113 @@ def unpack_xy_vectors(packed_values, n_vectors):
     return np.column_stack((x_vals, y_vals))
 
 
-def dump_fpga_float_results(slopes_xy, centroids_xy, zernikes):
+def save_xy_grid(path, xy_grid, x_label, y_label):
+    with open(path, "w", encoding="utf-8") as handle:
+        handle.write(f"row col {x_label} {y_label}\n")
+        for row_idx in range(xy_grid.shape[0]):
+            for col_idx in range(xy_grid.shape[1]):
+                x_val, y_val = xy_grid[row_idx, col_idx]
+                handle.write(f"{row_idx} {col_idx} {x_val:.10f} {y_val:.10f}\n")
+
+
+def save_zernike_coefficients(path, coeffs, mode_labels, header_prefix):
+    with open(path, "w", encoding="utf-8") as handle:
+        handle.write(f"mode {header_prefix}_coeff\n")
+        for label, coeff in zip(mode_labels, coeffs):
+            handle.write(f"{label} {coeff:.10f}\n")
+
+
+def dump_fpga_float_results(slopes_xy_grid, centroids_xy_grid, zernikes, mode_labels):
     np.savetxt(
-        os.path.join(RESULT_DUMP_DIR, "slopes_xy_float.txt"),
-        slopes_xy,
-        fmt="%.10f",
-        header="x_slope y_slope",
-        comments="",
-    )
-    np.savetxt(
-        os.path.join(RESULT_DUMP_DIR, "centroids_xy_float.txt"),
-        centroids_xy,
-        fmt="%.10f",
-        header="x_centroid y_centroid",
-        comments="",
-    )
-    np.savetxt(
-        os.path.join(RESULT_DUMP_DIR, "zernikes_float.txt"),
+        os.path.join(RESULT_DUMP_DIR, "fpga_zernikes_float.txt"),
         zernikes,
         fmt="%.10f",
         header="zernike_coeff",
         comments="",
     )
+    save_xy_grid(
+        os.path.join(RESULT_DUMP_DIR, "fpga_slopes_grid.txt"),
+        slopes_xy_grid,
+        "x_slope",
+        "y_slope",
+    )
+    save_xy_grid(
+        os.path.join(RESULT_DUMP_DIR, "fpga_centroids_grid.txt"),
+        centroids_xy_grid,
+        "x_centroid",
+        "y_centroid",
+    )
+    save_zernike_coefficients(
+        os.path.join(RESULT_DUMP_DIR, "fpga_zernikes_named.txt"),
+        zernikes,
+        mode_labels,
+        "fpga",
+    )
+
+
+def dump_hcipy_reference_results(slopes_xy_grid, centroids_xy_grid, zernikes, mode_labels):
+    save_xy_grid(
+        os.path.join(RESULT_DUMP_DIR, "hcipy_slopes_grid.txt"),
+        slopes_xy_grid,
+        "x_slope",
+        "y_slope",
+    )
+    save_xy_grid(
+        os.path.join(RESULT_DUMP_DIR, "hcipy_centroids_grid.txt"),
+        centroids_xy_grid,
+        "x_centroid",
+        "y_centroid",
+    )
+    save_zernike_coefficients(
+        os.path.join(RESULT_DUMP_DIR, "hcipy_zernikes_named.txt"),
+        zernikes,
+        mode_labels,
+        "hcipy",
+    )
+
+
+def dump_comparison_results(fpga_slopes_grid, hcipy_slopes_grid, fpga_centroids_grid, hcipy_centroids_grid):
+    save_xy_grid(
+        os.path.join(RESULT_DUMP_DIR, "slope_error_grid.txt"),
+        fpga_slopes_grid - hcipy_slopes_grid,
+        "x_error",
+        "y_error",
+    )
+    save_xy_grid(
+        os.path.join(RESULT_DUMP_DIR, "centroid_error_grid.txt"),
+        fpga_centroids_grid - hcipy_centroids_grid,
+        "x_error",
+        "y_error",
+    )
+
+
+def summarize_xy_error(name, fpga_xy, hcipy_xy, valid_mask_flat):
+    error = fpga_xy - hcipy_xy
+    valid_error = error[valid_mask_flat]
+    rms_x = np.sqrt(np.mean(valid_error[:, 0] ** 2))
+    rms_y = np.sqrt(np.mean(valid_error[:, 1] ** 2))
+    rms_mag = np.sqrt(np.mean(np.sum(valid_error ** 2, axis=1)))
+    print(
+        f"     {name} RMS error over valid subapertures: "
+        f"x={rms_x:.6e}, y={rms_y:.6e}, |xy|={rms_mag:.6e}"
+    )
+
+
+def dump_zernike_comparison(fpga_coeffs, hcipy_coeffs, mode_labels):
+    comparison = np.column_stack((hcipy_coeffs, fpga_coeffs, fpga_coeffs - hcipy_coeffs))
+    header = "hcipy_coeff fpga_coeff error"
+    np.savetxt(
+        os.path.join(RESULT_DUMP_DIR, "zernike_comparison.txt"),
+        comparison,
+        fmt="%.10f",
+        header=header,
+        comments="",
+    )
+    for label, hcipy_coeff, fpga_coeff in zip(mode_labels, hcipy_coeffs, fpga_coeffs):
+        print(
+            f"     {label:<12} HCIPy={hcipy_coeff:.6e} "
+            f"FPGA={fpga_coeff:.6e} err={(fpga_coeff - hcipy_coeff):.6e}"
+        )
 
 #client handling thread
 def handle_client(client_socket): 
@@ -220,7 +314,23 @@ def handle_client(client_socket):
             case "start":
 
                 print("Shack Hartmann Generation - Image Abberation running. ")
-                coeffs = generate_aberrated_image() # 65536 array of ints
+                simulation = generate_shwfs_case(
+                    num_lenslets=NUM_SUBAPERTURES_SIDE,
+                    num_zernike=NUM_ZERNIKE,
+                    demo_image_path=None,
+                )
+                hcipy_estimation = run_hcipy_estimation(
+                    image=simulation["image_aber"],
+                    estimator=simulation["estimator"],
+                    reference_slopes=simulation["slopes_ref"],
+                    reconstruction_matrix=simulation["reconstruction_matrix"],
+                    zernike_modes=simulation["zernike_modes"],
+                    aperture=simulation["aperture"],
+                    measured_opd_field=simulation["input_opd_field"],
+                    shwfs=simulation["shwfs"],
+                )
+
+                coeffs = np.asarray(simulation["image_aber"])
                 interp_coeffs = np.interp(coeffs, (coeffs.min(), coeffs.max()), (0, 255)).astype(np.uint8)
                 coeff_payload = interp_coeffs.tobytes(order="C")
                 dump_bytes("py_sent_coeffs", coeff_payload, elem_size=1, words_per_row=256)
@@ -280,13 +390,102 @@ def handle_client(client_socket):
                 slopes_q423 = decode_q4_23_from_bytes(slope_bytes, NUM_PACKED_XY)
                 zernikes_q423 = decode_q4_23_from_bytes(zernike_bytes, NUM_ZERNIKE)
 
-                # Packed format: [X0..X255, Y0..Y255] for both slopes and centroids.
+                # Packed format: [X0..X255, Y0..Y255] for both centroids and slopes.
+                # The transport order is row-major across the 16x16 lenslet grid, and
+                # each lenslet integrates a 16x16 detector-pixel tile.
                 centroids_xy = unpack_xy_vectors(centroids_q423, NUM_SUBAPERTURES)
                 slopes_xy = unpack_xy_vectors(slopes_q423, NUM_SUBAPERTURES)
 
-                dump_fpga_float_results(slopes_xy, centroids_xy, zernikes_q423)
+                centroids_xy_grid = reshape_subaperture_xy(centroids_xy, NUM_SUBAPERTURES_SIDE)
+                slopes_xy_grid = reshape_subaperture_xy(slopes_xy, NUM_SUBAPERTURES_SIDE)
+
+                hcipy_centroids_32 = expand_valid_subaperture_array(
+                    hcipy_estimation["slopes_aber"].T,
+                    simulation["valid_subaperture_mask"],
+                    fill_value=np.nan,
+                )
+                hcipy_slopes_32 = expand_valid_subaperture_array(
+                    hcipy_estimation["slopes_delta"].T,
+                    simulation["valid_subaperture_mask"],
+                    fill_value=np.nan,
+                )
+
+                hcipy_centroids_grid = collapse_xy_grid(
+                    hcipy_centroids_32.reshape(NUM_SUBAPERTURES_SIDE * 2, NUM_SUBAPERTURES_SIDE * 2, 2),
+                    factor=2,
+                )
+                hcipy_slopes_grid = collapse_xy_grid(
+                    hcipy_slopes_32.reshape(NUM_SUBAPERTURES_SIDE * 2, NUM_SUBAPERTURES_SIDE * 2, 2),
+                    factor=2,
+                )
+                hcipy_centroids_xy = hcipy_centroids_grid.reshape(NUM_SUBAPERTURES, 2)
+                hcipy_slopes_xy = hcipy_slopes_grid.reshape(NUM_SUBAPERTURES, 2)
+                valid_mask_flat = np.asarray(simulation["fpga_subaperture_mask"], dtype=bool).ravel()
+
+                dump_fpga_float_results(
+                    slopes_xy_grid,
+                    centroids_xy_grid,
+                    zernikes_q423,
+                    simulation["mode_labels"],
+                )
+                dump_hcipy_reference_results(
+                    hcipy_slopes_grid,
+                    hcipy_centroids_grid,
+                    hcipy_estimation["estimated_coeffs"],
+                    simulation["mode_labels"],
+                )
+                dump_comparison_results(
+                    slopes_xy_grid,
+                    hcipy_slopes_grid,
+                    centroids_xy_grid,
+                    hcipy_centroids_grid,
+                )
+                dump_zernike_comparison(
+                    zernikes_q423,
+                    hcipy_estimation["estimated_coeffs"],
+                    simulation["mode_labels"],
+                )
+
+                summarize_xy_error("Centroid", centroids_xy, hcipy_centroids_xy, valid_mask_flat)
+                summarize_xy_error("Slope", slopes_xy, hcipy_slopes_xy, valid_mask_flat)
+
+                fpga_estimation = build_fpga_estimation(
+                    slopes_xy=slopes_xy,
+                    estimated_coeffs=zernikes_q423,
+                    zernike_modes=simulation["zernike_modes"],
+                    aperture=simulation["aperture"],
+                    shwfs=simulation["shwfs"],
+                    num_lenslets=NUM_SUBAPERTURES_SIDE,
+                    measured_opd_field=simulation["input_opd_field"],
+                )
+                figure_info = generate_shwfs_visualizations(
+                    image_ref=simulation["image_ref"],
+                    image_aber=simulation["image_aber"],
+                    estimation=fpga_estimation,
+                    aperture=simulation["aperture"],
+                    input_opd_field=simulation["input_opd_field"],
+                    true_coeffs=hcipy_estimation["estimated_coeffs"],
+                    mode_labels=simulation["mode_labels"],
+                    wavelength=simulation["wavelength"],
+                    num_lenslets=NUM_SUBAPERTURES_SIDE,
+                    results_path=os.path.join(RESULT_DUMP_DIR, "fpga_results.png"),
+                    ao_demo_path=os.path.join(RESULT_DUMP_DIR, "fpga_ao_demo.png"),
+                    show_plots=False,
+                    comparison_label="HCIPy",
+                    estimated_label="FPGA",
+                    figure_title="Shack-Hartmann WFS Simulation (FPGA vs HCIPy)",
+                )
+
                 print(f"     Float outputs written under: {RESULT_DUMP_DIR}")
-                print(f"     slopes_xy shape={slopes_xy.shape}, centroids_xy shape={centroids_xy.shape}, zernikes shape={zernikes_q423.shape}")
+                print(
+                    f"     slope grid shape={slopes_xy_grid.shape}, "
+                    f"centroid grid shape={centroids_xy_grid.shape}, "
+                    f"zernike shape={zernikes_q423.shape}"
+                )
+                print(
+                    f"     visualization files: {figure_info['results_path']}, "
+                    f"{figure_info['ao_demo_path']}"
+                )
 
             case _:
                 print("Pattern not recognized")
