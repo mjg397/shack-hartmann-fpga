@@ -10,30 +10,40 @@
 # Copying C:/intelFPGA_lite/18.1/modelsim_ase/win32aloem/../modelsim.ini to modelsim.ini
 # Modifying modelsim.ini
 # 
+# vlog -vlog01compat -work work +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus {C:/Users/sjbar/shack-hartmann-fpga/Quartus/async_reset.v}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 15:49:46 on May 01,2026
+# vlog -reportprogress 300 -vlog01compat -work work "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus" C:/Users/sjbar/shack-hartmann-fpga/Quartus/async_reset.v 
+# -- Compiling module async_reset
+# 
+# Top level modules:
+# 	async_reset
+# End time: 15:49:46 on May 01,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
 # vlog -vlog01compat -work work +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus {C:/Users/sjbar/shack-hartmann-fpga/Quartus/TCoG_intensity_accumulator.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:24 on Apr 26,2026
+# Start time: 15:49:46 on May 01,2026
 # vlog -reportprogress 300 -vlog01compat -work work "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus" C:/Users/sjbar/shack-hartmann-fpga/Quartus/TCoG_intensity_accumulator.v 
 # -- Compiling module TCoG_intensity_accumulator
 # 
 # Top level modules:
 # 	TCoG_intensity_accumulator
-# End time: 14:40:24 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:46 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -vlog01compat -work work +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus {C:/Users/sjbar/shack-hartmann-fpga/Quartus/slope_calculation.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:24 on Apr 26,2026
+# Start time: 15:49:46 on May 01,2026
 # vlog -reportprogress 300 -vlog01compat -work work "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus" C:/Users/sjbar/shack-hartmann-fpga/Quartus/slope_calculation.v 
 # -- Compiling module slope_calculation
 # -- Compiling module unsigned_mult
 # 
 # Top level modules:
 # 	slope_calculation
-# End time: 14:40:24 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:46 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -vlog01compat -work work +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus {C:/Users/sjbar/shack-hartmann-fpga/Quartus/reciprocal_u16_q27.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:24 on Apr 26,2026
+# Start time: 15:49:46 on May 01,2026
 # vlog -reportprogress 300 -vlog01compat -work work "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus" C:/Users/sjbar/shack-hartmann-fpga/Quartus/reciprocal_u16_q27.v 
 # -- Compiling module reciprocal_u16_q27
 # ** Warning: C:/Users/sjbar/shack-hartmann-fpga/Quartus/reciprocal_u16_q27.v(97): (vlog-2600) [RDGN] - Redundant digits in numeric literal.
@@ -42,68 +52,68 @@
 # 
 # Top level modules:
 # 	reciprocal_u16_q27
-# End time: 14:40:24 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:47 on May 01,2026, Elapsed time: 0:00:01
 # Errors: 0, Warnings: 3
 # vlog -vlog01compat -work work +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus {C:/Users/sjbar/shack-hartmann-fpga/Quartus/intensity_reciprocal.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:25 on Apr 26,2026
+# Start time: 15:49:47 on May 01,2026
 # vlog -reportprogress 300 -vlog01compat -work work "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus" C:/Users/sjbar/shack-hartmann-fpga/Quartus/intensity_reciprocal.v 
 # -- Compiling module intensity_reciprocal
 # 
 # Top level modules:
 # 	intensity_reciprocal
-# End time: 14:40:25 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:47 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -vlog01compat -work work +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus {C:/Users/sjbar/shack-hartmann-fpga/Quartus/newton_step_q27.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:25 on Apr 26,2026
+# Start time: 15:49:47 on May 01,2026
 # vlog -reportprogress 300 -vlog01compat -work work "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus" C:/Users/sjbar/shack-hartmann-fpga/Quartus/newton_step_q27.v 
 # -- Compiling module newton_step_q27
 # ** Warning: C:/Users/sjbar/shack-hartmann-fpga/Quartus/newton_step_q27.v(36): (vlog-2600) [RDGN] - Redundant digits in numeric literal.
 # 
 # Top level modules:
 # 	newton_step_q27
-# End time: 14:40:25 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:47 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 1
-# vlog -vlog01compat -work work +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus {C:/Users/sjbar/shack-hartmann-fpga/Quartus/DE1_SoC_Computer.v}
-# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:26 on Apr 26,2026
-# vlog -reportprogress 300 -vlog01compat -work work "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus" C:/Users/sjbar/shack-hartmann-fpga/Quartus/DE1_SoC_Computer.v 
-# -- Compiling module DE1_SoC_Computer
-# 
-# Top level modules:
-# 	DE1_SoC_Computer
-# End time: 14:40:26 on Apr 26,2026, Elapsed time: 0:00:00
-# Errors: 0, Warnings: 0
-# vlog -vlog01compat -work work +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus {C:/Users/sjbar/shack-hartmann-fpga/Quartus/hex_decoder.v}
-# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:26 on Apr 26,2026
-# vlog -reportprogress 300 -vlog01compat -work work "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus" C:/Users/sjbar/shack-hartmann-fpga/Quartus/hex_decoder.v 
-# -- Compiling module HexDigit
-# 
-# Top level modules:
-# 	HexDigit
-# End time: 14:40:26 on Apr 26,2026, Elapsed time: 0:00:00
-# Errors: 0, Warnings: 0
-# vlog -vlog01compat -work work +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus {C:/Users/sjbar/shack-hartmann-fpga/Quartus/ematrix_accumulator.v}
-# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:27 on Apr 26,2026
-# vlog -reportprogress 300 -vlog01compat -work work "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus" C:/Users/sjbar/shack-hartmann-fpga/Quartus/ematrix_accumulator.v 
-# -- Compiling module ematrix_accumulator
-# 
-# Top level modules:
-# 	ematrix_accumulator
-# End time: 14:40:27 on Apr 26,2026, Elapsed time: 0:00:00
-# Errors: 0, Warnings: 0
 # vlog -vlog01compat -work work +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus {C:/Users/sjbar/shack-hartmann-fpga/Quartus/streaming_emulator.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:28 on Apr 26,2026
+# Start time: 15:49:47 on May 01,2026
 # vlog -reportprogress 300 -vlog01compat -work work "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus" C:/Users/sjbar/shack-hartmann-fpga/Quartus/streaming_emulator.v 
 # -- Compiling module streaming_emulator
 # 
 # Top level modules:
 # 	streaming_emulator
-# End time: 14:40:28 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:47 on May 01,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -vlog01compat -work work +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus {C:/Users/sjbar/shack-hartmann-fpga/Quartus/DE1_SoC_Computer.v}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 15:49:47 on May 01,2026
+# vlog -reportprogress 300 -vlog01compat -work work "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus" C:/Users/sjbar/shack-hartmann-fpga/Quartus/DE1_SoC_Computer.v 
+# -- Compiling module DE1_SoC_Computer
+# 
+# Top level modules:
+# 	DE1_SoC_Computer
+# End time: 15:49:47 on May 01,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -vlog01compat -work work +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus {C:/Users/sjbar/shack-hartmann-fpga/Quartus/hex_decoder.v}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 15:49:47 on May 01,2026
+# vlog -reportprogress 300 -vlog01compat -work work "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus" C:/Users/sjbar/shack-hartmann-fpga/Quartus/hex_decoder.v 
+# -- Compiling module HexDigit
+# 
+# Top level modules:
+# 	HexDigit
+# End time: 15:49:47 on May 01,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -vlog01compat -work work +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus {C:/Users/sjbar/shack-hartmann-fpga/Quartus/ematrix_accumulator.v}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 15:49:48 on May 01,2026
+# vlog -reportprogress 300 -vlog01compat -work work "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus" C:/Users/sjbar/shack-hartmann-fpga/Quartus/ematrix_accumulator.v 
+# -- Compiling module ematrix_accumulator
+# 
+# Top level modules:
+# 	ematrix_accumulator
+# End time: 15:49:48 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlib Computer_System
 # ** Warning: (vlib-34) Library already exists at "Computer_System".
@@ -113,97 +123,137 @@
 # Modifying modelsim.ini
 # vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/Computer_System.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:28 on Apr 26,2026
+# Start time: 15:49:48 on May 01,2026
 # vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/Computer_System.v 
 # -- Compiling module Computer_System
 # 
 # Top level modules:
 # 	Computer_System
-# End time: 14:40:28 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:48 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_reset_controller.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:29 on Apr 26,2026
+# Start time: 15:49:48 on May 01,2026
 # vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_reset_controller.v 
 # -- Compiling module altera_reset_controller
 # 
 # Top level modules:
 # 	altera_reset_controller
-# End time: 14:40:29 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:48 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_reset_synchronizer.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:29 on Apr 26,2026
+# Start time: 15:49:48 on May 01,2026
 # vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_reset_synchronizer.v 
 # -- Compiling module altera_reset_synchronizer
 # 
 # Top level modules:
 # 	altera_reset_synchronizer
-# End time: 14:40:29 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:48 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-# vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_2.v}
+# vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_3.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:30 on Apr 26,2026
-# vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_2.v 
-# -- Compiling module Computer_System_mm_interconnect_2
+# Start time: 15:49:48 on May 01,2026
+# vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_3.v 
+# -- Compiling module Computer_System_mm_interconnect_3
 # 
 # Top level modules:
-# 	Computer_System_mm_interconnect_2
-# End time: 14:40:30 on Apr 26,2026, Elapsed time: 0:00:00
+# 	Computer_System_mm_interconnect_3
+# End time: 15:49:48 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-# vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_2_avalon_st_adapter.v}
+# vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_3_avalon_st_adapter.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:31 on Apr 26,2026
-# vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_2_avalon_st_adapter.v 
-# -- Compiling module Computer_System_mm_interconnect_2_avalon_st_adapter
+# Start time: 15:49:49 on May 01,2026
+# vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_3_avalon_st_adapter.v 
+# -- Compiling module Computer_System_mm_interconnect_3_avalon_st_adapter
 # 
 # Top level modules:
-# 	Computer_System_mm_interconnect_2_avalon_st_adapter
-# End time: 14:40:31 on Apr 26,2026, Elapsed time: 0:00:00
+# 	Computer_System_mm_interconnect_3_avalon_st_adapter
+# End time: 15:49:49 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_avalon_sc_fifo.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:31 on Apr 26,2026
+# Start time: 15:49:49 on May 01,2026
 # vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_avalon_sc_fifo.v 
 # -- Compiling module altera_avalon_sc_fifo
 # 
 # Top level modules:
 # 	altera_avalon_sc_fifo
-# End time: 14:40:31 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:49 on May 01,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_2.v}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 15:49:49 on May 01,2026
+# vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_2.v 
+# -- Compiling module Computer_System_mm_interconnect_2
+# 
+# Top level modules:
+# 	Computer_System_mm_interconnect_2
+# End time: 15:49:49 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_1.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:32 on Apr 26,2026
+# Start time: 15:49:49 on May 01,2026
 # vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_1.v 
 # -- Compiling module Computer_System_mm_interconnect_1
 # 
 # Top level modules:
 # 	Computer_System_mm_interconnect_1
-# End time: 14:40:32 on Apr 26,2026, Elapsed time: 0:00:00
-# Errors: 0, Warnings: 0
-# vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_0.v}
-# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:33 on Apr 26,2026
-# vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_0.v 
-# -- Compiling module Computer_System_mm_interconnect_0
-# 
-# Top level modules:
-# 	Computer_System_mm_interconnect_0
-# End time: 14:40:33 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:49 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_0_avalon_st_adapter.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:33 on Apr 26,2026
+# Start time: 15:49:50 on May 01,2026
 # vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_0_avalon_st_adapter.v 
 # -- Compiling module Computer_System_mm_interconnect_0_avalon_st_adapter
 # 
 # Top level modules:
 # 	Computer_System_mm_interconnect_0_avalon_st_adapter
-# End time: 14:40:33 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:50 on May 01,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_0.v}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 15:49:50 on May 01,2026
+# vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_0.v 
+# -- Compiling module Computer_System_mm_interconnect_0
+# 
+# Top level modules:
+# 	Computer_System_mm_interconnect_0
+# End time: 15:49:50 on May 01,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_result_sram.v}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 15:49:50 on May 01,2026
+# vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_result_sram.v 
+# -- Compiling module Computer_System_result_sram
+# 
+# Top level modules:
+# 	Computer_System_result_sram
+# End time: 15:49:50 on May 01,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_pll_0.v}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 15:49:50 on May 01,2026
+# vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_pll_0.v 
+# -- Compiling module Computer_System_pll_0
+# 
+# Top level modules:
+# 	Computer_System_pll_0
+# End time: 15:49:50 on May 01,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_intensity_sram.v}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 15:49:50 on May 01,2026
+# vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_intensity_sram.v 
+# -- Compiling module Computer_System_intensity_sram
+# 
+# Top level modules:
+# 	Computer_System_intensity_sram
+# End time: 15:49:50 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_dma_2.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:34 on Apr 26,2026
+# Start time: 15:49:51 on May 01,2026
 # vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_dma_2.v 
 # -- Compiling module Computer_System_dma_2_read_data_mux
 # -- Compiling module Computer_System_dma_2_byteenables
@@ -215,11 +265,11 @@
 # 
 # Top level modules:
 # 	Computer_System_dma_2
-# End time: 14:40:34 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:51 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_dma_1.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:35 on Apr 26,2026
+# Start time: 15:49:51 on May 01,2026
 # vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_dma_1.v 
 # -- Compiling module Computer_System_dma_1_read_data_mux
 # -- Compiling module Computer_System_dma_1_byteenables
@@ -231,282 +281,292 @@
 # 
 # Top level modules:
 # 	Computer_System_dma_1
-# End time: 14:40:35 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:51 on May 01,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ctrl_reg_h2f.v}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 15:49:51 on May 01,2026
+# vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ctrl_reg_h2f.v 
+# -- Compiling module Computer_System_ctrl_reg_h2f
+# 
+# Top level modules:
+# 	Computer_System_ctrl_reg_h2f
+# End time: 15:49:51 on May 01,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ctrl_reg_f2h.v}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 15:49:51 on May 01,2026
+# vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ctrl_reg_f2h.v 
+# -- Compiling module Computer_System_ctrl_reg_f2h
+# 
+# Top level modules:
+# 	Computer_System_ctrl_reg_f2h
+# End time: 15:49:51 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_System_PLL.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:36 on Apr 26,2026
+# Start time: 15:49:52 on May 01,2026
 # vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_System_PLL.v 
 # -- Compiling module Computer_System_System_PLL
 # 
 # Top level modules:
 # 	Computer_System_System_PLL
-# End time: 14:40:36 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:52 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_up_avalon_reset_from_locked_signal.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:36 on Apr 26,2026
+# Start time: 15:49:52 on May 01,2026
 # vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_up_avalon_reset_from_locked_signal.v 
 # -- Compiling module altera_up_avalon_reset_from_locked_signal
 # 
 # Top level modules:
 # 	altera_up_avalon_reset_from_locked_signal
-# End time: 14:40:36 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:52 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_System_PLL_sys_pll.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:37 on Apr 26,2026
+# Start time: 15:49:52 on May 01,2026
 # vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_System_PLL_sys_pll.v 
 # -- Compiling module Computer_System_System_PLL_sys_pll
 # 
 # Top level modules:
 # 	Computer_System_System_PLL_sys_pll
-# End time: 14:40:37 on Apr 26,2026, Elapsed time: 0:00:00
-# Errors: 0, Warnings: 0
-# vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_Onchip_SRAM.v}
-# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:37 on Apr 26,2026
-# vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_Onchip_SRAM.v 
-# -- Compiling module Computer_System_Onchip_SRAM
-# 
-# Top level modules:
-# 	Computer_System_Onchip_SRAM
-# End time: 14:40:37 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:52 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:38 on Apr 26,2026
+# Start time: 15:49:52 on May 01,2026
 # vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS.v 
 # -- Compiling module Computer_System_ARM_A9_HPS
 # 
 # Top level modules:
 # 	Computer_System_ARM_A9_HPS
-# End time: 14:40:38 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:52 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_hps_io.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:38 on Apr 26,2026
+# Start time: 15:49:52 on May 01,2026
 # vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_hps_io.v 
 # -- Compiling module Computer_System_ARM_A9_HPS_hps_io
 # 
 # Top level modules:
 # 	Computer_System_ARM_A9_HPS_hps_io
-# End time: 14:40:38 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:52 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/hps_sdram.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:39 on Apr 26,2026
+# Start time: 15:49:53 on May 01,2026
 # vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/hps_sdram.v 
 # -- Compiling module hps_sdram
 # 
 # Top level modules:
 # 	hps_sdram
-# End time: 14:40:39 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:53 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_mem_if_hhp_qseq_synth_top.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:39 on Apr 26,2026
+# Start time: 15:49:53 on May 01,2026
 # vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_mem_if_hhp_qseq_synth_top.v 
 # -- Compiling module altera_mem_if_hhp_qseq_synth_top
 # 
 # Top level modules:
 # 	altera_mem_if_hhp_qseq_synth_top
-# End time: 14:40:40 on Apr 26,2026, Elapsed time: 0:00:01
+# End time: 15:49:53 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/hps_sdram_p0_acv_hard_addr_cmd_pads.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:40 on Apr 26,2026
+# Start time: 15:49:53 on May 01,2026
 # vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/hps_sdram_p0_acv_hard_addr_cmd_pads.v 
 # -- Compiling module hps_sdram_p0_acv_hard_addr_cmd_pads
 # 
 # Top level modules:
 # 	hps_sdram_p0_acv_hard_addr_cmd_pads
-# End time: 14:40:40 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:53 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/hps_sdram_p0_acv_hard_io_pads.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:41 on Apr 26,2026
+# Start time: 15:49:53 on May 01,2026
 # vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/hps_sdram_p0_acv_hard_io_pads.v 
 # -- Compiling module hps_sdram_p0_acv_hard_io_pads
 # 
 # Top level modules:
 # 	hps_sdram_p0_acv_hard_io_pads
-# End time: 14:40:41 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:53 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/hps_sdram_p0_acv_hard_memphy.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:41 on Apr 26,2026
+# Start time: 15:49:53 on May 01,2026
 # vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/hps_sdram_p0_acv_hard_memphy.v 
 # -- Compiling module hps_sdram_p0_acv_hard_memphy
 # 
 # Top level modules:
 # 	hps_sdram_p0_acv_hard_memphy
-# End time: 14:40:41 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:53 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/hps_sdram_p0_acv_ldc.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:42 on Apr 26,2026
+# Start time: 15:49:54 on May 01,2026
 # vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/hps_sdram_p0_acv_ldc.v 
 # -- Compiling module hps_sdram_p0_acv_ldc
 # 
 # Top level modules:
 # 	hps_sdram_p0_acv_ldc
-# End time: 14:40:42 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:54 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/hps_sdram_p0_altdqdqs.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:42 on Apr 26,2026
+# Start time: 15:49:54 on May 01,2026
 # vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/hps_sdram_p0_altdqdqs.v 
 # -- Compiling module hps_sdram_p0_altdqdqs
 # 
 # Top level modules:
 # 	hps_sdram_p0_altdqdqs
-# End time: 14:40:42 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:54 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/hps_sdram_p0_clock_pair_generator.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:43 on Apr 26,2026
+# Start time: 15:49:54 on May 01,2026
 # vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/hps_sdram_p0_clock_pair_generator.v 
 # -- Compiling module hps_sdram_p0_clock_pair_generator
 # 
 # Top level modules:
 # 	hps_sdram_p0_clock_pair_generator
-# End time: 14:40:43 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:54 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -vlog01compat -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/hps_sdram_p0_generic_ddio.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:44 on Apr 26,2026
+# Start time: 15:49:54 on May 01,2026
 # vlog -reportprogress 300 -vlog01compat -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/hps_sdram_p0_generic_ddio.v 
 # -- Compiling module hps_sdram_p0_generic_ddio
 # 
 # Top level modules:
 # 	hps_sdram_p0_generic_ddio
-# End time: 14:40:44 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:54 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_irq_mapper.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:44 on Apr 26,2026
+# Start time: 15:49:55 on May 01,2026
 # vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_irq_mapper.sv 
 # -- Compiling module Computer_System_irq_mapper
 # 
 # Top level modules:
 # 	Computer_System_irq_mapper
-# End time: 14:40:44 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:55 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_2_avalon_st_adapter_error_adapter_0.sv}
+# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_3_avalon_st_adapter_error_adapter_0.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:45 on Apr 26,2026
-# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_2_avalon_st_adapter_error_adapter_0.sv 
-# -- Compiling module Computer_System_mm_interconnect_2_avalon_st_adapter_error_adapter_0
+# Start time: 15:49:55 on May 01,2026
+# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_3_avalon_st_adapter_error_adapter_0.sv 
+# -- Compiling module Computer_System_mm_interconnect_3_avalon_st_adapter_error_adapter_0
 # 
 # Top level modules:
-# 	Computer_System_mm_interconnect_2_avalon_st_adapter_error_adapter_0
-# End time: 14:40:45 on Apr 26,2026, Elapsed time: 0:00:00
+# 	Computer_System_mm_interconnect_3_avalon_st_adapter_error_adapter_0
+# End time: 15:49:55 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_merlin_width_adapter.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:45 on Apr 26,2026
+# Start time: 15:49:55 on May 01,2026
 # vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_merlin_width_adapter.sv 
 # -- Compiling module altera_merlin_width_adapter
 # 
 # Top level modules:
 # 	altera_merlin_width_adapter
-# End time: 14:40:45 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:55 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_merlin_address_alignment.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:46 on Apr 26,2026
+# Start time: 15:49:55 on May 01,2026
 # vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_merlin_address_alignment.sv 
 # -- Compiling module altera_merlin_address_alignment
 # 
 # Top level modules:
 # 	altera_merlin_address_alignment
-# End time: 14:40:46 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:55 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_merlin_burst_uncompressor.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:47 on Apr 26,2026
+# Start time: 15:49:55 on May 01,2026
 # vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_merlin_burst_uncompressor.sv 
 # -- Compiling module altera_merlin_burst_uncompressor
 # 
 # Top level modules:
 # 	altera_merlin_burst_uncompressor
-# End time: 14:40:47 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:55 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_2_rsp_mux.sv}
+# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_3_rsp_mux.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:47 on Apr 26,2026
-# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_2_rsp_mux.sv 
-# -- Compiling module Computer_System_mm_interconnect_2_rsp_mux
+# Start time: 15:49:56 on May 01,2026
+# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_3_rsp_mux.sv 
+# -- Compiling module Computer_System_mm_interconnect_3_rsp_mux
 # 
 # Top level modules:
-# 	Computer_System_mm_interconnect_2_rsp_mux
-# End time: 14:40:47 on Apr 26,2026, Elapsed time: 0:00:00
+# 	Computer_System_mm_interconnect_3_rsp_mux
+# End time: 15:49:56 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_merlin_arbitrator.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:48 on Apr 26,2026
+# Start time: 15:49:56 on May 01,2026
 # vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_merlin_arbitrator.sv 
 # -- Compiling module altera_merlin_arbitrator
 # -- Compiling module altera_merlin_arb_adder
 # 
 # Top level modules:
 # 	altera_merlin_arbitrator
-# End time: 14:40:48 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:56 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_2_rsp_demux.sv}
+# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_3_rsp_demux.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:49 on Apr 26,2026
-# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_2_rsp_demux.sv 
-# -- Compiling module Computer_System_mm_interconnect_2_rsp_demux
+# Start time: 15:49:56 on May 01,2026
+# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_3_rsp_demux.sv 
+# -- Compiling module Computer_System_mm_interconnect_3_rsp_demux
 # 
 # Top level modules:
-# 	Computer_System_mm_interconnect_2_rsp_demux
-# End time: 14:40:49 on Apr 26,2026, Elapsed time: 0:00:00
+# 	Computer_System_mm_interconnect_3_rsp_demux
+# End time: 15:49:56 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_2_cmd_mux.sv}
+# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_3_cmd_mux.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:49 on Apr 26,2026
-# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_2_cmd_mux.sv 
-# -- Compiling module Computer_System_mm_interconnect_2_cmd_mux
+# Start time: 15:49:56 on May 01,2026
+# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_3_cmd_mux.sv 
+# -- Compiling module Computer_System_mm_interconnect_3_cmd_mux
 # 
 # Top level modules:
-# 	Computer_System_mm_interconnect_2_cmd_mux
-# End time: 14:40:49 on Apr 26,2026, Elapsed time: 0:00:00
+# 	Computer_System_mm_interconnect_3_cmd_mux
+# End time: 15:49:56 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_2_cmd_demux.sv}
+# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_3_cmd_demux.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:50 on Apr 26,2026
-# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_2_cmd_demux.sv 
-# -- Compiling module Computer_System_mm_interconnect_2_cmd_demux
+# Start time: 15:49:56 on May 01,2026
+# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_3_cmd_demux.sv 
+# -- Compiling module Computer_System_mm_interconnect_3_cmd_demux
 # 
 # Top level modules:
-# 	Computer_System_mm_interconnect_2_cmd_demux
-# End time: 14:40:50 on Apr 26,2026, Elapsed time: 0:00:00
+# 	Computer_System_mm_interconnect_3_cmd_demux
+# End time: 15:49:56 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_merlin_burst_adapter.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:50 on Apr 26,2026
+# Start time: 15:49:57 on May 01,2026
 # vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_merlin_burst_adapter.sv 
 # -- Compiling module altera_merlin_burst_adapter
 # 
 # Top level modules:
 # 	altera_merlin_burst_adapter
-# End time: 14:40:50 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:57 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_merlin_burst_adapter_uncmpr.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:51 on Apr 26,2026
+# Start time: 15:49:57 on May 01,2026
 # vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_merlin_burst_adapter_uncmpr.sv 
 # -- Compiling module altera_merlin_burst_adapter_uncompressed_only
 # 
 # Top level modules:
 # 	altera_merlin_burst_adapter_uncompressed_only
-# End time: 14:40:51 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:57 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_merlin_burst_adapter_13_1.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:52 on Apr 26,2026
+# Start time: 15:49:57 on May 01,2026
 # vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_merlin_burst_adapter_13_1.sv 
 # -- Compiling module altera_merlin_burst_adapter_burstwrap_increment
 # -- Compiling module altera_merlin_burst_adapter_adder
@@ -516,33 +576,33 @@
 # 
 # Top level modules:
 # 	altera_merlin_burst_adapter_13_1
-# End time: 14:40:52 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:57 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_2_router_002.sv}
+# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_3_router_002.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:52 on Apr 26,2026
-# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_2_router_002.sv 
-# -- Compiling module Computer_System_mm_interconnect_2_router_002_default_decode
-# -- Compiling module Computer_System_mm_interconnect_2_router_002
+# Start time: 15:49:57 on May 01,2026
+# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_3_router_002.sv 
+# -- Compiling module Computer_System_mm_interconnect_3_router_002_default_decode
+# -- Compiling module Computer_System_mm_interconnect_3_router_002
 # 
 # Top level modules:
-# 	Computer_System_mm_interconnect_2_router_002
-# End time: 14:40:52 on Apr 26,2026, Elapsed time: 0:00:00
+# 	Computer_System_mm_interconnect_3_router_002
+# End time: 15:49:57 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_2_router.sv}
+# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_3_router.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:53 on Apr 26,2026
-# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_2_router.sv 
-# -- Compiling module Computer_System_mm_interconnect_2_router_default_decode
-# -- Compiling module Computer_System_mm_interconnect_2_router
+# Start time: 15:49:58 on May 01,2026
+# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_3_router.sv 
+# -- Compiling module Computer_System_mm_interconnect_3_router_default_decode
+# -- Compiling module Computer_System_mm_interconnect_3_router
 # 
 # Top level modules:
-# 	Computer_System_mm_interconnect_2_router
-# End time: 14:40:53 on Apr 26,2026, Elapsed time: 0:00:00
+# 	Computer_System_mm_interconnect_3_router
+# End time: 15:49:58 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_merlin_slave_agent.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:53 on Apr 26,2026
+# Start time: 15:49:58 on May 01,2026
 # vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_merlin_slave_agent.sv 
 # -- Compiling module altera_merlin_slave_agent
 # ** Warning: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_merlin_slave_agent.sv(618): (vlog-2186) SystemVerilog testbench feature
@@ -558,81 +618,81 @@
 # 
 # Top level modules:
 # 	altera_merlin_slave_agent
-# End time: 14:40:54 on Apr 26,2026, Elapsed time: 0:00:01
+# End time: 15:49:58 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 6
 # vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_merlin_master_agent.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:55 on Apr 26,2026
+# Start time: 15:49:58 on May 01,2026
 # vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_merlin_master_agent.sv 
 # -- Compiling module altera_merlin_master_agent
 # 
 # Top level modules:
 # 	altera_merlin_master_agent
-# End time: 14:40:55 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:58 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_merlin_slave_translator.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:55 on Apr 26,2026
+# Start time: 15:49:58 on May 01,2026
 # vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_merlin_slave_translator.sv 
 # -- Compiling module altera_merlin_slave_translator
 # 
 # Top level modules:
 # 	altera_merlin_slave_translator
-# End time: 14:40:56 on Apr 26,2026, Elapsed time: 0:00:01
+# End time: 15:49:58 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_merlin_master_translator.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:56 on Apr 26,2026
+# Start time: 15:49:59 on May 01,2026
 # vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_merlin_master_translator.sv 
 # -- Compiling module altera_merlin_master_translator
 # 
 # Top level modules:
 # 	altera_merlin_master_translator
-# End time: 14:40:56 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:49:59 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_1_rsp_mux.sv}
+# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_2_rsp_mux.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:57 on Apr 26,2026
-# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_1_rsp_mux.sv 
-# -- Compiling module Computer_System_mm_interconnect_1_rsp_mux
+# Start time: 15:49:59 on May 01,2026
+# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_2_rsp_mux.sv 
+# -- Compiling module Computer_System_mm_interconnect_2_rsp_mux
 # 
 # Top level modules:
-# 	Computer_System_mm_interconnect_1_rsp_mux
-# End time: 14:40:57 on Apr 26,2026, Elapsed time: 0:00:00
+# 	Computer_System_mm_interconnect_2_rsp_mux
+# End time: 15:49:59 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_1_cmd_mux.sv}
+# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_2_cmd_mux.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:57 on Apr 26,2026
-# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_1_cmd_mux.sv 
-# -- Compiling module Computer_System_mm_interconnect_1_cmd_mux
+# Start time: 15:49:59 on May 01,2026
+# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_2_cmd_mux.sv 
+# -- Compiling module Computer_System_mm_interconnect_2_cmd_mux
 # 
 # Top level modules:
-# 	Computer_System_mm_interconnect_1_cmd_mux
-# End time: 14:40:57 on Apr 26,2026, Elapsed time: 0:00:00
+# 	Computer_System_mm_interconnect_2_cmd_mux
+# End time: 15:49:59 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_1_cmd_demux_001.sv}
+# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_2_cmd_demux_001.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:58 on Apr 26,2026
-# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_1_cmd_demux_001.sv 
-# -- Compiling module Computer_System_mm_interconnect_1_cmd_demux_001
+# Start time: 15:49:59 on May 01,2026
+# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_2_cmd_demux_001.sv 
+# -- Compiling module Computer_System_mm_interconnect_2_cmd_demux_001
 # 
 # Top level modules:
-# 	Computer_System_mm_interconnect_1_cmd_demux_001
-# End time: 14:40:58 on Apr 26,2026, Elapsed time: 0:00:00
+# 	Computer_System_mm_interconnect_2_cmd_demux_001
+# End time: 15:49:59 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_1_cmd_demux.sv}
+# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_2_cmd_demux.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:58 on Apr 26,2026
-# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_1_cmd_demux.sv 
-# -- Compiling module Computer_System_mm_interconnect_1_cmd_demux
+# Start time: 15:49:59 on May 01,2026
+# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_2_cmd_demux.sv 
+# -- Compiling module Computer_System_mm_interconnect_2_cmd_demux
 # 
 # Top level modules:
-# 	Computer_System_mm_interconnect_1_cmd_demux
-# End time: 14:40:59 on Apr 26,2026, Elapsed time: 0:00:01
+# 	Computer_System_mm_interconnect_2_cmd_demux
+# End time: 15:50:00 on May 01,2026, Elapsed time: 0:00:01
 # Errors: 0, Warnings: 0
 # vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_merlin_traffic_limiter.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:40:59 on Apr 26,2026
+# Start time: 15:50:00 on May 01,2026
 # vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_merlin_traffic_limiter.sv 
 # -- Compiling module altera_merlin_traffic_limiter
 # ** Warning: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_merlin_traffic_limiter.sv(531): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.
@@ -659,33 +719,33 @@
 # 
 # Top level modules:
 # 	altera_merlin_traffic_limiter
-# End time: 14:40:59 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:50:00 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 21
-# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_1_router_002.sv}
+# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_2_router_002.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:41:02 on Apr 26,2026
-# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_1_router_002.sv 
-# -- Compiling module Computer_System_mm_interconnect_1_router_002_default_decode
-# -- Compiling module Computer_System_mm_interconnect_1_router_002
+# Start time: 15:50:01 on May 01,2026
+# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_2_router_002.sv 
+# -- Compiling module Computer_System_mm_interconnect_2_router_002_default_decode
+# -- Compiling module Computer_System_mm_interconnect_2_router_002
 # 
 # Top level modules:
-# 	Computer_System_mm_interconnect_1_router_002
-# End time: 14:41:02 on Apr 26,2026, Elapsed time: 0:00:00
+# 	Computer_System_mm_interconnect_2_router_002
+# End time: 15:50:01 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_1_router.sv}
+# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_2_router.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:41:02 on Apr 26,2026
-# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_1_router.sv 
-# -- Compiling module Computer_System_mm_interconnect_1_router_default_decode
-# -- Compiling module Computer_System_mm_interconnect_1_router
+# Start time: 15:50:01 on May 01,2026
+# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_2_router.sv 
+# -- Compiling module Computer_System_mm_interconnect_2_router_default_decode
+# -- Compiling module Computer_System_mm_interconnect_2_router
 # 
 # Top level modules:
-# 	Computer_System_mm_interconnect_1_router
-# End time: 14:41:02 on Apr 26,2026, Elapsed time: 0:00:00
+# 	Computer_System_mm_interconnect_2_router
+# End time: 15:50:01 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_merlin_axi_slave_ni.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:41:03 on Apr 26,2026
+# Start time: 15:50:01 on May 01,2026
 # vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_merlin_axi_slave_ni.sv 
 # -- Compiling module altera_merlin_axi_slave_ni
 # ** Warning: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_merlin_axi_slave_ni.sv(848): (vlog-2186) SystemVerilog testbench feature
@@ -700,83 +760,83 @@
 # 
 # Top level modules:
 # 	altera_merlin_axi_slave_ni
-# End time: 14:41:03 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:50:01 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 3
 # vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_0_avalon_st_adapter_error_adapter_0.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:41:04 on Apr 26,2026
+# Start time: 15:50:02 on May 01,2026
 # vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_0_avalon_st_adapter_error_adapter_0.sv 
 # -- Compiling module Computer_System_mm_interconnect_0_avalon_st_adapter_error_adapter_0
 # 
 # Top level modules:
 # 	Computer_System_mm_interconnect_0_avalon_st_adapter_error_adapter_0
-# End time: 14:41:04 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:50:02 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_0_rsp_mux.sv}
+# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_1_rsp_mux.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:41:05 on Apr 26,2026
-# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_0_rsp_mux.sv 
-# -- Compiling module Computer_System_mm_interconnect_0_rsp_mux
+# Start time: 15:50:02 on May 01,2026
+# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_1_rsp_mux.sv 
+# -- Compiling module Computer_System_mm_interconnect_1_rsp_mux
 # 
 # Top level modules:
-# 	Computer_System_mm_interconnect_0_rsp_mux
-# End time: 14:41:05 on Apr 26,2026, Elapsed time: 0:00:00
+# 	Computer_System_mm_interconnect_1_rsp_mux
+# End time: 15:50:02 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_0_rsp_demux.sv}
+# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_1_rsp_demux.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:41:06 on Apr 26,2026
-# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_0_rsp_demux.sv 
-# -- Compiling module Computer_System_mm_interconnect_0_rsp_demux
+# Start time: 15:50:02 on May 01,2026
+# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_1_rsp_demux.sv 
+# -- Compiling module Computer_System_mm_interconnect_1_rsp_demux
 # 
 # Top level modules:
-# 	Computer_System_mm_interconnect_0_rsp_demux
-# End time: 14:41:06 on Apr 26,2026, Elapsed time: 0:00:00
+# 	Computer_System_mm_interconnect_1_rsp_demux
+# End time: 15:50:02 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_0_cmd_mux.sv}
+# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_1_cmd_mux.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:41:07 on Apr 26,2026
-# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_0_cmd_mux.sv 
-# -- Compiling module Computer_System_mm_interconnect_0_cmd_mux
+# Start time: 15:50:02 on May 01,2026
+# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_1_cmd_mux.sv 
+# -- Compiling module Computer_System_mm_interconnect_1_cmd_mux
 # 
 # Top level modules:
-# 	Computer_System_mm_interconnect_0_cmd_mux
-# End time: 14:41:07 on Apr 26,2026, Elapsed time: 0:00:00
+# 	Computer_System_mm_interconnect_1_cmd_mux
+# End time: 15:50:02 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_0_cmd_demux.sv}
+# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_1_cmd_demux.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:41:07 on Apr 26,2026
-# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_0_cmd_demux.sv 
-# -- Compiling module Computer_System_mm_interconnect_0_cmd_demux
+# Start time: 15:50:03 on May 01,2026
+# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_1_cmd_demux.sv 
+# -- Compiling module Computer_System_mm_interconnect_1_cmd_demux
 # 
 # Top level modules:
-# 	Computer_System_mm_interconnect_0_cmd_demux
-# End time: 14:41:07 on Apr 26,2026, Elapsed time: 0:00:00
+# 	Computer_System_mm_interconnect_1_cmd_demux
+# End time: 15:50:03 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_0_router_002.sv}
+# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_1_router_002.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:41:08 on Apr 26,2026
-# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_0_router_002.sv 
-# -- Compiling module Computer_System_mm_interconnect_0_router_002_default_decode
-# -- Compiling module Computer_System_mm_interconnect_0_router_002
+# Start time: 15:50:03 on May 01,2026
+# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_1_router_002.sv 
+# -- Compiling module Computer_System_mm_interconnect_1_router_002_default_decode
+# -- Compiling module Computer_System_mm_interconnect_1_router_002
 # 
 # Top level modules:
-# 	Computer_System_mm_interconnect_0_router_002
-# End time: 14:41:08 on Apr 26,2026, Elapsed time: 0:00:00
+# 	Computer_System_mm_interconnect_1_router_002
+# End time: 15:50:03 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_0_router.sv}
+# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_1_router.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:41:09 on Apr 26,2026
-# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_0_router.sv 
-# -- Compiling module Computer_System_mm_interconnect_0_router_default_decode
-# -- Compiling module Computer_System_mm_interconnect_0_router
+# Start time: 15:50:03 on May 01,2026
+# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_1_router.sv 
+# -- Compiling module Computer_System_mm_interconnect_1_router_default_decode
+# -- Compiling module Computer_System_mm_interconnect_1_router
 # 
 # Top level modules:
-# 	Computer_System_mm_interconnect_0_router
-# End time: 14:41:09 on Apr 26,2026, Elapsed time: 0:00:00
+# 	Computer_System_mm_interconnect_1_router
+# End time: 15:50:03 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_merlin_axi_master_ni.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:41:09 on Apr 26,2026
+# Start time: 15:50:03 on May 01,2026
 # vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_merlin_axi_master_ni.sv 
 # -- Compiling module altera_merlin_axi_master_ni
 # ** Warning: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_merlin_axi_master_ni.sv(763): (vlog-2186) SystemVerilog testbench feature
@@ -799,11 +859,73 @@
 # 
 # Top level modules:
 # 	altera_merlin_axi_master_ni
-# End time: 14:41:09 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:50:03 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 11
+# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_0_rsp_mux.sv}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 15:50:04 on May 01,2026
+# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_0_rsp_mux.sv 
+# -- Compiling module Computer_System_mm_interconnect_0_rsp_mux
+# 
+# Top level modules:
+# 	Computer_System_mm_interconnect_0_rsp_mux
+# End time: 15:50:04 on May 01,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_0_rsp_demux.sv}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 15:50:04 on May 01,2026
+# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_0_rsp_demux.sv 
+# -- Compiling module Computer_System_mm_interconnect_0_rsp_demux
+# 
+# Top level modules:
+# 	Computer_System_mm_interconnect_0_rsp_demux
+# End time: 15:50:04 on May 01,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_0_cmd_mux.sv}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 15:50:05 on May 01,2026
+# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_0_cmd_mux.sv 
+# -- Compiling module Computer_System_mm_interconnect_0_cmd_mux
+# 
+# Top level modules:
+# 	Computer_System_mm_interconnect_0_cmd_mux
+# End time: 15:50:05 on May 01,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_0_cmd_demux.sv}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 15:50:05 on May 01,2026
+# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_0_cmd_demux.sv 
+# -- Compiling module Computer_System_mm_interconnect_0_cmd_demux
+# 
+# Top level modules:
+# 	Computer_System_mm_interconnect_0_cmd_demux
+# End time: 15:50:05 on May 01,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_0_router_002.sv}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 15:50:05 on May 01,2026
+# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_0_router_002.sv 
+# -- Compiling module Computer_System_mm_interconnect_0_router_002_default_decode
+# -- Compiling module Computer_System_mm_interconnect_0_router_002
+# 
+# Top level modules:
+# 	Computer_System_mm_interconnect_0_router_002
+# End time: 15:50:05 on May 01,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_0_router.sv}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 15:50:05 on May 01,2026
+# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_mm_interconnect_0_router.sv 
+# -- Compiling module Computer_System_mm_interconnect_0_router_default_decode
+# -- Compiling module Computer_System_mm_interconnect_0_router
+# 
+# Top level modules:
+# 	Computer_System_mm_interconnect_0_router
+# End time: 15:50:05 on May 01,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
 # vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altdq_dqs2_acv_connect_to_hard_phy_cyclonev.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:41:11 on Apr 26,2026
+# Start time: 15:50:05 on May 01,2026
 # vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altdq_dqs2_acv_connect_to_hard_phy_cyclonev.sv 
 # -- Compiling module altdq_dqs2_acv_connect_to_hard_phy_cyclonev
 # ** Warning: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altdq_dqs2_acv_connect_to_hard_phy_cyclonev.sv(199): (vlog-2597) '4294967295' is being treated as 32-bit signed integer and will overflow.
@@ -819,417 +941,69 @@
 # 
 # Top level modules:
 # 	altdq_dqs2_acv_connect_to_hard_phy_cyclonev
-# End time: 14:41:11 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:50:06 on May 01,2026, Elapsed time: 0:00:01
 # Errors: 0, Warnings: 4
 # vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_mem_if_dll_cyclonev.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:41:13 on Apr 26,2026
+# Start time: 15:50:06 on May 01,2026
 # vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_mem_if_dll_cyclonev.sv 
 # -- Compiling module altera_mem_if_dll_cyclonev
 # 
 # Top level modules:
 # 	altera_mem_if_dll_cyclonev
-# End time: 14:41:13 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:50:06 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_mem_if_hard_memory_controller_top_cyclonev.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:41:14 on Apr 26,2026
+# Start time: 15:50:06 on May 01,2026
 # vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_mem_if_hard_memory_controller_top_cyclonev.sv 
 # -- Compiling module altera_mem_if_hard_memory_controller_top_cyclonev
 # 
 # Top level modules:
 # 	altera_mem_if_hard_memory_controller_top_cyclonev
-# End time: 14:41:14 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:50:06 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_mem_if_oct_cyclonev.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:41:14 on Apr 26,2026
+# Start time: 15:50:06 on May 01,2026
 # vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_mem_if_oct_cyclonev.sv 
 # -- Compiling module altera_mem_if_oct_cyclonev
 # 
 # Top level modules:
 # 	altera_mem_if_oct_cyclonev
-# End time: 14:41:14 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:50:06 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/hps_sdram_p0.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:41:15 on Apr 26,2026
+# Start time: 15:50:07 on May 01,2026
 # vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/hps_sdram_p0.sv 
 # -- Compiling module hps_sdram_p0
 # 
 # Top level modules:
 # 	hps_sdram_p0
-# End time: 14:41:15 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:50:07 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/hps_sdram_pll.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:41:16 on Apr 26,2026
+# Start time: 15:50:07 on May 01,2026
 # vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/hps_sdram_pll.sv 
 # -- Compiling module hps_sdram_pll
 # 
 # Top level modules:
 # 	hps_sdram_pll
-# End time: 14:41:16 on Apr 26,2026, Elapsed time: 0:00:00
+# End time: 15:50:07 on May 01,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_hps_io_border.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:41:16 on Apr 26,2026
+# Start time: 15:50:07 on May 01,2026
 # vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_hps_io_border.sv 
 # -- Compiling module Computer_System_ARM_A9_HPS_hps_io_border
-# 
-# Top level modules:
-# 	Computer_System_ARM_A9_HPS_hps_io_border
-# End time: 14:41:16 on Apr 26,2026, Elapsed time: 0:00:00
-# Errors: 0, Warnings: 0
-# vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_fpga_interfaces.sv}
-# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 14:41:17 on Apr 26,2026
-# vlog -reportprogress 300 -sv -work Computer_System "+incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules" C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_fpga_interfaces.sv 
-# -- Compiling module Computer_System_ARM_A9_HPS_fpga_interfaces
-# 
-# Top level modules:
-# 	Computer_System_ARM_A9_HPS_fpga_interfaces
-# End time: 14:41:17 on Apr 26,2026, Elapsed time: 0:00:00
-# Errors: 0, Warnings: 0
-# 
-vsim -gui -l msim_transcript work.DE1_SoC_Computer
-# vsim -gui -l msim_transcript work.DE1_SoC_Computer 
-# Start time: 14:41:53 on Apr 26,2026
-# Loading work.DE1_SoC_Computer
-# Loading work.HexDigit
-# Loading work.streaming_emulator
-# Loading work.TCoG_intensity_accumulator
-# Loading work.intensity_reciprocal
-# Loading work.reciprocal_u16_q27
-# Loading work.newton_step_q27
-# Loading work.slope_calculation
-# Loading work.unsigned_mult
-# Loading work.ematrix_accumulator
-# ** Error: (vsim-3033) C:/Users/sjbar/shack-hartmann-fpga/Quartus/DE1_SoC_Computer.v(505): Instantiation of 'Computer_System' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /DE1_SoC_Computer File: C:/Users/sjbar/shack-hartmann-fpga/Quartus/DE1_SoC_Computer.v
-#         Searched libraries:
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/rtl_work
-# Error loading design
-# End time: 14:41:54 on Apr 26,2026, Elapsed time: 0:00:01
-# Errors: 1, Warnings: 0
-vsim -gui -l msim_transcript work.DE1_SoC_Computer
-# vsim -gui -l msim_transcript work.DE1_SoC_Computer 
-# Start time: 14:42:47 on Apr 26,2026
-# Loading work.DE1_SoC_Computer
-# Loading work.HexDigit
-# Loading work.streaming_emulator
-# Loading work.TCoG_intensity_accumulator
-# Loading work.intensity_reciprocal
-# Loading work.reciprocal_u16_q27
-# Loading work.newton_step_q27
-# Loading work.slope_calculation
-# Loading work.unsigned_mult
-# Loading work.ematrix_accumulator
-# ** Error: (vsim-3033) C:/Users/sjbar/shack-hartmann-fpga/Quartus/DE1_SoC_Computer.v(505): Instantiation of 'Computer_System' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /DE1_SoC_Computer File: C:/Users/sjbar/shack-hartmann-fpga/Quartus/DE1_SoC_Computer.v
-#         Searched libraries:
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/rtl_work
-# Error loading design
-# End time: 14:42:47 on Apr 26,2026, Elapsed time: 0:00:00
-# Errors: 1, Warnings: 0
-cd C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim
-# reading modelsim.ini
-source msim_setup.tcl
-# couldn't read file "msim_setup.tcl": no such file or directory
-ls
-# Computer_System
-# Computer_System_Onchip_SRAM.hex
-# DE1_SoC_Computer_run_msim_rtl_verilog.do
-# DE1_SoC_Computer_run_msim_rtl_verilog.do.bak
-# DE1_SoC_Computer_run_msim_rtl_verilog.do.bak1
-# de1_soc_computer.ram0_streaming_emulator_2e8c9523.hdl.mif
-# e_matrix_x.hex
-# e_matrix_y.hex
-# hps_AC_ROM.hex
-# hps_inst_ROM.hex
-# image_rotating.hex
-# modelsim.ini
-# msim_transcript
-# rtl_work
-vsim -L Computer_System rtl_work.DE1_SoC_Computer
-# vsim -L Computer_System rtl_work.DE1_SoC_Computer 
-# Start time: 14:46:24 on Apr 26,2026
-# Loading rtl_work.DE1_SoC_Computer
-# Loading rtl_work.HexDigit
-# Loading rtl_work.streaming_emulator
-# Loading rtl_work.TCoG_intensity_accumulator
-# Loading rtl_work.intensity_reciprocal
-# Loading rtl_work.reciprocal_u16_q27
-# Loading rtl_work.newton_step_q27
-# Loading rtl_work.slope_calculation
-# Loading rtl_work.unsigned_mult
-# Loading rtl_work.ematrix_accumulator
-# Loading Computer_System.Computer_System
-# Loading Computer_System.Computer_System_ARM_A9_HPS
-# Loading sv_std.std
-# Loading Computer_System.Computer_System_ARM_A9_HPS_fpga_interfaces
-# ** Error: (vsim-3033) C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_fpga_interfaces.sv(143): Instantiation of 'cyclonev_hps_interface_clocks_resets' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /DE1_SoC_Computer/The_System/arm_a9_hps/fpga_interfaces File: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_fpga_interfaces.sv
-#         Searched libraries:
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/Computer_System
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/rtl_work
-# ** Error: (vsim-3033) C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_fpga_interfaces.sv(162): Instantiation of 'cyclonev_hps_interface_dbg_apb' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /DE1_SoC_Computer/The_System/arm_a9_hps/fpga_interfaces File: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_fpga_interfaces.sv
-#         Searched libraries:
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/Computer_System
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/rtl_work
-# ** Error: (vsim-3033) C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_fpga_interfaces.sv(172): Instantiation of 'cyclonev_hps_interface_tpiu_trace' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /DE1_SoC_Computer/The_System/arm_a9_hps/fpga_interfaces File: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_fpga_interfaces.sv
-#         Searched libraries:
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/Computer_System
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/rtl_work
-# ** Error: (vsim-3033) C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_fpga_interfaces.sv(179): Instantiation of 'cyclonev_hps_interface_boot_from_fpga' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /DE1_SoC_Computer/The_System/arm_a9_hps/fpga_interfaces File: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_fpga_interfaces.sv
-#         Searched libraries:
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/Computer_System
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/rtl_work
-# ** Error: (vsim-3033) C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_fpga_interfaces.sv(201): Instantiation of 'cyclonev_hps_interface_fpga2hps' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /DE1_SoC_Computer/The_System/arm_a9_hps/fpga_interfaces File: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_fpga_interfaces.sv
-#         Searched libraries:
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/Computer_System
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/rtl_work
-# ** Error: (vsim-3033) C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_fpga_interfaces.sv(325): Instantiation of 'cyclonev_hps_interface_hps2fpga_light_weight' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /DE1_SoC_Computer/The_System/arm_a9_hps/fpga_interfaces File: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_fpga_interfaces.sv
-#         Searched libraries:
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/Computer_System
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/rtl_work
-# ** Error: (vsim-3033) C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_fpga_interfaces.sv(440): Instantiation of 'cyclonev_hps_interface_hps2fpga' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /DE1_SoC_Computer/The_System/arm_a9_hps/fpga_interfaces File: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_fpga_interfaces.sv
-#         Searched libraries:
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/Computer_System
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/rtl_work
-# ** Error: (vsim-3033) C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_fpga_interfaces.sv(558): Instantiation of 'cyclonev_hps_interface_fpga2sdram' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /DE1_SoC_Computer/The_System/arm_a9_hps/fpga_interfaces File: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_fpga_interfaces.sv
-#         Searched libraries:
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/Computer_System
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/rtl_work
-# ** Error: (vsim-3033) C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_fpga_interfaces.sv(583): Instantiation of 'cyclonev_hps_interface_interrupts' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /DE1_SoC_Computer/The_System/arm_a9_hps/fpga_interfaces File: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_fpga_interfaces.sv
-#         Searched libraries:
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/Computer_System
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/rtl_work
-# Loading Computer_System.Computer_System_ARM_A9_HPS_hps_io
-# Loading Computer_System.Computer_System_ARM_A9_HPS_hps_io_border
-# ** Error: (vsim-3033) C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_hps_io_border.sv(128): Instantiation of 'cyclonev_hps_peripheral_emac' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /DE1_SoC_Computer/The_System/arm_a9_hps/hps_io/border File: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_hps_io_border.sv
-#         Searched libraries:
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/Computer_System
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/rtl_work
-# ** Error: (vsim-3033) C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_hps_io_border.sv(168): Instantiation of 'cyclonev_hps_peripheral_qspi' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /DE1_SoC_Computer/The_System/arm_a9_hps/hps_io/border File: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_hps_io_border.sv
-#         Searched libraries:
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/Computer_System
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/rtl_work
-# ** Error: (vsim-3033) C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_hps_io_border.sv(208): Instantiation of 'cyclonev_hps_peripheral_sdmmc' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /DE1_SoC_Computer/The_System/arm_a9_hps/hps_io/border File: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_hps_io_border.sv
-#         Searched libraries:
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/Computer_System
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/rtl_work
-# ** Error: (vsim-3033) C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_hps_io_border.sv(242): Instantiation of 'cyclonev_hps_peripheral_usb' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /DE1_SoC_Computer/The_System/arm_a9_hps/hps_io/border File: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_hps_io_border.sv
-#         Searched libraries:
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/Computer_System
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/rtl_work
-# ** Error: (vsim-3033) C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_hps_io_border.sv(288): Instantiation of 'cyclonev_hps_peripheral_spi_master' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /DE1_SoC_Computer/The_System/arm_a9_hps/hps_io/border File: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_hps_io_border.sv
-#         Searched libraries:
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/Computer_System
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/rtl_work
-# ** Error: (vsim-3033) C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_hps_io_border.sv(307): Instantiation of 'cyclonev_hps_peripheral_uart' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /DE1_SoC_Computer/The_System/arm_a9_hps/hps_io/border File: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_hps_io_border.sv
-#         Searched libraries:
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/Computer_System
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/rtl_work
-# ** Error: (vsim-3033) C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_hps_io_border.sv(317): Instantiation of 'cyclonev_hps_peripheral_i2c' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /DE1_SoC_Computer/The_System/arm_a9_hps/hps_io/border File: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_hps_io_border.sv
-#         Searched libraries:
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/Computer_System
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/rtl_work
-# ** Error: (vsim-3033) C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_hps_io_border.sv(333): Instantiation of 'cyclonev_hps_peripheral_i2c' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /DE1_SoC_Computer/The_System/arm_a9_hps/hps_io/border File: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_hps_io_border.sv
-#         Searched libraries:
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/Computer_System
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/rtl_work
-# ** Error: (vsim-3033) C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_hps_io_border.sv(349): Instantiation of 'cyclonev_hps_peripheral_gpio' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /DE1_SoC_Computer/The_System/arm_a9_hps/hps_io/border File: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_hps_io_border.sv
-#         Searched libraries:
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/Computer_System
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/rtl_work
-# Loading Computer_System.hps_sdram
-# Loading Computer_System.hps_sdram_pll
-# Loading Computer_System.hps_sdram_p0
-# Loading Computer_System.hps_sdram_p0_acv_hard_memphy
-# Loading Computer_System.hps_sdram_p0_acv_ldc
-# ** Error: (vsim-3033) C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/hps_sdram_p0_acv_ldc.v(70): Instantiation of 'cyclonev_leveling_delay_chain' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /DE1_SoC_Computer/The_System/arm_a9_hps/hps_io/border/hps_sdram_inst/p0/umemphy/memphy_ldc File: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/hps_sdram_p0_acv_ldc.v
-#         Searched libraries:
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/Computer_System
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/rtl_work
-# ** Error: (vsim-3033) C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/hps_sdram_p0_acv_ldc.v(78): Instantiation of 'cyclonev_leveling_delay_chain' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /DE1_SoC_Computer/The_System/arm_a9_hps/hps_io/border/hps_sdram_inst/p0/umemphy/memphy_ldc File: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/hps_sdram_p0_acv_ldc.v
-#         Searched libraries:
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/Computer_System
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/rtl_work
-# ** Error: (vsim-3033) C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/hps_sdram_p0_acv_ldc.v(86): Instantiation of 'cyclonev_clk_phase_select' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /DE1_SoC_Computer/The_System/arm_a9_hps/hps_io/border/hps_sdram_inst/p0/umemphy/memphy_ldc File: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/hps_sdram_p0_acv_ldc.v
-#         Searched libraries:
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/Computer_System
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/rtl_work
-# ** Error: (vsim-3033) C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/hps_sdram_p0_acv_ldc.v(95): Instantiation of 'cyclonev_clk_phase_select' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /DE1_SoC_Computer/The_System/arm_a9_hps/hps_io/border/hps_sdram_inst/p0/umemphy/memphy_ldc File: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/hps_sdram_p0_acv_ldc.v
-#         Searched libraries:
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/Computer_System
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/rtl_work
-# ** Error: (vsim-3033) C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/hps_sdram_p0_acv_hard_memphy.v(564): Instantiation of 'cyclonev_mem_phy' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /DE1_SoC_Computer/The_System/arm_a9_hps/hps_io/border/hps_sdram_inst/p0/umemphy File: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/hps_sdram_p0_acv_hard_memphy.v
-#         Searched libraries:
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/Computer_System
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/rtl_work
-# Loading Computer_System.hps_sdram_p0_acv_hard_io_pads
-# Loading Computer_System.hps_sdram_p0_acv_hard_addr_cmd_pads
-# Loading Computer_System.hps_sdram_p0_generic_ddio
-# Loading Computer_System.altera_mem_if_hhp_qseq_synth_top
-# Loading Computer_System.altera_mem_if_hard_memory_controller_top_cyclonev
-# ** Error: (vsim-3033) C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_mem_if_hard_memory_controller_top_cyclonev.sv(1387): Instantiation of 'cyclonev_hmc' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /DE1_SoC_Computer/The_System/arm_a9_hps/hps_io/border/hps_sdram_inst/c0 File: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_mem_if_hard_memory_controller_top_cyclonev.sv
-#         Searched libraries:
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/Computer_System
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/rtl_work
-# Loading Computer_System.altera_mem_if_oct_cyclonev
-# ** Error: (vsim-3033) C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_mem_if_oct_cyclonev.sv(54): Instantiation of 'cyclonev_termination' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /DE1_SoC_Computer/The_System/arm_a9_hps/hps_io/border/hps_sdram_inst/oct File: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_mem_if_oct_cyclonev.sv
-#         Searched libraries:
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/Computer_System
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/rtl_work
-# ** Error: (vsim-3033) C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_mem_if_oct_cyclonev.sv(83): Instantiation of 'cyclonev_termination_logic' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /DE1_SoC_Computer/The_System/arm_a9_hps/hps_io/border/hps_sdram_inst/oct File: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_mem_if_oct_cyclonev.sv
-#         Searched libraries:
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/Computer_System
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/rtl_work
-# Loading Computer_System.altera_mem_if_dll_cyclonev
-# ** Error: (vsim-3033) C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_mem_if_dll_cyclonev.sv(52): Instantiation of 'cyclonev_dll' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /DE1_SoC_Computer/The_System/arm_a9_hps/hps_io/border/hps_sdram_inst/dll File: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/altera_mem_if_dll_cyclonev.sv
-#         Searched libraries:
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/Computer_System
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/rtl_work
-# Loading Computer_System.Computer_System_Onchip_SRAM
-# ** Error: (vsim-3033) C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_Onchip_SRAM.v(81): Instantiation of 'altsyncram' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /DE1_SoC_Computer/The_System/onchip_sram File: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_Onchip_SRAM.v
-#         Searched libraries:
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/Computer_System
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/rtl_work
-# Loading Computer_System.Computer_System_System_PLL
-# Loading Computer_System.Computer_System_System_PLL_sys_pll
-# ** Error: (vsim-3033) C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_System_PLL_sys_pll.v(81): Instantiation of 'altera_pll' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /DE1_SoC_Computer/The_System/system_pll/sys_pll File: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_System_PLL_sys_pll.v
-#         Searched libraries:
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/Computer_System
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/rtl_work
-# Loading Computer_System.altera_up_avalon_reset_from_locked_signal
-# Loading Computer_System.Computer_System_dma_1
-# Loading Computer_System.Computer_System_dma_1_read_data_mux
-# Loading Computer_System.Computer_System_dma_1_byteenables
-# Loading Computer_System.Computer_System_dma_1_fifo_module
-# Loading Computer_System.Computer_System_dma_1_fifo_module_fifo_ram_module
-# Loading Computer_System.Computer_System_dma_1_mem_read
-# Loading Computer_System.Computer_System_dma_1_mem_write
-# Loading Computer_System.Computer_System_dma_2
-# Loading Computer_System.Computer_System_dma_2_read_data_mux
-# Loading Computer_System.Computer_System_dma_2_byteenables
-# Loading Computer_System.Computer_System_dma_2_fifo_module
-# Loading Computer_System.Computer_System_dma_2_fifo_module_fifo_ram_module
-# Loading Computer_System.Computer_System_dma_2_mem_read
-# Loading Computer_System.Computer_System_dma_2_mem_write
-# Loading Computer_System.Computer_System_mm_interconnect_0
-# Loading Computer_System.altera_merlin_slave_translator
-# Loading Computer_System.altera_merlin_axi_master_ni
-# Loading Computer_System.altera_merlin_slave_agent
-# Loading Computer_System.altera_merlin_burst_uncompressor
-# Loading Computer_System.altera_avalon_sc_fifo
-# Loading Computer_System.Computer_System_mm_interconnect_0_router
-# Loading Computer_System.Computer_System_mm_interconnect_0_router_default_decode
-# Loading Computer_System.Computer_System_mm_interconnect_0_router_002
-# Loading Computer_System.Computer_System_mm_interconnect_0_router_002_default_decode
-# Loading Computer_System.altera_merlin_traffic_limiter
-# Loading Computer_System.altera_merlin_burst_adapter
-# Loading Computer_System.Computer_System_mm_interconnect_0_cmd_demux
-# Loading Computer_System.Computer_System_mm_interconnect_0_cmd_mux
-# Loading Computer_System.altera_merlin_arbitrator
-# Loading Computer_System.altera_merlin_arb_adder
-# Loading Computer_System.Computer_System_mm_interconnect_0_rsp_demux
-# Loading Computer_System.Computer_System_mm_interconnect_0_rsp_mux
-# Loading Computer_System.Computer_System_mm_interconnect_0_avalon_st_adapter
-# Loading Computer_System.Computer_System_mm_interconnect_0_avalon_st_adapter_error_adapter_0
-# Loading Computer_System.Computer_System_mm_interconnect_1
-# Loading Computer_System.altera_merlin_master_translator
-# Loading Computer_System.altera_merlin_master_agent
-# Loading Computer_System.altera_merlin_axi_slave_ni
-# Loading Computer_System.altera_merlin_address_alignment
-# Loading Computer_System.Computer_System_mm_interconnect_1_router
-# Loading Computer_System.Computer_System_mm_interconnect_1_router_default_decode
-# Loading Computer_System.Computer_System_mm_interconnect_1_router_002
-# Loading Computer_System.Computer_System_mm_interconnect_1_router_002_default_decode
-# Loading Computer_System.Computer_System_mm_interconnect_1_cmd_demux
-# Loading Computer_System.Computer_System_mm_interconnect_1_cmd_demux_001
-# Loading Computer_System.Computer_System_mm_interconnect_1_cmd_mux
-# Loading Computer_System.Computer_System_mm_interconnect_1_rsp_mux
-# Loading Computer_System.altera_merlin_width_adapter
-# Loading Computer_System.Computer_System_mm_interconnect_2
-# Loading Computer_System.Computer_System_mm_interconnect_2_router
-# Loading Computer_System.Computer_System_mm_interconnect_2_router_default_decode
-# Loading Computer_System.Computer_System_mm_interconnect_2_router_002
-# Loading Computer_System.Computer_System_mm_interconnect_2_router_002_default_decode
-# Loading Computer_System.Computer_System_mm_interconnect_2_cmd_demux
-# Loading Computer_System.Computer_System_mm_interconnect_2_cmd_mux
-# Loading Computer_System.Computer_System_mm_interconnect_2_rsp_demux
-# Loading Computer_System.Computer_System_mm_interconnect_2_rsp_mux
-# Loading Computer_System.Computer_System_mm_interconnect_2_avalon_st_adapter
-# Loading Computer_System.Computer_System_mm_interconnect_2_avalon_st_adapter_error_adapter_0
-# Loading Computer_System.Computer_System_irq_mapper
-# Loading Computer_System.altera_reset_controller
-# Error loading design
-# End time: 14:46:24 on Apr 26,2026, Elapsed time: 0:00:00
-# Errors: 29, Warnings: 0
-vsim -L rtl_work -L work -L Computer_System_sim \
-     -L altera_ver -L lpm_ver -L sgate_ver \
-     -L altera_mf_ver -L altera_lnsim_ver \
-     -L cyclonev_ver -L cyclonev_hssi_ver \
-     -L cyclonev_pcie_hip_ver \
-     rtl_work.DE1_SoC_Computer
-# vsim -L rtl_work -L work -L Computer_System_sim -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L cyclonev_ver -L cyclonev_hssi_ver -L cyclonev_pcie_hip_ver rtl_work.DE1_SoC_Computer 
-# Start time: 14:47:04 on Apr 26,2026
-# Loading rtl_work.DE1_SoC_Computer
-# Loading rtl_work.HexDigit
-# Loading rtl_work.streaming_emulator
-# Loading rtl_work.TCoG_intensity_accumulator
-# Loading rtl_work.intensity_reciprocal
-# Loading rtl_work.reciprocal_u16_q27
-# Loading rtl_work.newton_step_q27
-# Loading rtl_work.slope_calculation
-# Loading rtl_work.unsigned_mult
-# Loading rtl_work.ematrix_accumulator
-# ** Error (suppressible): (vsim-19) Failed to access library 'Computer_System_sim' at "Computer_System_sim".
-# No such file or directory. (errno = ENOENT)
-# ** Error: (vsim-3033) C:/Users/sjbar/shack-hartmann-fpga/Quartus/DE1_SoC_Computer.v(505): Instantiation of 'Computer_System' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /DE1_SoC_Computer File: C:/Users/sjbar/shack-hartmann-fpga/Quartus/DE1_SoC_Computer.v
-#         Searched libraries:
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/rtl_work
-#             C:/Users/sjbar/shack-hartmann-fpga/Quartus/simulation/modelsim/rtl_work
-# ** Error (suppressible): (vsim-19) Failed to access library 'Computer_System_sim' at "Computer_System_sim".
-# No such file or directory. (errno = ENOENT)
-#             C:/intelFPGA_lite/18.1/modelsim_ase/altera/verilog/altera
-#             C:/intelFPGA_lite/18.1/modelsim_ase/altera/verilog/220model
-#             C:/intelFPGA_lite/18.1/modelsim_ase/altera/verilog/sgate
-#             C:/intelFPGA_lite/18.1/modelsim_ase/altera/verilog/altera_mf
-#             C:/intelFPGA_lite/18.1/modelsim_ase/altera/verilog/altera_lnsim
-#             C:/intelFPGA_lite/18.1/modelsim_ase/altera/verilog/cyclonev
-#             C:/intelFPGA_lite/18.1/modelsim_ase/altera/verilog/cyclonev_hssi
-#             C:/intelFPGA_lite/18.1/modelsim_ase/altera/verilog/cyclonev_pcie_hip
-# Error loading design
-# End time: 14:47:04 on Apr 26,2026, Elapsed time: 0:00:00
-# Errors: 3, Warnings: 0
+# ** Error: C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_hps_io_border.sv(91): (vlog-2730) Undefined variable: 'intermediate'.
+# ** Error (suppressible): C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules/Computer_System_ARM_A9_HPS_hps_io_border.sv(123): (vlog-2388) 'intermediate' already declared in this scope (Computer_System_ARM_A9_HPS_hps_io_border).
+# End time: 15:50:07 on May 01,2026, Elapsed time: 0:00:00
+# Errors: 2, Warnings: 0
+# ** Error: C:/intelFPGA_lite/18.1/modelsim_ase/win32aloem/vlog failed.
+# Error in macro ./DE1_SoC_Computer_run_msim_rtl_verilog.do line 98
+# C:/intelFPGA_lite/18.1/modelsim_ase/win32aloem/vlog failed.
+#     while executing
+# "vlog -sv -work Computer_System +incdir+C:/Users/sjbar/shack-hartmann-fpga/Quartus/Computer_System/synthesis/submodules {C:/Users/sjbar/shack-hartmann-..."

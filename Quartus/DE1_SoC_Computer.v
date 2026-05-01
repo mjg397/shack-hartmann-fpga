@@ -592,49 +592,49 @@ always @(posedge clk) begin
         x_slopes_out   <= x_slopes;
         y_slopes_out   <= y_slopes;
 
-	if (done && resw_state == RESULT_W_WAIT)
-		write_zernike_latch <= 1'b1;
-	else if (resw_state == RESULT_W_ZK)
-		write_zernike_latch <= 1'b0;
+		if (done)
+			write_zernike_latch <= 1'b1;
+		else if (resw_state == RESULT_W_ZK)
+			write_zernike_latch <= 1'b0;
 
         // FSM datapath
-        case (resw_state)
-            RESULT_W_WAIT: begin
-                result_wdata <= 32'd0;
-                result_addr  <= 11'd0;
-                result_write <= 1'b0;
-				write_zernike_count <= 4'd0;
-            end
-            RESULT_W_SX: begin
-                result_wdata <= x_slopes;
-                result_addr  <= resw_write_idx + SLOPE_X_OFFSET;
-                result_write <= 1'b1;
-            end
-            RESULT_W_SY: begin
-                result_wdata <= y_slopes;
-                result_addr  <= resw_write_idx + SLOPE_Y_OFFSET;
-                result_write <= 1'b1;
-            end
-            RESULT_W_CX: begin
-                result_wdata <= x_centroid;
-                result_addr  <= resw_write_idx + CENTROID_X_OFFSET;
-                result_write <= 1'b1;
-            end
-            RESULT_W_CY: begin
-                result_wdata <= y_centroid;
-                result_addr  <= resw_write_idx + CENTROID_Y_OFFSET;
-                result_write <= 1'b1;
-            end
-				RESULT_W_ZK: begin
-					write_zernike_count <= write_zernike_count + 4'd1;
-					result_wdata <= zernike_out_reg[write_zernike_count];
-					result_addr <= write_zernike_count + ZERNIKE_OFFSET;
-					result_write <= 1'b1;
-				end
-            RESULT_W_DONE: begin
-                resw_write_idx <= resw_write_idx + 8'd1;
-                result_write   <= 1'b0;
-            end
+	  case (resw_state)
+			RESULT_W_WAIT: begin
+				 result_wdata <= 32'd0;
+				 result_addr  <= 11'd0;
+				 result_write <= 1'b0;
+			write_zernike_count <= 4'd0;
+			end
+			RESULT_W_SX: begin
+				 result_wdata <= x_slopes;
+				 result_addr  <= resw_write_idx + SLOPE_X_OFFSET;
+				 result_write <= 1'b1;
+			end
+			RESULT_W_SY: begin
+				 result_wdata <= y_slopes;
+				 result_addr  <= resw_write_idx + SLOPE_Y_OFFSET;
+				 result_write <= 1'b1;
+			end
+			RESULT_W_CX: begin
+				 result_wdata <= x_centroid;
+				 result_addr  <= resw_write_idx + CENTROID_X_OFFSET;
+				 result_write <= 1'b1;
+			end
+			RESULT_W_CY: begin
+				 result_wdata <= y_centroid;
+				 result_addr  <= resw_write_idx + CENTROID_Y_OFFSET;
+				 result_write <= 1'b1;
+			end
+			RESULT_W_ZK: begin
+				write_zernike_count <= write_zernike_count + 4'd1;
+				result_wdata <= zernike_out_reg[write_zernike_count];
+				result_addr <= write_zernike_count + ZERNIKE_OFFSET;
+				result_write <= 1'b1;
+			end
+			RESULT_W_DONE: begin
+				 resw_write_idx <= resw_write_idx + 8'd1;
+				 result_write   <= 1'b0;
+			end
         endcase
     end
 end

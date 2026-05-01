@@ -139,7 +139,7 @@ always @(posedge clk) begin
                 if (sub_valid) begin
 
                     if (sub_counter == LAST_SUB) begin
-                        // Last subaperture: latch acc_next (not stale acc) and
+                        // Last subaperture: latch  (not stale acc) and
                         // truncate Q5.39 → Q4.23 by selecting bits [43:17]:
                         //   [43:40] = 4 integer bits
                         //   [39:17] = 23 fractional bits
