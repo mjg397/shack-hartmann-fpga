@@ -582,10 +582,6 @@ int main(int argc, char **argv)
         }
     }
 
-    for (int k = 0; k < 512; k++) {
-        printf("slope %d : %d", k, (int32_t)slopes[k]);
-    }
-
     if (dump_signed_decimal_u32_array("slopes_signed_decimal.txt", slopes, 512) != 0) {
         printf("Failed to dump slopes to file\n");
     }
