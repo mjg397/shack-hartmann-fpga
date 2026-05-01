@@ -1,6 +1,6 @@
 `timescale 1ns/1ns
 
-module testbench_streaming_emulator();
+module streaming_emulator_tb();
 
   reg clk_100;
   reg reset;
