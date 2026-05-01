@@ -2,25 +2,28 @@
 
 module slope_calculation_tb;
 
-  // ---------------- CLOCK + RESET ----------------
+  // ================= CLOCK / RESET =================
   reg clk_100;
   reg reset;
 
-  // ---------------- INPUTS ----------------
+  // ================= Q FORMAT =================
+  localparam real SCALE = 8388608.0; // 2^23 (Q4.23)
+
+  // ================= INPUTS =================
   reg [7:0] subapetures_completed;
   reg frame_complete;
   reg [26:0] rec_intensity;
   reg [19:0] x_intensity;
   reg [19:0] y_intensity;
 
-  // ---------------- OUTPUTS ----------------
+  // ================= OUTPUTS =================
   wire signed [26:0] x_centroid;
   wire signed [26:0] y_centroid;
   wire signed [26:0] x_slope;
   wire signed [26:0] y_slope;
   wire new_subapeture;
 
-  // ---------------- DUT ----------------
+  // ================= DUT =================
   slope_calculation DUT (
     .clk(clk_100),
     .rst(reset),
@@ -36,114 +39,136 @@ module slope_calculation_tb;
     .new_subapeture(new_subapeture)
   );
 
-  // ---------------- CLOCK ----------------
+  // ================= CLOCK =================
   initial clk_100 = 0;
   always #5 clk_100 = ~clk_100;
 
-  // ---------------- INITIAL RESET ----------------
-  initial begin
-    reset = 1;
-    subapetures_completed = 0;
-    frame_complete = 0;
-    rec_intensity = 0;
-    x_intensity = 0;
-    y_intensity = 0;
-
-    #20;
-    reset = 0;
-  end
+  // =========================================================
+  // REAL ? FIXED (Q4.23)
+  // =========================================================
+  function [26:0] to_fixed;
+    input real val;
+    begin
+      to_fixed = val * SCALE;
+    end
+  endfunction
 
   // =========================================================
-  // TASK: APPLY INPUTS
+  // FIXED ? REAL (Q4.23)
+  // =========================================================
+  function real to_real;
+    input signed [26:0] val;
+    begin
+      to_real = val / SCALE;
+    end
+  endfunction
+
+  // =========================================================
+  // APPLY INPUTS (REAL DOMAIN 0?15)
   // =========================================================
   task apply_input;
-    input [7:0] subap;
-    input [26:0] rec;
-    input [19:0] xi;
-    input [19:0] yi;
+    input integer subap;
+    input real rec;
+    input real xi;
+    input real yi;
     begin
       subapetures_completed = subap;
-      rec_intensity = rec;
-      x_intensity = xi;
-      y_intensity = yi;
+
+      rec_intensity = to_fixed(rec);
+      x_intensity   = to_fixed(xi);
+      y_intensity   = to_fixed(yi);
     end
   endtask
 
   // =========================================================
-  // TASK: PRINT OUTPUTS
+  // PRINT RESULTS (REAL INTERPRETATION)
   // =========================================================
   task print_outputs;
     input integer id;
-    begin
-      $display("------------------------------------------------");
-      $display("TEST %0d", id);
-      $display("Inputs:");
-      $display("  subap = %0d rec = %0d x = %0d y = %0d",
-                subapetures_completed, rec_intensity,
-                x_intensity, y_intensity);
 
-      $display("Outputs:");
-      $display("  x_centroid = %0d", x_centroid);
-      $display("  y_centroid = %0d", y_centroid);
-      $display("  x_slope    = %0d", x_slope);
-      $display("  y_slope    = %0d", y_slope);
+    real xc;
+    real yc;
+    real xs;
+    real ys;
+
+    begin
+      xc = to_real(x_centroid);
+      yc = to_real(y_centroid);
+      xs = to_real(x_slope);
+      ys = to_real(y_slope);
+
+      $display("================================================");
+      $display("TEST %0d", id);
+
+      $display("INPUTS (REAL DOMAIN 0?15):");
+      $display("  subap = %0d", subapetures_completed);
+      $display("  rec   = %f", rec_intensity / SCALE);
+      $display("  x_in  = %f", x_intensity / SCALE);
+      $display("  y_in  = %f", y_intensity / SCALE);
+
+      $display("OUTPUTS (DECODED Q4.23 ? REAL):");
+      $display("  x_centroid ? %f", xc);
+      $display("  y_centroid ? %f", yc);
+      $display("  x_slope    ? %f", xs);
+      $display("  y_slope    ? %f", ys);
       $display("  new_subap  = %0d", new_subapeture);
+      $display("================================================");
     end
   endtask
 
   // =========================================================
-  // ALL TESTS (BEHAVIOR COVERAGE)
+  // 10 TEST CASES (0?15 RANGE)
   // =========================================================
   task run_all_tests;
   begin
-    $display("========== START TESTS ==========");
+    $display("========== Q4.23 FIXED-POINT TEST START ==========");
 
-    // RESET BEHAVIOR
+    // RESET
     reset = 1;
-    apply_input(0, 0, 0, 0);
+    apply_input(0, 0.0, 0.0, 0.0);
     #10;
     reset = 0;
     #10;
     print_outputs(1);
 
-    // ZERO INPUT
-    apply_input(1, 0, 0, 0);
+    // LOW VALUES
+    apply_input(1, 1.0, 2.0, 3.0);
     #10;
     print_outputs(2);
 
-    // NORMAL SMALL VALUES
-    apply_input(2, 100, 10, 20);
+    // SMALL RANGE
+    apply_input(2, 3.5, 4.2, 5.1);
     #10;
     print_outputs(3);
 
-    // SYMMETRY CASE
-    apply_input(3, 200, 50, 50);
+    // MID RANGE
+    apply_input(3, 0.6, 7.5, 8.2);
     #10;
     print_outputs(4);
 
-    // MEDIUM VALUES
-    apply_input(4, 500, 123, 456);
+    // HIGH RANGE
+    apply_input(4, 10.0, 12.3, 14.8);
     #10;
     print_outputs(5);
 
-    // LARGE VALUES STRESS
-    apply_input(5, 5000, 10000, 20000);
+    // MAX RANGE
+    apply_input(5, 15.0, 15.0, 15.0);
     #10;
     print_outputs(6);
 
-    // MAX EDGE CASE
-    apply_input(6, 27'h7FFFFFF, 20'hFFFFF, 20'hFFFFF);
+    // NON-SYMMETRIC
+    apply_input(6, 8.5, 1.2, 14.7);
     #10;
     print_outputs(7);
 
-    // LOW SIGNAL PRECISION TEST
-    apply_input(7, 10, 1, 2);
+    // SMALL DIFFERENCE SENSITIVITY
+    apply_input(7, 5.0, 5.01, 5.02);
     #10;
     print_outputs(8);
 
-    // SUBAPERTURE EDGE TEST
+    // SUBAPERTURE EDGE CASE
     subapetures_completed = 0;
-    apply_input(8, 100, 30, 40);
+    apply_input(8, 2.0, 3.0, 4.0);
     #10;
     print_outputs(9);
 
@@ -152,26 +177,35 @@ module slope_calculation_tb;
     print_outputs(9);
 
     // DYNAMIC CHANGE TEST
-    apply_input(9, 100, 10, 20);
+    apply_input(9, 1.0, 2.0, 3.0);
     #10;
-    apply_input(10, 200, 30, 60);
+
+    apply_input(10, 7.0, 8.0, 9.0);
     #10;
-    apply_input(11, 300, 90, 10);
+
+    apply_input(11, 12.0, 13.0, 14.0);
     #10;
+
     print_outputs(10);
 
-    $display("========== TESTS COMPLETE ==========");
+    $display("========== TEST COMPLETE ==========");
   end
   endtask
 
-  // ---------------- START ----------------
+  // ================= MAIN =================
   initial begin
-    #25; // wait for reset release
+    clk_100 = 0;
+    reset = 1;
+    #20;
+    reset = 0;
+
     run_all_tests();
+
     $finish;
   end
 
 endmodule
+
 // `timescale 1ns/1ns
 
 // module slope_calculation_tb.v();
