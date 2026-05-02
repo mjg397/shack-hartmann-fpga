@@ -59,6 +59,14 @@ extern const VlWide<16>/*511:0*/ Vtb__ConstPool__CONST_ha15ce332_0 = {{
     0x2d686172, 0x6861636b, 0x6f742f73, 0x002f726f
 }};
 
+extern const VlWide<18>/*575:0*/ Vtb__ConstPool__CONST_heb68ca02_0 = {{
+    0x2e686578, 0x746d6170, 0x655f6269, 0x72747572,
+    0x62617065, 0x612f7375, 0x2f646174, 0x5f73696d,
+    0x6c696e65, 0x70697065, 0x756c6c5f, 0x67612f66,
+    0x6e2d6670, 0x746d616e, 0x2d686172, 0x6861636b,
+    0x6f742f73, 0x002f726f
+}};
+
 extern const VlWide<19>/*607:0*/ Vtb__ConstPool__CONST_hf3894275_0 = {{
     0x2e686578, 0x74696e67, 0x726f7461, 0x6167655f,
     0x795f696d, 0x68636970, 0x6174612f, 0x696d2f64,

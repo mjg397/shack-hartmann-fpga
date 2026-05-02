@@ -122,6 +122,7 @@ module DE1_SoC_Computer (
 	(*keep*) wire [26:0] x_slopes; 
 	(*keep*) wire [26:0] y_slopes; 
 	wire new_subapeture;
+	wire subap_valid; // this subap is in the pupil
 
 	slope_calculation slopes
 	(
@@ -136,7 +137,8 @@ module DE1_SoC_Computer (
 		.y_centroid             (y_centroid),
 		.x_slope                (x_slopes),
 		.y_slope                (y_slopes),
-		.new_subapeture         (new_subapeture)
+		.new_subapeture         (new_subapeture),
+		.subap_valid			(subap_valid)
 	);
 
 	(*keep*) wire [269:0] zernike_out;
@@ -149,7 +151,7 @@ module DE1_SoC_Computer (
 		.clk             (clk),
 		.rst             (reset),
 
-		.sub_valid       (new_subapeture),
+		.sub_valid       (subap_valid),
 		.x_slope         (x_slopes),   // Q4.23
 		.y_slope         (y_slopes),   // Q4.23
 

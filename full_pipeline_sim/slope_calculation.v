@@ -17,6 +17,15 @@ module slope_calculation (
     output reg         subap_valid      // high for one cycle *WITH* new_subapeture when the subap is in the pupil
 );
 
+  reg [255:0] subap_bitmap_mem[0:0];
+  wire [255:0] subap_bitmap; // row major ordered bitmap
+
+  initial begin
+    $readmemh("/root/shack-hartmann-fpga/full_pipeline_sim/data/subaperture_bitmap.hex", subap_bitmap_mem);
+  end
+
+  assign subap_bitmap = subap_bitmap_mem[0];
+
   localparam integer SCALE = 8388608; // 2^23 for 4.23 signed fixed point
   localparam x_ref = 62914560;
   localparam y_ref = 62914560;
@@ -67,8 +76,10 @@ module slope_calculation (
       if (subapetures_completed > current_subap) begin
         current_subap <= current_subap + 1;
         new_subapeture <= 1;
+        subap_valid <= subap_bitmap[subapetures_completed - 1]; // check bitmap for last completed subap
       end else begin
         new_subapeture <= 0;
+        subap_valid <= 1'b0;
       end
     end
   end

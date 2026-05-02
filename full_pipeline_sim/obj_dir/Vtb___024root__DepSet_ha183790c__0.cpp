@@ -264,10 +264,10 @@ VL_INLINE_OPT void Vtb___024root___nba_sequent__TOP__0(Vtb___024root* vlSelf) {
         = vlSelf->tb__DOT__dut__DOT__streamer__DOT__line_counter;
     __Vdly__tb__DOT__dut__DOT__streamer__DOT__state 
         = vlSelf->tb__DOT__dut__DOT__streamer__DOT__state;
-    __Vdly__tb__DOT__dut__DOT__slopes__DOT__current_subap 
-        = vlSelf->tb__DOT__dut__DOT__slopes__DOT__current_subap;
     __Vdly__tb__DOT__dut__DOT__accumulator__DOT__subap_row 
         = vlSelf->tb__DOT__dut__DOT__accumulator__DOT__subap_row;
+    __Vdly__tb__DOT__dut__DOT__slopes__DOT__current_subap 
+        = vlSelf->tb__DOT__dut__DOT__slopes__DOT__current_subap;
     __Vdly__tb__DOT__dut__DOT__subaps_done_accumulator 
         = vlSelf->tb__DOT__dut__DOT__subaps_done_accumulator;
     __Vdlyvset__tb__DOT__dut__DOT__accumulator__DOT__i__v0 = 0U;
@@ -687,8 +687,8 @@ VL_INLINE_OPT void Vtb___024root___nba_sequent__TOP__0(Vtb___024root* vlSelf) {
             } else {
                 __Vdly__tb__DOT__dut__DOT__em__DOT__state = 0U;
             }
-        } else if (vlSelf->tb__DOT__dut__DOT__new_subapeture) {
-            if ((0xa7U == (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))) {
+        } else if (vlSelf->tb__DOT__dut__DOT__subap_valid) {
+            if ((0x83U == (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))) {
                 vlSelf->tb__DOT__dut__DOT__em__DOT____Vlvbound_h252efdf3__1 
                     = vlSelf->tb__DOT__dut__DOT__em__DOT__acc_next
                     [0U];
@@ -924,8 +924,16 @@ VL_INLINE_OPT void Vtb___024root___nba_sequent__TOP__0(Vtb___024root* vlSelf) {
             __Vdly__tb__DOT__dut__DOT__slopes__DOT__current_subap 
                 = (0xffU & ((IData)(1U) + (IData)(vlSelf->tb__DOT__dut__DOT__slopes__DOT__current_subap)));
             vlSelf->tb__DOT__dut__DOT__new_subapeture = 1U;
+            vlSelf->tb__DOT__dut__DOT__subap_valid 
+                = (1U & (vlSelf->tb__DOT__dut__DOT__slopes__DOT__subap_bitmap_mem
+                         [0U][(7U & (((IData)(vlSelf->tb__DOT__dut__DOT__subaps_done_reciprocal) 
+                                      - (IData)(1U)) 
+                                     >> 5U))] >> (0x1fU 
+                                                  & ((IData)(vlSelf->tb__DOT__dut__DOT__subaps_done_reciprocal) 
+                                                     - (IData)(1U)))));
         } else {
             vlSelf->tb__DOT__dut__DOT__new_subapeture = 0U;
+            vlSelf->tb__DOT__dut__DOT__subap_valid = 0U;
         }
         vlSelf->tb__DOT__dut__DOT__subaps_done_reciprocal 
             = vlSelf->tb__DOT__dut__DOT__subaps_done_accumulator;
@@ -1202,16 +1210,16 @@ VL_INLINE_OPT void Vtb___024root___nba_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__1__KET____DOT__prod_x 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0xa8U) 
+                                                                   & ((IData)(0x84U) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_x
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0xa8U) 
+                                                                  & ((IData)(0x84U) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -1219,16 +1227,16 @@ VL_INLINE_OPT void Vtb___024root___nba_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__1__KET____DOT__prod_y 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0xa8U) 
+                                                                   & ((IData)(0x84U) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_y
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0xa8U) 
+                                                                  & ((IData)(0x84U) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -1236,16 +1244,16 @@ VL_INLINE_OPT void Vtb___024root___nba_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__2__KET____DOT__prod_x 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0x150U) 
+                                                                   & ((IData)(0x108U) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_x
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0x150U) 
+                                                                  & ((IData)(0x108U) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -1253,16 +1261,16 @@ VL_INLINE_OPT void Vtb___024root___nba_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__2__KET____DOT__prod_y 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0x150U) 
+                                                                   & ((IData)(0x108U) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_y
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0x150U) 
+                                                                  & ((IData)(0x108U) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -1270,16 +1278,16 @@ VL_INLINE_OPT void Vtb___024root___nba_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__3__KET____DOT__prod_x 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0x1f8U) 
+                                                                   & ((IData)(0x18cU) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_x
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0x1f8U) 
+                                                                  & ((IData)(0x18cU) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -1287,16 +1295,16 @@ VL_INLINE_OPT void Vtb___024root___nba_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__3__KET____DOT__prod_y 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0x1f8U) 
+                                                                   & ((IData)(0x18cU) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_y
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0x1f8U) 
+                                                                  & ((IData)(0x18cU) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -1304,16 +1312,16 @@ VL_INLINE_OPT void Vtb___024root___nba_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__4__KET____DOT__prod_x 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0x2a0U) 
+                                                                   & ((IData)(0x210U) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_x
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0x2a0U) 
+                                                                  & ((IData)(0x210U) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -1321,16 +1329,16 @@ VL_INLINE_OPT void Vtb___024root___nba_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__4__KET____DOT__prod_y 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0x2a0U) 
+                                                                   & ((IData)(0x210U) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_y
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0x2a0U) 
+                                                                  & ((IData)(0x210U) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -1338,16 +1346,16 @@ VL_INLINE_OPT void Vtb___024root___nba_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__5__KET____DOT__prod_x 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0x348U) 
+                                                                   & ((IData)(0x294U) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_x
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0x348U) 
+                                                                  & ((IData)(0x294U) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -1355,16 +1363,16 @@ VL_INLINE_OPT void Vtb___024root___nba_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__5__KET____DOT__prod_y 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0x348U) 
+                                                                   & ((IData)(0x294U) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_y
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0x348U) 
+                                                                  & ((IData)(0x294U) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -1372,16 +1380,16 @@ VL_INLINE_OPT void Vtb___024root___nba_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__6__KET____DOT__prod_x 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0x3f0U) 
+                                                                   & ((IData)(0x318U) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_x
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0x3f0U) 
+                                                                  & ((IData)(0x318U) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -1389,16 +1397,16 @@ VL_INLINE_OPT void Vtb___024root___nba_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__6__KET____DOT__prod_y 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0x3f0U) 
+                                                                   & ((IData)(0x318U) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_y
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0x3f0U) 
+                                                                  & ((IData)(0x318U) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -1406,16 +1414,16 @@ VL_INLINE_OPT void Vtb___024root___nba_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__7__KET____DOT__prod_x 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0x498U) 
+                                                                   & ((IData)(0x39cU) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_x
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0x498U) 
+                                                                  & ((IData)(0x39cU) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -1423,16 +1431,16 @@ VL_INLINE_OPT void Vtb___024root___nba_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__7__KET____DOT__prod_y 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0x498U) 
+                                                                   & ((IData)(0x39cU) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_y
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0x498U) 
+                                                                  & ((IData)(0x39cU) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -1440,16 +1448,16 @@ VL_INLINE_OPT void Vtb___024root___nba_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__8__KET____DOT__prod_x 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0x540U) 
+                                                                   & ((IData)(0x420U) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_x
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0x540U) 
+                                                                  & ((IData)(0x420U) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -1457,16 +1465,16 @@ VL_INLINE_OPT void Vtb___024root___nba_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__8__KET____DOT__prod_y 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0x540U) 
+                                                                   & ((IData)(0x420U) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_y
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0x540U) 
+                                                                  & ((IData)(0x420U) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -1474,16 +1482,16 @@ VL_INLINE_OPT void Vtb___024root___nba_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__9__KET____DOT__prod_x 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0x5e8U) 
+                                                                   & ((IData)(0x4a4U) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_x
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0x5e8U) 
+                                                                  & ((IData)(0x4a4U) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -1491,16 +1499,16 @@ VL_INLINE_OPT void Vtb___024root___nba_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__9__KET____DOT__prod_y 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0x5e8U) 
+                                                                   & ((IData)(0x4a4U) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_y
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0x5e8U) 
+                                                                  & ((IData)(0x4a4U) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 

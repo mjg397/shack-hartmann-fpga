@@ -12,6 +12,7 @@ VL_ATTR_COLD void Vtb___024root___eval_static(Vtb___024root* vlSelf) {
 }
 
 extern const VlWide<19>/*607:0*/ Vtb__ConstPool__CONST_hf3894275_0;
+extern const VlWide<18>/*575:0*/ Vtb__ConstPool__CONST_heb68ca02_0;
 extern const VlWide<16>/*511:0*/ Vtb__ConstPool__CONST_h70d4d4c2_0;
 extern const VlWide<16>/*511:0*/ Vtb__ConstPool__CONST_ha15ce332_0;
 
@@ -23,10 +24,13 @@ VL_ATTR_COLD void Vtb___024root___eval_initial__TOP(Vtb___024root* vlSelf) {
     VL_READMEM_N(true, 8, 65536, 0, VL_CVT_PACK_STR_NW(19, Vtb__ConstPool__CONST_hf3894275_0)
                  ,  &(vlSelf->tb__DOT__dut__DOT__streamer__DOT__mem)
                  , 0, ~0ULL);
-    VL_READMEM_N(true, 18, 1680, 0, VL_CVT_PACK_STR_NW(16, Vtb__ConstPool__CONST_h70d4d4c2_0)
+    VL_READMEM_N(true, 256, 1, 0, VL_CVT_PACK_STR_NW(18, Vtb__ConstPool__CONST_heb68ca02_0)
+                 ,  &(vlSelf->tb__DOT__dut__DOT__slopes__DOT__subap_bitmap_mem)
+                 , 0, ~0ULL);
+    VL_READMEM_N(true, 18, 1320, 0, VL_CVT_PACK_STR_NW(16, Vtb__ConstPool__CONST_h70d4d4c2_0)
                  ,  &(vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_x)
                  , 0, ~0ULL);
-    VL_READMEM_N(true, 18, 1680, 0, VL_CVT_PACK_STR_NW(16, Vtb__ConstPool__CONST_ha15ce332_0)
+    VL_READMEM_N(true, 18, 1320, 0, VL_CVT_PACK_STR_NW(16, Vtb__ConstPool__CONST_ha15ce332_0)
                  ,  &(vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_y)
                  , 0, ~0ULL);
 }
@@ -183,16 +187,16 @@ VL_ATTR_COLD void Vtb___024root___stl_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__1__KET____DOT__prod_x 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0xa8U) 
+                                                                   & ((IData)(0x84U) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_x
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0xa8U) 
+                                                                  & ((IData)(0x84U) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -200,16 +204,16 @@ VL_ATTR_COLD void Vtb___024root___stl_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__1__KET____DOT__prod_y 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0xa8U) 
+                                                                   & ((IData)(0x84U) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_y
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0xa8U) 
+                                                                  & ((IData)(0x84U) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -217,16 +221,16 @@ VL_ATTR_COLD void Vtb___024root___stl_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__2__KET____DOT__prod_x 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0x150U) 
+                                                                   & ((IData)(0x108U) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_x
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0x150U) 
+                                                                  & ((IData)(0x108U) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -234,16 +238,16 @@ VL_ATTR_COLD void Vtb___024root___stl_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__2__KET____DOT__prod_y 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0x150U) 
+                                                                   & ((IData)(0x108U) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_y
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0x150U) 
+                                                                  & ((IData)(0x108U) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -251,16 +255,16 @@ VL_ATTR_COLD void Vtb___024root___stl_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__3__KET____DOT__prod_x 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0x1f8U) 
+                                                                   & ((IData)(0x18cU) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_x
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0x1f8U) 
+                                                                  & ((IData)(0x18cU) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -268,16 +272,16 @@ VL_ATTR_COLD void Vtb___024root___stl_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__3__KET____DOT__prod_y 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0x1f8U) 
+                                                                   & ((IData)(0x18cU) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_y
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0x1f8U) 
+                                                                  & ((IData)(0x18cU) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -285,16 +289,16 @@ VL_ATTR_COLD void Vtb___024root___stl_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__4__KET____DOT__prod_x 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0x2a0U) 
+                                                                   & ((IData)(0x210U) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_x
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0x2a0U) 
+                                                                  & ((IData)(0x210U) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -302,16 +306,16 @@ VL_ATTR_COLD void Vtb___024root___stl_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__4__KET____DOT__prod_y 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0x2a0U) 
+                                                                   & ((IData)(0x210U) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_y
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0x2a0U) 
+                                                                  & ((IData)(0x210U) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -319,16 +323,16 @@ VL_ATTR_COLD void Vtb___024root___stl_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__5__KET____DOT__prod_x 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0x348U) 
+                                                                   & ((IData)(0x294U) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_x
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0x348U) 
+                                                                  & ((IData)(0x294U) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -336,16 +340,16 @@ VL_ATTR_COLD void Vtb___024root___stl_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__5__KET____DOT__prod_y 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0x348U) 
+                                                                   & ((IData)(0x294U) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_y
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0x348U) 
+                                                                  & ((IData)(0x294U) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -353,16 +357,16 @@ VL_ATTR_COLD void Vtb___024root___stl_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__6__KET____DOT__prod_x 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0x3f0U) 
+                                                                   & ((IData)(0x318U) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_x
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0x3f0U) 
+                                                                  & ((IData)(0x318U) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -370,16 +374,16 @@ VL_ATTR_COLD void Vtb___024root___stl_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__6__KET____DOT__prod_y 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0x3f0U) 
+                                                                   & ((IData)(0x318U) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_y
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0x3f0U) 
+                                                                  & ((IData)(0x318U) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -387,16 +391,16 @@ VL_ATTR_COLD void Vtb___024root___stl_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__7__KET____DOT__prod_x 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0x498U) 
+                                                                   & ((IData)(0x39cU) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_x
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0x498U) 
+                                                                  & ((IData)(0x39cU) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -404,16 +408,16 @@ VL_ATTR_COLD void Vtb___024root___stl_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__7__KET____DOT__prod_y 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0x498U) 
+                                                                   & ((IData)(0x39cU) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_y
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0x498U) 
+                                                                  & ((IData)(0x39cU) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -421,16 +425,16 @@ VL_ATTR_COLD void Vtb___024root___stl_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__8__KET____DOT__prod_x 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0x540U) 
+                                                                   & ((IData)(0x420U) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_x
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0x540U) 
+                                                                  & ((IData)(0x420U) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -438,16 +442,16 @@ VL_ATTR_COLD void Vtb___024root___stl_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__8__KET____DOT__prod_y 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0x540U) 
+                                                                   & ((IData)(0x420U) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_y
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0x540U) 
+                                                                  & ((IData)(0x420U) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -455,16 +459,16 @@ VL_ATTR_COLD void Vtb___024root___stl_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__9__KET____DOT__prod_x 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0x5e8U) 
+                                                                   & ((IData)(0x4a4U) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_x
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0x5e8U) 
+                                                                  & ((IData)(0x4a4U) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -472,16 +476,16 @@ VL_ATTR_COLD void Vtb___024root___stl_sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__9__KET____DOT__prod_y 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
-                                                                ((0x68fU 
+                                                                ((0x527U 
                                                                   >= 
                                                                   (0x7ffU 
-                                                                   & ((IData)(0x5e8U) 
+                                                                   & ((IData)(0x4a4U) 
                                                                       + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter))))
                                                                   ? 
                                                                  vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_y
                                                                  [
                                                                  (0x7ffU 
-                                                                  & ((IData)(0x5e8U) 
+                                                                  & ((IData)(0x4a4U) 
                                                                      + (IData)(vlSelf->tb__DOT__dut__DOT__em__DOT__sub_counter)))]
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
@@ -1189,6 +1193,7 @@ VL_ATTR_COLD void Vtb___024root___ctor_var_reset(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__x_slopes = VL_RAND_RESET_I(27);
     vlSelf->tb__DOT__dut__DOT__y_slopes = VL_RAND_RESET_I(27);
     vlSelf->tb__DOT__dut__DOT__new_subapeture = VL_RAND_RESET_I(1);
+    vlSelf->tb__DOT__dut__DOT__subap_valid = VL_RAND_RESET_I(1);
     VL_RAND_RESET_W(270, vlSelf->tb__DOT__dut__DOT__zernike_out);
     vlSelf->tb__DOT__dut__DOT__done = VL_RAND_RESET_I(1);
     for (int __Vi0 = 0; __Vi0 < 10; ++__Vi0) {
@@ -1241,13 +1246,16 @@ VL_ATTR_COLD void Vtb___024root___ctor_var_reset(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__out_q0_27_ext = VL_RAND_RESET_I(28);
     vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__u_newton_step_0__DOT__prod_mul = VL_RAND_RESET_Q(55);
     vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__u_newton_step_1__DOT__prod_mul = VL_RAND_RESET_Q(55);
+    for (int __Vi0 = 0; __Vi0 < 1; ++__Vi0) {
+        VL_RAND_RESET_W(256, vlSelf->tb__DOT__dut__DOT__slopes__DOT__subap_bitmap_mem[__Vi0]);
+    }
     vlSelf->tb__DOT__dut__DOT__slopes__DOT__current_subap = VL_RAND_RESET_I(8);
     vlSelf->tb__DOT__dut__DOT__slopes__DOT__x_mult__DOT__mult_out = VL_RAND_RESET_Q(47);
     vlSelf->tb__DOT__dut__DOT__slopes__DOT__y_mult__DOT__mult_out = VL_RAND_RESET_Q(47);
-    for (int __Vi0 = 0; __Vi0 < 1680; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 1320; ++__Vi0) {
         vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_x[__Vi0] = VL_RAND_RESET_I(18);
     }
-    for (int __Vi0 = 0; __Vi0 < 1680; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 1320; ++__Vi0) {
         vlSelf->tb__DOT__dut__DOT__em__DOT__e_rom_y[__Vi0] = VL_RAND_RESET_I(18);
     }
     vlSelf->tb__DOT__dut__DOT__em__DOT__state = VL_RAND_RESET_I(1);

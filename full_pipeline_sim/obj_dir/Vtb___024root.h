@@ -34,6 +34,7 @@ class alignas(VL_CACHE_LINE_BYTES) Vtb___024root final : public VerilatedModule 
         CData/*7:0*/ tb__DOT__dut__DOT__subaps_done_accumulator;
         CData/*7:0*/ tb__DOT__dut__DOT__subaps_done_reciprocal;
         CData/*0:0*/ tb__DOT__dut__DOT__new_subapeture;
+        CData/*0:0*/ tb__DOT__dut__DOT__subap_valid;
         CData/*0:0*/ tb__DOT__dut__DOT__done;
         CData/*4:0*/ tb__DOT__dut__DOT__resw_next_state;
         CData/*0:0*/ tb__DOT__dut__DOT__resw_start;
@@ -80,9 +81,9 @@ class alignas(VL_CACHE_LINE_BYTES) Vtb___024root final : public VerilatedModule 
         IData/*19:0*/ tb__DOT__dut__DOT__xI_accumulator;
         IData/*19:0*/ tb__DOT__dut__DOT__yI_accumulator;
         IData/*19:0*/ tb__DOT__dut__DOT__xI_reciprocal;
-        IData/*19:0*/ tb__DOT__dut__DOT__yI_reciprocal;
     };
     struct {
+        IData/*19:0*/ tb__DOT__dut__DOT__yI_reciprocal;
         IData/*26:0*/ tb__DOT__dut__DOT__rI_reciprocal;
         IData/*26:0*/ tb__DOT__dut__DOT__x_centroid;
         IData/*26:0*/ tb__DOT__dut__DOT__y_centroid;
@@ -131,8 +132,9 @@ class alignas(VL_CACHE_LINE_BYTES) Vtb___024root final : public VerilatedModule 
         VlUnpacked<SData/*15:0*/, 256> tb__DOT__dut__DOT__accumulator__DOT__i;
         VlUnpacked<IData/*19:0*/, 256> tb__DOT__dut__DOT__accumulator__DOT__x_i;
         VlUnpacked<IData/*19:0*/, 256> tb__DOT__dut__DOT__accumulator__DOT__y_i;
-        VlUnpacked<IData/*17:0*/, 1680> tb__DOT__dut__DOT__em__DOT__e_rom_x;
-        VlUnpacked<IData/*17:0*/, 1680> tb__DOT__dut__DOT__em__DOT__e_rom_y;
+        VlUnpacked<VlWide<8>/*255:0*/, 1> tb__DOT__dut__DOT__slopes__DOT__subap_bitmap_mem;
+        VlUnpacked<IData/*17:0*/, 1320> tb__DOT__dut__DOT__em__DOT__e_rom_x;
+        VlUnpacked<IData/*17:0*/, 1320> tb__DOT__dut__DOT__em__DOT__e_rom_y;
         VlUnpacked<QData/*54:0*/, 10> tb__DOT__dut__DOT__em__DOT__mac_sum;
         VlUnpacked<QData/*54:0*/, 10> tb__DOT__dut__DOT__em__DOT__acc;
         VlUnpacked<QData/*54:0*/, 10> tb__DOT__dut__DOT__em__DOT__acc_next;

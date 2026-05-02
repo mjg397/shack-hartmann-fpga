@@ -21,7 +21,7 @@
 
 module ematrix_accumulator #(
     parameter NUM_MODES  = 10,   // Zernike modes  (rows of E)
-    parameter NUM_SUBS   = 168,  // valid subapertures
+    parameter NUM_SUBS   = 132,  // valid subapertures
     parameter NUM_SLOPES = 392   // 2 * NUM_SUBS (kept for port compatibility)
 )(
     input  wire        clk,
