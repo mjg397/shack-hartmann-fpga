@@ -1,29 +1,21 @@
 `timescale 1ns/1ns
 
-module slope_calculation_tb;
+module slope_calculation_tb(
 
-  // ================= CLOCK / RESET =================
   reg clk_100;
   reg reset;
-
-  // ================= Q FORMAT =================
-  localparam real SCALE = 8388608.0; // 2^23 (Q4.23)
-
-  // ================= INPUTS =================
   reg [7:0] subapetures_completed;
   reg frame_complete;
   reg [26:0] rec_intensity;
   reg [19:0] x_intensity;
   reg [19:0] y_intensity;
-
-  // ================= OUTPUTS =================
   wire signed [26:0] x_centroid;
   wire signed [26:0] y_centroid;
   wire signed [26:0] x_slope;
   wire signed [26:0] y_slope;
   wire new_subapeture;
+);
 
-  // ================= DUT =================
   slope_calculation DUT (
     .clk(clk_100),
     .rst(reset),
@@ -74,9 +66,11 @@ module slope_calculation_tb;
     begin
       subapetures_completed = subap;
 
-      rec_intensity = to_fixed(rec);
-      x_intensity   = to_fixed(xi);
-      y_intensity   = to_fixed(yi);
+
+      rec_intensity = rec;
+
+      x_intensity   = xi;             // integer
+      y_intensity   = yi;             // integer
     end
   endtask
 
@@ -102,9 +96,9 @@ module slope_calculation_tb;
 
       $display("INPUTS (REAL DOMAIN 0?15):");
       $display("  subap = %0d", subapetures_completed);
-      $display("  rec   = %f", rec_intensity / SCALE);
-      $display("  x_in  = %f", x_intensity / SCALE);
-      $display("  y_in  = %f", y_intensity / SCALE);
+      $display("  rec   = %f", rec_intensity);
+      $display("  x_in  = %f", x_intensity);
+      $display("  y_in  = %f", y_intensity);
 
       $display("OUTPUTS (DECODED Q4.23 ? REAL):");
       $display("  x_centroid ? %f", xc);
@@ -117,7 +111,8 @@ module slope_calculation_tb;
   endtask
 
   // =========================================================
-  // 10 TEST CASES (0?15 RANGE)
+  // 10 TEST CASES (0?15 RANGE)   the values of x_intensity and y_intensity should be between 0 - 489600, realistically near the higher end of this
+  //  the values of regular intensity is between 0 - 65280 and therefore r_intensity should be between 0.00001531862 - 1, values of regular intensity below 0 are set to 0
   // =========================================================
   task run_all_tests;
   begin
@@ -132,12 +127,12 @@ module slope_calculation_tb;
     print_outputs(1);
 
     // LOW VALUES
-    apply_input(1, 1.0, 2.0, 3.0);
+    apply_input(1, 0.5, 200000, 300000);
     #10;
     print_outputs(2);
 
     // SMALL RANGE
-    apply_input(2, 3.5, 4.2, 5.1);
+    apply_input(2, 0.1, 4.2, 5.1);
     #10;
     print_outputs(3);
 
@@ -147,28 +142,28 @@ module slope_calculation_tb;
     print_outputs(4);
 
     // HIGH RANGE
-    apply_input(4, 10.0, 12.3, 14.8);
+    apply_input(4, 1.0, 7.4, 7.4);
     #10;
     print_outputs(5);
 
     // MAX RANGE
-    apply_input(5, 15.0, 15.0, 15.0);
+    apply_input(5, 1.0, 15.0, 15.0);
     #10;
     print_outputs(6);
 
     // NON-SYMMETRIC
-    apply_input(6, 8.5, 1.2, 14.7);
+    apply_input(6, 0.5, 1.2, 14.7);
     #10;
     print_outputs(7);
 
     // SMALL DIFFERENCE SENSITIVITY
-    apply_input(7, 5.0, 5.01, 5.02);
+    apply_input(7, 0.1, 5.01, 5.02);
     #10;
     print_outputs(8);
 
     // SUBAPERTURE EDGE CASE
     subapetures_completed = 0;
-    apply_input(8, 2.0, 3.0, 4.0);
+    apply_input(8, 0.5, 30.0, 30.0);
     #10;
     print_outputs(9);
 
@@ -180,10 +175,10 @@ module slope_calculation_tb;
     apply_input(9, 1.0, 2.0, 3.0);
     #10;
 
-    apply_input(10, 7.0, 8.0, 9.0);
+    apply_input(10, 1.0, 8.0, 9.0);
     #10;
 
-    apply_input(11, 12.0, 13.0, 14.0);
+    apply_input(11, 1.0, 13.0, 14.0);
     #10;
 
     print_outputs(10);
