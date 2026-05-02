@@ -31,9 +31,19 @@ module slope_calculation_tb(
     .new_subapeture(new_subapeture)
   );
 
-  // ================= CLOCK =================
-  initial clk_100 = 0;
-  always #5 clk_100 = ~clk_100;
+  // Initialize the clk and reset
+  initial begin
+    clk_100 <= 0;
+    reset <= 1;
+    #10
+    reset <= 0;
+  end
+
+  // Toggle the clock at 100MHz
+  always begin
+    #5
+    clk_100  = !clk_100;
+  end
 
   // =========================================================
   // REAL ? FIXED (Q4.23)
