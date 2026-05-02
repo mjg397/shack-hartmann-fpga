@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import sys
+from collections.abc import MutableMapping
 from typing import cast
 
 import numpy as np
@@ -344,8 +345,30 @@ class MainWindow(QtWidgets.QMainWindow):
         self.statusBar().showMessage(f"Updated UI with the {result.source} run from {result.timestamp}")
 
 
+def configure_qt_platform(
+    *,
+    platform_name: str | None = None,
+    environment: MutableMapping[str, str] | None = None,
+) -> None:
+    platform_name = sys.platform if platform_name is None else platform_name
+    environment = os.environ if environment is None else environment
+
+    if environment.get("QT_QPA_PLATFORM"):
+        return
+
+    if platform_name.startswith("win") or platform_name == "darwin":
+        return
+
+    has_linux_display = bool(environment.get("DISPLAY") or environment.get("WAYLAND_DISPLAY"))
+    if platform_name.startswith("linux") and not has_linux_display:
+        raise RuntimeError(
+            "No GUI display was detected. If you are launching from a dev container, WSL, or remote Linux shell, "
+            "run the app with a local desktop Python on Windows, or explicitly set QT_QPA_PLATFORM=offscreen for tests."
+        )
+
+
 def build_application() -> QtWidgets.QApplication:
-    os.environ.setdefault("QT_QPA_PLATFORM", os.environ.get("QT_QPA_PLATFORM", "xcb"))
+    configure_qt_platform()
     existing_app = QtWidgets.QApplication.instance()
     if existing_app is None:
         app = QtWidgets.QApplication(sys.argv)
