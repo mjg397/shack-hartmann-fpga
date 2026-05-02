@@ -9,14 +9,16 @@ Shack-Hartmann WFS — E Matrix (Reconstruction Matrix) Generator
 import numpy as np
 from math import factorial
 
+from generate_subaperture_bitmap import subaperture_inside_pupil
+
 
 # =============================================================================
 # STEP 1 — Parameters
 # =============================================================================
 
-TELESCOPE_DIAMETER        = 8.0      # metres
+TELESCOPE_DIAMETER        = 8      # metres
 CENTRAL_OBSCURATION       = 1.2      # metres
-SPIDER_WIDTH              = 0.05     # metres (0.0 to disable)
+SPIDER_WIDTH              = 0.05    # metres (0.0 to disable)
 NUM_LENSLETS_ACROSS       = 16
 NUM_ZERNIKE               = 10
 TIKHONOV_RCOND            = 1e-3     # regularisation for near-singular W
@@ -28,6 +30,7 @@ CSV_OUTPUT_FILE           = "e_matrix.csv"
 
 CENTRAL_OBSCURATION_RATIO = CENTRAL_OBSCURATION / TELESCOPE_DIAMETER
 PUPIL_RADIUS              = TELESCOPE_DIAMETER / 2.0
+SUBAP_PUPIL_RADIUS        = 7.20
 
 # =============================================================================
 # STEP 2 — Pupil grid and aperture mask
@@ -38,23 +41,17 @@ lenslet_coords_1d = np.linspace(-1.0, 1.0, NUM_LENSLETS_ACROSS, endpoint=True)
 lx, ly   = np.meshgrid(lenslet_coords_1d, lenslet_coords_1d)
 lx_flat  = lx.ravel()
 ly_flat  = ly.ravel()
-lr       = np.sqrt(lx_flat**2 + ly_flat**2)
 
-in_outer  = lr <= 1.0
-out_inner = lr >= CENTRAL_OBSCURATION_RATIO
-
-def spider_mask(x, y, width, n_arms=4):
-    half = width / 2.0 / PUPIL_RADIUS
-    keep = np.ones(len(x), dtype=bool)
-    for angle_deg in np.linspace(0, 180, n_arms // 2, endpoint=False):
-        angle = np.radians(angle_deg)
-        keep &= ~(np.abs(x * np.sin(angle) - y * np.cos(angle)) <= half)
-    return keep
-
-not_spider = spider_mask(lx_flat, ly_flat, SPIDER_WIDTH) if SPIDER_WIDTH > 0.0 \
-             else np.ones(len(lx_flat), dtype=bool)
-
-valid_mask = in_outer & out_inner & not_spider
+# Keep the gradient evaluation points at the lenslet centers, but select valid
+# subapertures using the same square-inside-pupil rule as the HDL bitmap.
+valid_mask = np.array(
+    [
+        subaperture_inside_pupil(row, col, NUM_LENSLETS_ACROSS, SUBAP_PUPIL_RADIUS)
+        for row in range(NUM_LENSLETS_ACROSS)
+        for col in range(NUM_LENSLETS_ACROSS)
+    ],
+    dtype=bool,
+)
 sx_coords  = lx_flat[valid_mask]
 sy_coords  = ly_flat[valid_mask]
 M          = int(valid_mask.sum())

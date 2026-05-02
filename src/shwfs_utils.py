@@ -886,6 +886,79 @@ def generate_aberrated_image(
     return image_aber
 
 
+def parse_zernike_coefficient_file(path):
+    """Load a text file of Zernike coefficients from HCIPy-side dumps."""
+    coeffs = []
+    coeff_path = Path(path)
+
+    with coeff_path.open("r", encoding="utf-8") as handle:
+        for line in handle:
+            stripped = line.strip()
+            if not stripped or stripped.startswith("#"):
+                continue
+            if stripped.lower().startswith("mode "):
+                continue
+
+            tokens = stripped.replace(",", " ").split()
+            try:
+                coeffs.append(float(tokens[-1]))
+            except (IndexError, ValueError) as exc:
+                raise ValueError(
+                    f"Could not parse coefficient from line: {stripped!r}"
+                ) from exc
+
+    if not coeffs:
+        raise ValueError(f"No coefficients found in {coeff_path}")
+
+    return np.asarray(coeffs, dtype=np.float64)
+
+
+def write_shwfs_hex(path, image):
+    """Write a quantized SHWFS detector frame in image_rotating.hex format."""
+    output_path = Path(path)
+    quantized = quantize_shwfs_image(image)
+    flat_values = np.asarray(quantized, dtype=np.uint8).reshape(-1)
+
+    with output_path.open("w", encoding="ascii") as handle:
+        for value in flat_values:
+            handle.write(f"{int(value):02X}\n")
+
+    return flat_values
+
+
+def generate_shwfs_hex_from_coefficients(
+    coefficients,
+    output_path,
+    num_lenslets=16,
+    demo_image_path=None,
+):
+    """Generate an image_rotating.hex-style byte stream from Zernike coefficients."""
+    coeffs = np.asarray(coefficients, dtype=np.float64)
+    image = generate_aberrated_image(
+        true_coeffs=coeffs,
+        num_lenslets=num_lenslets,
+        num_zernike=int(coeffs.size),
+        demo_image_path=demo_image_path,
+    )
+    return write_shwfs_hex(output_path, image)
+
+
+def generate_shwfs_hex_from_file(
+    coefficients_path,
+    output_path,
+    num_lenslets=16,
+    demo_image_path=None,
+):
+    """Parse coefficients from disk and write an image_rotating.hex-style file."""
+    coeffs = parse_zernike_coefficient_file(coefficients_path)
+    return generate_shwfs_hex_from_coefficients(
+        coeffs,
+        output_path,
+        num_lenslets=num_lenslets,
+        demo_image_path=demo_image_path,
+    )
+
+
 if __name__ == "__main__":
     image_aber = generate_aberrated_image()
     print(f"image_aber shape: {image_aber.shape}, "
