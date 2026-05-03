@@ -1,3 +1,5 @@
+// cc -o client -std=c99 -D_GNU_SOURCE hps_client.c
+
 #include <arpa/inet.h> // inet_addr()
 #include <netdb.h>
 #include <stdio.h>
