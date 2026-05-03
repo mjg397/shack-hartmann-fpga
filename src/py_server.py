@@ -25,7 +25,7 @@ NUM_PACKED_XY = NUM_SUBAPERTURES * 2
 NUM_ZERNIKE = 10
 Q4_23_SCALE = float(1 << 23)
 
-bind_ip = "10.48.69.89" 
+bind_ip = "10.48.129.113" 
 bind_port = 80
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
