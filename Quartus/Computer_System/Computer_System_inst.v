@@ -1,5 +1,5 @@
 	Computer_System u0 (
-		.clk_25_clk                      (<connected-to-clk_25_clk>),                      //               clk_25.clk
+		.clk_55_clk                      (<connected-to-clk_55_clk>),                      //               clk_55.clk
 		.ctrl_reg_f2h_export             (<connected-to-ctrl_reg_f2h_export>),             //         ctrl_reg_f2h.export
 		.ctrl_reg_h2f_export             (<connected-to-ctrl_reg_h2f_export>),             //         ctrl_reg_h2f.export
 		.hps_io_hps_io_emac1_inst_TX_CLK (<connected-to-hps_io_hps_io_emac1_inst_TX_CLK>), //               hps_io.hps_io_emac1_inst_TX_CLK

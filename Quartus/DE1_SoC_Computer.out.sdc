@@ -2239,7 +2239,7 @@ set_max_delay -from [get_ports {HPS_DDR3_DQ[28]}] -to [get_keepers {{*:The_Syste
 set_max_delay -from [get_ports {HPS_DDR3_DQ[29]}] -to [get_keepers {{*:The_System|*:arm_a9_hps|*:hps_io|*:border|*:hps_sdram_inst|*:p0|*:umemphy|*:uio_pads|*:dq_ddio[*].ubidir_dq_dqs|*:altdq_dqs2_inst|*input_path_gen[*].capture_reg~DFFLO} {*:The_System|*:arm_a9_hps|*:hps_io|*:border|*:hps_sdram_inst|*:p0|*:umemphy|*:uio_pads|*:dq_ddio[*].ubidir_dq_dqs|*:altdq_dqs2_inst|*input_path_gen[*].aligned_input[*]}}] 0.000
 set_max_delay -from [get_ports {HPS_DDR3_DQ[30]}] -to [get_keepers {{*:The_System|*:arm_a9_hps|*:hps_io|*:border|*:hps_sdram_inst|*:p0|*:umemphy|*:uio_pads|*:dq_ddio[*].ubidir_dq_dqs|*:altdq_dqs2_inst|*input_path_gen[*].capture_reg~DFFLO} {*:The_System|*:arm_a9_hps|*:hps_io|*:border|*:hps_sdram_inst|*:p0|*:umemphy|*:uio_pads|*:dq_ddio[*].ubidir_dq_dqs|*:altdq_dqs2_inst|*input_path_gen[*].aligned_input[*]}}] 0.000
 set_max_delay -from [get_ports {HPS_DDR3_DQ[31]}] -to [get_keepers {{*:The_System|*:arm_a9_hps|*:hps_io|*:border|*:hps_sdram_inst|*:p0|*:umemphy|*:uio_pads|*:dq_ddio[*].ubidir_dq_dqs|*:altdq_dqs2_inst|*input_path_gen[*].capture_reg~DFFLO} {*:The_System|*:arm_a9_hps|*:hps_io|*:border|*:hps_sdram_inst|*:p0|*:umemphy|*:uio_pads|*:dq_ddio[*].ubidir_dq_dqs|*:altdq_dqs2_inst|*input_path_gen[*].aligned_input[*]}}] 0.000
-set_max_delay -to [get_registers {intensity_reciprocal:reciprocal|rI_out[*]}] 40.000
+set_max_delay -from [get_registers {*}] -to [get_registers {*}] 18.000
 
 
 #**************************************************************

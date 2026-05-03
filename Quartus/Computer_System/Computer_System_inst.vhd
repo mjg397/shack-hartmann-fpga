@@ -1,6 +1,6 @@
 	component Computer_System is
 		port (
-			clk_25_clk                      : out   std_logic;                                        -- clk
+			clk_55_clk                      : out   std_logic;                                        -- clk
 			ctrl_reg_f2h_export             : in    std_logic_vector(7 downto 0)  := (others => 'X'); -- export
 			ctrl_reg_h2f_export             : out   std_logic_vector(7 downto 0);                     -- export
 			hps_io_hps_io_emac1_inst_TX_CLK : out   std_logic;                                        -- hps_io_emac1_inst_TX_CLK
@@ -95,7 +95,7 @@
 
 	u0 : component Computer_System
 		port map (
-			clk_25_clk                      => CONNECTED_TO_clk_25_clk,                      --               clk_25.clk
+			clk_55_clk                      => CONNECTED_TO_clk_55_clk,                      --               clk_55.clk
 			ctrl_reg_f2h_export             => CONNECTED_TO_ctrl_reg_f2h_export,             --         ctrl_reg_f2h.export
 			ctrl_reg_h2f_export             => CONNECTED_TO_ctrl_reg_h2f_export,             --         ctrl_reg_h2f.export
 			hps_io_hps_io_emac1_inst_TX_CLK => CONNECTED_TO_hps_io_hps_io_emac1_inst_TX_CLK, --               hps_io.hps_io_emac1_inst_TX_CLK

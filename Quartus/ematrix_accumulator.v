@@ -60,8 +60,8 @@ reg [17:0] e_rom_x [0:(NUM_MODES * NUM_SUBS)-1];
 reg [17:0] e_rom_y [0:(NUM_MODES * NUM_SUBS)-1];
 
 initial begin
-    $readmemh("/root/shack-hartmann-fpga/full_pipeline_sim/data/e_matrix_x.hex", e_rom_x);
-    $readmemh("/root/shack-hartmann-fpga/full_pipeline_sim/data/e_matrix_y.hex", e_rom_y);
+    $readmemh("e_matrix_x.hex", e_rom_x);
+    $readmemh("e_matrix_y.hex", e_rom_y);
 end
 
 // ---------------------------------------------------------------------------
