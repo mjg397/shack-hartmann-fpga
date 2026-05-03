@@ -4,7 +4,7 @@
 # Execute this makefile from the object directory:
 #    make -f Vtb.mk
 
-default: tb
+default: Vtb
 
 ### Constants...
 # Perl executable (from $PERL)
@@ -58,7 +58,7 @@ VPATH += $(VM_USER_DIR)
 
 
 ### Link rules... (from --exe)
-tb: $(VK_USER_OBJS) $(VK_GLOBAL_OBJS) $(VM_PREFIX)__ALL.a $(VM_HIER_LIBS)
+Vtb: $(VK_USER_OBJS) $(VK_GLOBAL_OBJS) $(VM_PREFIX)__ALL.a $(VM_HIER_LIBS)
 	$(LINK) $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS) $(LIBS) $(SC_LIBS) -o $@
 
 

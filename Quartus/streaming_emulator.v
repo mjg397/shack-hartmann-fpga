@@ -40,10 +40,11 @@ module streaming_emulator #(
   reg [1:0] state;
 
   reg start_latch;
+
   always @(posedge clk) begin
       if (reset)                              start_latch <= 0;
       else if (start)                         start_latch <= 1;
-      else if (state == STATE_ACTIVE_FRAME)   start_latch <= 0;  // consume it
+      else if (state == STATE_ACTIVE_FRAME)   start_latch <= 0; // consume it
   end
 
   always @(posedge clk) begin

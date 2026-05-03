@@ -405,17 +405,21 @@ HexDigit Digit3(HEX3, hex3_hex0[15:12]);
 // assign clk = CLOCK_50;
  
  wire [7:0] ctrl_reg_h2f;
- wire [7:0] ctrl_reg_f2h;
+ reg  [7:0] ctrl_reg_f2h;
  
  wire reset;
 
  assign frame_complete_w = frame_complete;
 
  reg [1:0] start_sync;
- always @(posedge clk)
-    start_sync <= {start_sync[0], ctrl_reg_h2f[0]};
+ always @(posedge clk) begin
+	 if (reset)
+		 start_sync <= 2'b00;
+	 else
+		 start_sync <= {start_sync[0], ctrl_reg_h2f[0]};
+ end
 
- wire start_synced = start_sync[1];
+ wire start_falling = start_sync[1] & ~start_sync[0];
  
 
  streaming_emulator streamer 
@@ -423,7 +427,7 @@ HexDigit Digit3(HEX3, hex3_hex0[15:12]);
 	  .clk            	(clk),
 	  .reset          	(reset),
 	  .rdata		  	(intensity_rdata),
-	  .start		  	(start_synced),
+	  .start		  	(start_falling),
 	  
 	  .raddr		  	(intensity_addr),
 	  .data           	(streamer_data),
@@ -538,6 +542,7 @@ HexDigit Digit3(HEX3, hex3_hex0[15:12]);
 	localparam RESULT_W_CY = 5'd4;
 	localparam RESULT_W_ZK = 5'd5;
 	localparam RESULT_W_DONE = 5'd6;
+	localparam RESULT_W_SIG = 5'd7;
 	
 	(*preserve, noprune*) reg  [4:0] resw_next_state;
 	(*preserve, noprune*) reg	 		 resw_start;
@@ -566,6 +571,7 @@ HexDigit Digit3(HEX3, hex3_hex0[15:12]);
 			RESULT_W_CY:	resw_next_state = write_zernike_latch ? RESULT_W_ZK : RESULT_W_DONE;
 			RESULT_W_ZK:	resw_next_state = write_zernike_count == 11'd9 ? RESULT_W_DONE : RESULT_W_ZK;
 			RESULT_W_DONE:	resw_next_state = RESULT_W_WAIT;
+			RESULT_W_SIG:	resw_next_state = RESULT_W_WAIT;
 			default:		resw_next_state = RESULT_W_WAIT;
 		endcase
 	end
@@ -579,6 +585,7 @@ HexDigit Digit3(HEX3, hex3_hex0[15:12]);
 			result_wdata     <= 32'd0;
 			result_addr      <= 11'd0;
 			write_zernike_latch <= 1'b0;
+			ctrl_reg_f2h[0] <= 1'b0;
 		end
 		else begin
 			resw_state <= resw_next_state;
@@ -592,8 +599,9 @@ HexDigit Digit3(HEX3, hex3_hex0[15:12]);
 			x_slopes_out   <= x_slopes;
 			y_slopes_out   <= y_slopes;
 
-			if (done)
+			if (done) begin
 				write_zernike_latch <= 1'b1;
+			end
 			else if (resw_state == RESULT_W_ZK)
 				write_zernike_latch <= 1'b0;
 
@@ -634,6 +642,10 @@ HexDigit Digit3(HEX3, hex3_hex0[15:12]);
 				RESULT_W_DONE: begin
 					resw_write_idx <= resw_write_idx + 11'd1;
 					result_write   <= 1'b0;
+				end
+				RESULT_W_SIG: begin // zernikes have been written -> tell HPS
+					ctrl_reg_f2h[0] <= 1'b1; // latch this until reset
+					result_write <= 1'b0;
 				end
 				default: begin
 					result_wdata <= 32'd0;

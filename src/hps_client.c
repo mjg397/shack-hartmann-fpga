@@ -547,12 +547,6 @@ int main(int argc, char **argv)
     // send ack to fpga? start compute
     // wait for results
 
-    fpga_reset(ctrl_reg_h2f);
-
-    *ctrl_reg_h2f |= 1u; // signal bit 0 in ctrl reg
-    usleep(10);
-    *ctrl_reg_h2f &= ~1u; // reset bit 0 (go bit)
-
     FILE *output = fopen("read_out_coeffs.hex", "w");
     if (output == NULL) {
         printf("Failed to open file output.\n");
@@ -560,6 +554,13 @@ int main(int argc, char **argv)
     } else {
         printf("Output file opened successfully.\n");
     }
+
+    fpga_reset(ctrl_reg_h2f);
+
+    *ctrl_reg_h2f |= 1u; // signal bit 0 in ctrl reg
+    usleep(10);
+    *ctrl_reg_h2f &= ~1u; // reset bit 0 (go bit)
+
     // read results back from FPGA mem
 
     while (*ctrl_reg_f2h == 0) WAIT; // wait for results to be ready in mem

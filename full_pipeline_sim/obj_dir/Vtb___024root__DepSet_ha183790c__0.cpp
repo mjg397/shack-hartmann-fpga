@@ -41,6 +41,28 @@ VL_INLINE_OPT VlCoroutine Vtb___024root___eval_initial__TOP__Vtiming__1(Vtb___02
                                            31);
         vlSelf->tb__DOT__i = ((IData)(1U) + vlSelf->tb__DOT__i);
     }
+    vlSelf->tb__DOT__key_reset = 1U;
+    co_await vlSelf->__VdlySched.delay(0x3e8ULL, nullptr, 
+                                       "tb.v", 35);
+    vlSelf->tb__DOT__clk = 1U;
+    co_await vlSelf->__VdlySched.delay(0x3e8ULL, nullptr, 
+                                       "tb.v", 37);
+    vlSelf->tb__DOT__clk = 0U;
+    vlSelf->tb__DOT__key_reset = 0U;
+    vlSelf->tb__DOT__i = 0U;
+    while (VL_GTS_III(32, 0x105b8U, vlSelf->tb__DOT__i)) {
+        vlSelf->tb__DOT__clk = 1U;
+        co_await vlSelf->__VdlySched.delay(0x3e8ULL, 
+                                           nullptr, 
+                                           "tb.v", 
+                                           43);
+        vlSelf->tb__DOT__clk = 0U;
+        co_await vlSelf->__VdlySched.delay(0x3e8ULL, 
+                                           nullptr, 
+                                           "tb.v", 
+                                           45);
+        vlSelf->tb__DOT__i = ((IData)(1U) + vlSelf->tb__DOT__i);
+    }
 }
 
 void Vtb___024root___eval_act(Vtb___024root* vlSelf) {
