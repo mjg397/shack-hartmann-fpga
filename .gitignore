@@ -31,3 +31,4 @@ tmp/*
 
 .github/*
 .vscode/*
+simulation/obj_dir/*
