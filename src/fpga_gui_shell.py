@@ -134,7 +134,11 @@ class PlotCanvas(FigureCanvasQTAgg):
         ax3 = axes[1, 1]
         if result.has_accuracy_comparison:
             errors = (result.fpga_zernikes - result.hcipy_zernikes) * 1e9
-            ax3.stem(x_axis, errors, linefmt=f"{ERROR_COLOR}-", markerfmt=f"{ERROR_COLOR}o", basefmt="w-")
+            markerline, stemlines, baseline = ax3.stem(x_axis, errors)
+            plt.setp(markerline, 'markerfacecolor', ERROR_COLOR, 'markeredgecolor', ERROR_COLOR)
+            plt.setp(stemlines, 'color', ERROR_COLOR, 'linewidth', 1.5)
+            plt.setp(baseline, 'color', TEXT_COLOR, 'linewidth', 0.5, 'alpha', 0.3)
+            
             ax3.set_title("RECONSTRUCTION ERROR [nm]", color=TEXT_COLOR, fontsize=10, fontweight="bold")
             ax3.set_xticks(x_axis)
             ax3.set_xticklabels(result.mode_labels, rotation=45, ha="right", fontsize=8)
