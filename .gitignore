@@ -1,2 +1,33 @@
+# Quartus generated files
+db/
+incremental_db/
+output_files/
+greybox_tmp/
+hc_output/
+*.rpt
+*.summary
+*.done
+*.jdi
+*.pin
+*.qws
+*.sof
+*.pof
+*.bak
+*.orig
+*.smsg
+
+
+# Platform Designer (QSYS) generated files
+# We keep the .qsys file, but dump the generated folders
+*/synthesis/
+*/simulation/
+*.qsys.bak
+*.sopcinfo
+*.html
+
+# temporary dumps, don't push these
+tmp/
+
+
+.github/
 .vscode/
-verilog/testbench/build/*

@@ -1,2 +1,0 @@
-verilator --binary --trace --timing --unroll-count 1024 -Wno-WIDTH -Wno-UNUSED -Wno-INITIALDLY shwfs_pipeline_tb.v ../TCoG_intensity_accumulator.v ../streaming_emulator.v ../intensity_reciprocal ../reciprocal_u16_q16.v ../newton_step_q16.v --top-module shwfs_pipeline_tb -Mdir build/shwfs_pipeline_obj
-./build/shwfs_pipeline_obj/Vshwfs_pipeline_tb

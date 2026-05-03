@@ -39,11 +39,11 @@ import scipy.ndimage as ndimage
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent
 
-DEFAULT_FULL_HEX_PATH = SCRIPT_DIR / "e_matrix_hdl_cog.hex"
-DEFAULT_MIF_PATH = SCRIPT_DIR / "e_matrix_hdl_cog.mif"
-DEFAULT_CSV_PATH = SCRIPT_DIR / "e_matrix_hdl_cog.csv"
-DEFAULT_X_HEX_PATH = REPO_ROOT / "full_pipeline_sim" / "data" / "e_matrix_x.hex"
-DEFAULT_Y_HEX_PATH = REPO_ROOT / "full_pipeline_sim" / "data" / "e_matrix_y.hex"
+DEFAULT_FULL_HEX_PATH = REPO_ROOT / "tmp" / "e_matrix_hdl_cog.hex"
+DEFAULT_MIF_PATH = REPO_ROOT / "tmp" / "e_matrix_hdl_cog.mif"
+DEFAULT_CSV_PATH = REPO_ROOT / "tmp" / "e_matrix_hdl_cog.csv"
+DEFAULT_X_HEX_PATH = REPO_ROOT / "hdl" / "data" / "e_matrix_x.hex"
+DEFAULT_Y_HEX_PATH = REPO_ROOT / "hdl" / "data" / "e_matrix_y.hex"
 
 DEFAULT_TELESCOPE_DIAMETER = 8.0
 DEFAULT_CENTRAL_OBSCURATION = 1.2

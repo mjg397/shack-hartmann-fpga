@@ -1,0 +1,607 @@
+// cc -o client -std=c99 -D_GNU_SOURCE hps_client.c
+
+#include <arpa/inet.h> // inet_addr()
+#include <netdb.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <string.h>
+#include <strings.h> // bzero()
+#include <sys/socket.h>
+#include <sys/time.h>
+#include <sys/stat.h>
+#include <unistd.h> // read(), write(), close()
+#include <errno.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/ipc.h> 
+#include <sys/shm.h> 
+#include <sys/mman.h>
+#include <sys/time.h> 
+#include <math.h> 
+#include <unistd.h>
+
+#define SIGN_EXTEND_4_23(v) \
+    (((v) & (1u << 26)) ? ((v) | 0xF8000000u) : ((v) & 0x07FFFFFFu))
+
+#define MAX 4096
+#define PORT 80
+#define SA struct sockaddr
+#define DUMP_DIR "debug_dumps"
+#define ENABLE_DUMPS 0
+
+char filename[32];
+
+// C Arrays to hold input data
+uint8_t coeffs[65536]; // 256x256(x8) coefficient array
+uint32_t e_matrix[3360]; // 10 zernike modes x 336 slopes (18 bit values - Q1.16 fixed point)
+
+// C Arrays to hold results
+uint32_t centroids[512];
+uint32_t slopes[512];
+uint32_t zernike_coeffs[10];
+
+// ======================================
+#define H2F_AXI_MASTER_BASE   0xC0000000
+// main bus; scratch RAM
+#define FPGA_ONCHIP_BASE      0xC8000000
+#define FPGA_ONCHIP_SPAN      0x0000201F
+#define SRAM_SPAN             0x1FFF
+#define CTRL_REG_F2H_OFFSET   0x2000
+#define CTRL_REG_H2F_OFFSET   0x2010
+
+// h2f bus
+// RAM FPGA port s2
+// main bus addess 0x0800_0000
+volatile uint32_t * sram_ptr = NULL ;
+void *sram_virtual_base;
+
+volatile uint8_t * ctrl_reg_f2h = NULL;
+volatile uint8_t * ctrl_reg_h2f = NULL;
+
+
+// ======================================
+// lw_bus; DMA  addresses
+#define HW_REGS_BASE        0xff200000
+#define HW_REGS_SPAN        0x00005000 
+#define DMA					0xff200000
+#define DMA_STATUS_OFFSET	0x00
+#define DMA_READ_ADD_OFFSET	0x04 // DATASHEET says 1!
+#define DMA_WRT_ADD_OFFSET	0x08	
+#define DMA_LENGTH_OFFSET	0x012
+#define DMA_CNTL_OFFSET		0x024	
+
+// the h2f light weight bus base
+void *h2p_lw_virtual_base;
+// HPS_to_FPGA DMA address = 0
+volatile unsigned int * DMA_status_ptr = NULL ;	
+volatile unsigned int * DMA_read_ptr = NULL ;	
+volatile unsigned int * DMA_write_ptr = NULL ;	
+volatile unsigned int * DMA_length_ptr = NULL ;	
+volatile unsigned int * DMA_cntl_ptr = NULL ;	
+
+// ======================================
+// HPS onchip memory base/span
+// 2^16 bytes at the top of memory
+#define HPS_ONCHIP_BASE		0xffff0000
+#define HPS_ONCHIP_SPAN		0x00010000
+// HPS onchip memory (HPS side!)
+volatile unsigned int * hps_onchip_ptr = NULL ;
+void *hps_onchip_virtual_base;
+// ======================================
+// HPS linux MMU memory
+//int test_array[];
+uint8_t data[65536] ;
+// ======================================
+		  
+// WAIT looks nicer than just braces
+#define WAIT {}
+
+// /dev/mem file id
+int fd;	
+
+// DMA helper functions
+void DMA_transfer_bytes(uint8_t *data, int N, volatile unsigned int *DMA_status_ptr, volatile unsigned int *DMA_read_ptr, 
+						volatile unsigned int *DMA_write_ptr, volatile unsigned int *DMA_length_ptr, volatile unsigned int *DMA_cntl_ptr) 
+	{
+		// === DMA transfer HPS->FPGA 
+		// set up DMA
+		// from https://www.altera.com/en_US/pdfs/literature/ug/ug_embedded_ip.pdf
+		// section 25.4.3 Tables 224 and 225
+		*(DMA_status_ptr) = 0;
+		// read bus-master gets data from HPS addr=0xffff0000
+		*(DMA_status_ptr+1) = HPS_ONCHIP_BASE ;
+		// write bus_master for fpga sram is mapped to 0x08000000 
+		*(DMA_status_ptr+2) = 0x08000000 ;
+		// copy N bytes (65536 for coeff array)
+		*(DMA_status_ptr+3) = N ;
+		// set bit 2 for WORD transfer
+		// set bit 3 to start DMA
+		// set bit 7 to stop on byte-coun	t
+		// start the timer because DMA will start
+
+		*(DMA_status_ptr+6) = 0b10001100;
+		while ((*(DMA_status_ptr) & 0x010) == 0) WAIT;
+	}
+
+void fabricate_results() {
+    for (uint32_t i = 0; i < 512; i++) {
+        centroids[i] = i;
+        slopes[i] = i;
+    }
+
+    for (uint32_t i = 0; i < 10; i++) {
+        zernike_coeffs[i] = i;
+    }
+}
+
+// Debug helpers
+static void ensure_dump_dir(void)
+{
+#if ENABLE_DUMPS
+    mkdir(DUMP_DIR, 0777);
+#endif
+}
+
+static void dump_buffer(const char *base_name, const void *buf, size_t len, size_t elem_size, size_t elems_per_row)
+{
+#if !ENABLE_DUMPS
+    (void)base_name;
+    (void)buf;
+    (void)len;
+    (void)elem_size;
+    (void)elems_per_row;
+    return;
+#else
+    char bin_path[256];
+    char txt_path[256];
+    FILE *fb;
+    FILE *ft;
+
+    snprintf(bin_path, sizeof(bin_path), "%s/%s.bin", DUMP_DIR, base_name);
+    snprintf(txt_path, sizeof(txt_path), "%s/%s.txt", DUMP_DIR, base_name);
+
+    fb = fopen(bin_path, "wb");
+    if (fb != NULL) {
+        fwrite(buf, 1, len, fb);
+        fclose(fb);
+    }
+
+    ft = fopen(txt_path, "w");
+    if (ft == NULL) {
+        return;
+    }
+
+    if (elem_size == 4 && (len % 4) == 0) {
+        const uint32_t *w = (const uint32_t *)buf;
+        size_t n = len / 4;
+        for (size_t i = 0; i < n; i++) {
+            if (i > 0 && i % elems_per_row == 0) {
+                fprintf(ft, "\n");
+            }
+            fprintf(ft, "%08X ", w[i]);
+        }
+        fprintf(ft, "\n");
+    } else {
+        const uint8_t *b = (const uint8_t *)buf;
+        size_t row = elems_per_row > 0 ? elems_per_row : 16;
+        for (size_t i = 0; i < len; i++) {
+            if (i > 0 && i % row == 0) {
+                fprintf(ft, "\n");
+            }
+            fprintf(ft, "%02X ", b[i]);
+        }
+        fprintf(ft, "\n");
+    }
+
+    fclose(ft);
+#endif
+}
+
+static int dump_signed_decimal_u32_array(const char *path, const uint32_t *arr, size_t count)
+{
+    FILE *f = fopen(path, "w");
+    if (f == NULL) {
+        return -1;
+    }
+
+    for (size_t i = 0; i < count; i++) {
+        fprintf(f, "%d\n", (int32_t)arr[i]);
+    }
+
+    fclose(f);
+    return 0;
+}
+
+// Socket helpers
+static int send_all(int sockfd, const void *buf, size_t len)
+{
+    const char *p = (const char *)buf;
+    size_t sent = 0;
+
+    while (sent < len) {
+        ssize_t n = write(sockfd, p + sent, len - sent);
+        if (n <= 0) {
+            return -1;
+        }
+        sent += (size_t)n;
+    }
+
+    return 0;
+}
+
+static int recv_all(int sockfd, void *buf, size_t len)
+{
+    char *p = (char *)buf;
+    size_t recvd = 0;
+
+    while (recvd < len) {
+        ssize_t n = read(sockfd, p + recvd, len - recvd);
+        if (n <= 0) {
+            return -1;
+        }
+        recvd += (size_t)n;
+    }
+
+    return 0;
+}
+
+static int recv_line(int sockfd, char *out, size_t out_sz)
+{
+    size_t used = 0;
+
+    if (out_sz < 2) {
+        return -1;
+    }
+
+    while (1) {
+        char ch;
+        ssize_t n = read(sockfd, &ch, 1);
+
+        if (n == 0) {
+            // Peer closed connection.
+            return 0;
+        }
+
+        if (n < 0) {
+            if (errno == EINTR) {
+                continue;
+            }
+            if (errno == EAGAIN || errno == EWOULDBLOCK) {
+                // Read timeout.
+                return -2;
+            }
+            return -1;
+        }
+
+        if (ch == '\r') {
+            continue;
+        }
+
+        if (ch == '\n') {
+            out[used] = '\0';
+            return 1;
+        }
+
+        if (used + 1 >= out_sz) {
+            return -3;
+        }
+
+        out[used++] = ch;
+    }
+}
+
+static int wait_for_ack(int sockfd, const char *expected_ack, int max_lines)
+{
+    char line[256];
+
+    for (int i = 0; i < max_lines; i++) {
+        int rc = recv_line(sockfd, line, sizeof(line));
+
+        if (rc <= 0) {
+            if (rc == 0) {
+                printf("Server closed connection while waiting for ack '%s'\n", expected_ack);
+            } else if (rc == -2) {
+                printf("Timeout while waiting for ack '%s'\n", expected_ack);
+            } else {
+                printf("Failed while waiting for ack '%s' (rc=%d)\n", expected_ack, rc);
+            }
+            return -1;
+        }
+
+        if (strcmp(line, expected_ack) == 0) {
+            return 0;
+        }
+
+        printf("Unexpected line while waiting for '%s': '%s'\n", expected_ack, line);
+    }
+
+    printf("Did not receive ack '%s' within %d lines\n", expected_ack, max_lines);
+    return -1;
+}
+
+void receive_shwfs(int sockfd)
+{
+    if (send_all(sockfd, "start\n", 6) != 0) {
+        printf("Failed to send command\n");
+        return;
+    }
+
+    if (recv_all(sockfd, coeffs, sizeof(coeffs)) != 0) {
+        printf("Failed to receive coeffs\n");
+        return;
+    }
+    printf("Coeffs received!\n");
+    dump_buffer("c_recv_coeffs", coeffs, sizeof(coeffs), 1, 256);
+    if (send_all(sockfd, "coeffs_done\n", 12) != 0) {
+        printf("Failed to send coeffs ack\n");
+        return;
+    }
+    
+    // FILE *f;
+    // f = fopen("received_coeffs.txt", "w"); 
+
+    // if (f == NULL) {
+    //     printf("Failed to open output file\n");
+    //     return;
+    // }
+
+    // for (int i = 0; i < 65536; i++) {
+    //     if (i % 256 == 0 && i > 0)
+    //         fprintf(f, "\n");
+    //     fprintf(f, "%3u ", coeffs[i]);
+    // }
+    // fprintf(f, "\n");
+    // printf("wrote output file\n");
+    // fclose(f);
+
+    printf("Done receiving\n");
+
+    // Now received data gets written into M10K on avalon bus - or transmitted some other way
+
+    // When FPGA notifies ARM that computation is done - we're here
+    // Result data from M10K gets written into HPS memory
+
+}
+
+void send_shwfs(int sockfd) {
+    // fabricate_results();
+
+    // Notify server that compute stage is done before sending results.
+    if (send_all(sockfd, "compute_done\n", 13) != 0) {
+        printf("Failed to send compute_done marker\n");
+        return;
+    }
+
+    printf("Sending centroid vector. \n");
+    dump_buffer("c_sent_centroids", centroids, sizeof(centroids), 4, 64);
+    if (send_all(sockfd, centroids, sizeof(centroids)) != 0) {
+        printf("Failed while sending centroid vector\n");
+        return;
+    }
+
+    // wait for ack from pyserver
+    if (wait_for_ack(sockfd, "centroids_done", 8) != 0) {
+        printf("    Missing centroid ack; continuing.\n");
+    }
+
+    
+    printf("    Centroids received.");
+
+    printf("Sending slope vector.\n");
+    dump_buffer("c_sent_slopes", slopes, sizeof(slopes), 4, 64);
+    if (send_all(sockfd, slopes, sizeof(slopes)) != 0) {
+        printf("Failed while sending slope vector\n");
+        return;
+    }
+
+    // wait for ack from pyserver
+    if (wait_for_ack(sockfd, "slopes_done", 8) != 0) {
+        printf("    Missing slope ack; continuing.\n");
+    }
+
+    printf("    Slopes received\n");
+     
+    printf("Sending zernike coefficients\n");
+    dump_buffer("c_sent_zernike", zernike_coeffs, sizeof(zernike_coeffs), 4, 10);
+    if (send_all(sockfd, zernike_coeffs, sizeof(zernike_coeffs)) != 0) {
+        printf("Failed while sending zernike coefficients\n");
+        return;
+    }
+
+    // wait for ack from server
+    if (wait_for_ack(sockfd, "zernike_done", 8) != 0) {
+        printf("    Missing zernike ack; continuing.\n");
+    }
+
+    printf("    Zernike coeffs received. \n");
+}
+
+static void fpga_reset(volatile uint8_t *ctrl_reg_h2f)
+{
+    *ctrl_reg_h2f |= (1u << 1);   // assert reset bit (bit 1)
+    usleep(100);                   // hold > 2 pipeline clock cycles (safe margin)
+    *ctrl_reg_h2f &= ~(1u << 1);  // deassert
+}
+
+// entry point
+int main(int argc, char **argv)
+{
+	// Declare volatile pointers to I/O registers (volatile 	
+	// means that IO load and store instructions will be used 	
+	// to access these pointer locations, 
+	// instead of regular memory loads and stores)  
+
+	// === get FPGA addresses ==================
+    // Open /dev/mem
+	if( ( fd = open( "/dev/mem", ( O_RDWR | O_SYNC ) ) ) == -1 ) 	{
+		printf( "ERROR: could not open \"/dev/mem\"...\n" );
+		return( 1 );
+	}
+
+    //============================================
+    // get virtual addr that maps to physical
+	// for light weight bus
+	// DMA status register
+	h2p_lw_virtual_base = mmap( NULL, HW_REGS_SPAN, ( PROT_READ | PROT_WRITE ), MAP_SHARED, fd, HW_REGS_BASE );	
+	if( h2p_lw_virtual_base == MAP_FAILED ) {
+		printf( "ERROR: mmap1() failed...\n" );
+		close( fd );
+		return(1);
+	}
+	// the DMA registers
+	DMA_status_ptr = (unsigned int *)(h2p_lw_virtual_base);
+	DMA_read_ptr = (unsigned int *)(h2p_lw_virtual_base + DMA_READ_ADD_OFFSET);
+	DMA_write_ptr = (unsigned int *)(h2p_lw_virtual_base + DMA_WRT_ADD_OFFSET);
+	DMA_length_ptr = (unsigned int *)(h2p_lw_virtual_base + DMA_LENGTH_OFFSET);
+	DMA_cntl_ptr = (unsigned int *)(h2p_lw_virtual_base + DMA_CNTL_OFFSET);
+
+
+	//============================================
+
+	//  RAM FPGA parameter addr 
+	sram_virtual_base = mmap( NULL, FPGA_ONCHIP_SPAN, ( PROT_READ | PROT_WRITE ), MAP_SHARED, fd, FPGA_ONCHIP_BASE); 	
+
+	if( sram_virtual_base == MAP_FAILED ) {
+		printf( "ERROR: mmap2() failed...\n" );
+		close( fd );
+		return(1);
+	}
+    // Get the address that maps to the RAM buffer
+	sram_ptr = (volatile uint32_t *)(sram_virtual_base);
+    ctrl_reg_f2h = (volatile uint8_t *)(sram_virtual_base + CTRL_REG_F2H_OFFSET);
+    ctrl_reg_h2f = (volatile uint8_t *)(sram_virtual_base + CTRL_REG_H2F_OFFSET);
+    
+    *ctrl_reg_h2f = 0;
+
+	// ===========================================
+
+	// HPS onchip ram
+	hps_onchip_virtual_base = mmap( NULL, HPS_ONCHIP_SPAN, ( PROT_READ | PROT_WRITE ), MAP_SHARED, fd, HPS_ONCHIP_BASE); 	
+
+	if( hps_onchip_virtual_base == MAP_FAILED ) {
+		printf( "ERROR: mmap3() failed...\n" );
+		close( fd );
+		return(1);
+	}
+    // Get the address that maps to the HPS ram
+	hps_onchip_ptr =(unsigned int *)(hps_onchip_virtual_base);
+
+
+	//============================================
+	int N = 65536;
+	//int data[16384] ;
+	int i ;
+
+    // TCP SOCKET
+
+    int sockfd, connfd;
+    struct sockaddr_in servaddr, cli;
+
+    if (argc > 1) {
+        strcpy(filename, argv[1]);
+    } else {
+        strcpy(filename, "output.bin");
+    }
+
+    ensure_dump_dir();
+
+    // socket create and verification
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sockfd == -1) {
+        printf("socket creation failed...\n");
+        exit(0);
+    }
+    else
+        printf("Socket successfully created..\n");
+    bzero(&servaddr, sizeof(servaddr));
+
+    // assign IP, PORT
+    servaddr.sin_family = AF_INET;
+    servaddr.sin_addr.s_addr = inet_addr("10.41.230.185");
+    servaddr.sin_port = htons(PORT);
+
+    // connect the client socket to server socket
+    if (connect(sockfd, (SA*)&servaddr, sizeof(servaddr))
+        != 0) {
+        printf("connection with the server failed...\n");
+        exit(0);
+    }
+    else
+        printf("connected to the server..\n");
+
+    {
+        struct timeval timeout;
+        timeout.tv_sec = 5;
+        timeout.tv_usec = 0;
+        setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
+    }
+
+    // Handle Data Transfers
+
+    // function for chat
+    receive_shwfs(sockfd);
+
+    printf("Starting DMA transfer\n");
+    // Coefficients should now be in array
+    DMA_transfer_bytes(coeffs, sizeof(coeffs), DMA_status_ptr, DMA_read_ptr, DMA_write_ptr, DMA_length_ptr, DMA_cntl_ptr);
+    printf("DMA Transfer complete.\n");
+    // send ack to fpga? start compute
+    // wait for results
+
+    FILE *output = fopen("read_out_coeffs.hex", "w");
+    if (output == NULL) {
+        printf("Failed to open file output.\n");
+        return 1;
+    } else {
+        printf("Output file opened successfully.\n");
+    }
+
+    fpga_reset(ctrl_reg_h2f);
+
+    *ctrl_reg_h2f |= 1u; // signal bit 0 in ctrl reg
+    usleep(10);
+    *ctrl_reg_h2f &= ~1u; // reset bit 0 (go bit)
+
+    // read results back from FPGA mem
+
+    while (*ctrl_reg_f2h == 0) WAIT; // wait for results to be ready in mem
+
+    sleep(2);
+
+    printf("Compute done \n");
+
+    // write output to result arrays
+    // Values are 4.23 fixed point (1 sign bit + 3 integer bits + 23 fractional bits = 27 bits).
+    // Sign-extend bit 26 into the unused upper 5 bits so Python can divide by 2^23 directly.
+
+    for (i = 0; i < 1034; i++) {
+        if (i < 512) {
+            slopes[i] = SIGN_EXTEND_4_23(sram_ptr[i]); // *(sram_ptr + (i * sizeof(slopes[i])))
+        } else if (i < 1024) {
+            centroids[i - 512] = SIGN_EXTEND_4_23(sram_ptr[i]); // *(sram_ptr + (i * sizeof(centroids[i - 512])))
+        } else if (i < 1034) {
+            zernike_coeffs[i - 1024] = SIGN_EXTEND_4_23(sram_ptr[i]); // *(sram_ptr + (i * sizeof(zernike_coeffs[i - 1024])))
+        }
+    }
+
+    if (dump_signed_decimal_u32_array("slopes_signed_decimal.txt", slopes, 512) != 0) {
+        printf("Failed to dump slopes to file\n");
+    }
+
+    if (dump_signed_decimal_u32_array("centroids_signed_decimal.txt", centroids, 512) != 0) {
+        printf("Failed to dump centroids to file\n");
+    }
+
+    if (dump_signed_decimal_u32_array("zernikes_signed_decimal.txt", zernike_coeffs, 10) != 0) {
+        printf("Failed to dump zernikes to file\n");
+    }
+
+    // fabricate_results();
+
+    send_shwfs(sockfd); // return data to python
+
+    // results
+    fclose(output);
+    close(sockfd);
+} 
