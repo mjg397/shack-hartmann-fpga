@@ -190,7 +190,7 @@ def generate_shwfs_case(
     true_coeffs=None,
     num_lenslets=16,
     num_zernike=10,
-    demo_image_path: str | None = "shwfs_aber_demo.png",
+    demo_image_path="shwfs_aber_demo.png",
 ):
     """
     Build a full HCIPy SHWFS simulation case for transport, estimation, and plotting.
@@ -853,7 +853,7 @@ def generate_aberrated_image(
     true_coeffs=None,
     num_lenslets=16,
     num_zernike=10,
-    demo_image_path: str | None = "shwfs_aber_demo.png",
+    demo_image_path="shwfs_aber_demo.png",
 ):
     """
     Build SHWFS model, apply Zernike aberration, return detector pixel array.
