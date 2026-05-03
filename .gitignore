@@ -34,4 +34,4 @@ tmp/*
 simulation/obj_dir/*
 
 
-*/__pycache__/*
+__pycache__/
