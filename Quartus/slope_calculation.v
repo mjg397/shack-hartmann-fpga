@@ -21,7 +21,7 @@ module slope_calculation (
   wire [255:0] subap_bitmap; // row major ordered bitmap
 
   initial begin
-    $readmemh("/root/shack-hartmann-fpga/full_pipeline_sim/data/subaperture_bitmap.hex", subap_bitmap_mem);
+    $readmemh("subaperture_bitmap.hex", subap_bitmap_mem);
   end
 
   assign subap_bitmap = subap_bitmap_mem[0];

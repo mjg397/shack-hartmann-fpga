@@ -208,8 +208,8 @@ refer to the applicable agreement for further details.
 	(port
 		(pt 592 72)
 		(output)
-		(text "clk_25_clk" (rect 0 0 42 12)(font "Arial" (font_size 8)))
-		(text "clk_25_clk" (rect 538 61 598 72)(font "Arial" (font_size 8)))
+		(text "clk_55_clk" (rect 0 0 42 12)(font "Arial" (font_size 8)))
+		(text "clk_55_clk" (rect 538 61 598 72)(font "Arial" (font_size 8)))
 		(line (pt 592 72)(pt 400 72)(line_width 1))
 	)
 	(port
@@ -654,7 +654,7 @@ refer to the applicable agreement for further details.
 		(line (pt 592 304)(pt 400 304)(line_width 3))
 	)
 	(drawing
-		(text "clk_25" (rect 401 43 838 99)(font "Arial" (color 128 0 0)(font_size 9)))
+		(text "clk_55" (rect 401 43 838 99)(font "Arial" (color 128 0 0)(font_size 9)))
 		(text "clk" (rect 385 67 788 144)(font "Arial" (color 0 0 0)))
 		(text "ctrl_reg_f2h" (rect 121 43 314 99)(font "Arial" (color 128 0 0)(font_size 9)))
 		(text "export" (rect 197 67 430 144)(font "Arial" (color 0 0 0)))

@@ -1,6 +1,6 @@
 
 module Computer_System (
-	clk_25_clk,
+	clk_55_clk,
 	ctrl_reg_f2h_export,
 	ctrl_reg_h2f_export,
 	hps_io_hps_io_emac1_inst_TX_CLK,
@@ -91,7 +91,7 @@ module Computer_System (
 	system_pll_ref_clk_clk,
 	system_pll_ref_reset_reset);	
 
-	output		clk_25_clk;
+	output		clk_55_clk;
 	input	[7:0]	ctrl_reg_f2h_export;
 	output	[7:0]	ctrl_reg_h2f_export;
 	output		hps_io_hps_io_emac1_inst_TX_CLK;

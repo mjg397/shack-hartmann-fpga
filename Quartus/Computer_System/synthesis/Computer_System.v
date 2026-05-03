@@ -4,7 +4,7 @@
 
 `timescale 1 ps / 1 ps
 module Computer_System (
-		output wire        clk_25_clk,                      //               clk_25.clk
+		output wire        clk_55_clk,                      //               clk_55.clk
 		input  wire [7:0]  ctrl_reg_f2h_export,             //         ctrl_reg_f2h.export
 		output wire [7:0]  ctrl_reg_h2f_export,             //         ctrl_reg_h2f.export
 		output wire        hps_io_hps_io_emac1_inst_TX_CLK, //               hps_io.hps_io_emac1_inst_TX_CLK
@@ -555,7 +555,7 @@ module Computer_System (
 		.write2      (intensity_sram_write),                           //       .write
 		.readdata2   (intensity_sram_readdata),                        //       .readdata
 		.writedata2  (intensity_sram_writedata),                       //       .writedata
-		.clk2        (clk_25_clk),                                     //   clk2.clk
+		.clk2        (clk_55_clk),                                     //   clk2.clk
 		.reset2      (rst_controller_001_reset_out_reset),             // reset2.reset
 		.reset_req2  (rst_controller_001_reset_out_reset_req),         //       .reset_req
 		.freeze      (1'b0)                                            // (terminated)
@@ -564,12 +564,12 @@ module Computer_System (
 	Computer_System_pll_0 pll_0 (
 		.refclk   (system_pll_sys_clk_clk),             //  refclk.clk
 		.rst      (rst_controller_002_reset_out_reset), //   reset.reset
-		.outclk_0 (clk_25_clk),                         // outclk0.clk
+		.outclk_0 (clk_55_clk),                         // outclk0.clk
 		.locked   ()                                    //  locked.export
 	);
 
 	Computer_System_result_sram result_sram (
-		.clk         (clk_25_clk),                                  //   clk1.clk
+		.clk         (clk_55_clk),                                  //   clk1.clk
 		.address     (result_sram_address),                         //     s1.address
 		.clken       (result_sram_clken),                           //       .clken
 		.chipselect  (result_sram_chipselect),                      //       .chipselect
@@ -882,7 +882,7 @@ module Computer_System (
 	) rst_controller_001 (
 		.reset_in0      (~arm_a9_hps_h2f_reset_reset),            // reset_in0.reset
 		.reset_in1      (system_pll_reset_source_reset),          // reset_in1.reset
-		.clk            (clk_25_clk),                             //       clk.clk
+		.clk            (clk_55_clk),                             //       clk.clk
 		.reset_out      (rst_controller_001_reset_out_reset),     // reset_out.reset
 		.reset_req      (rst_controller_001_reset_out_reset_req), //          .reset_req
 		.reset_req_in0  (1'b0),                                   // (terminated)
