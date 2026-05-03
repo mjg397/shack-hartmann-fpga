@@ -8,7 +8,7 @@ from typing import cast
 import numpy as np
 from PySide6 import QtCore, QtGui, QtWidgets
 from matplotlib.axes import Axes
-from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
+from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg, NavigationToolbar2QT
 from matplotlib.figure import Figure
 
 from fpga_gui_service import (
@@ -360,32 +360,285 @@ class ComparisonTab(QtWidgets.QWidget):
         self.canvas.update_result(result)
 
 
-class PlotCanvas(FigureCanvasQTAgg):
+class ZernikeComparisonCanvas(FigureCanvasQTAgg):
     def __init__(self, parent: QtWidgets.QWidget | None = None) -> None:
-        self.figure = Figure(figsize=(10, 8), tight_layout=True)
+        self.figure = Figure(figsize=(11, 6), tight_layout=True)
         super().__init__(self.figure)
         self.setParent(parent)
 
-    def _masked_component(self, xy_grid: np.ndarray, mask: np.ndarray | None, component_index: int) -> np.ma.MaskedArray:
-        component = np.asarray(xy_grid[..., component_index], dtype=np.float64)
-        if mask is None:
-            return np.ma.array(component)
-        return np.ma.array(component, mask=~np.asarray(mask, dtype=bool))
+    def show_placeholder(self, message: str) -> None:
+        self.figure.clear()
+        axis = self.figure.subplots()
+        axis.text(0.5, 0.5, message, ha="center", va="center")
+        axis.set_axis_off()
+        self.draw_idle()
 
-    def _plot_signed_field(
+    def update_result(self, result: RunResult) -> None:
+        true_nm = None if result.true_zernikes is None else np.asarray(result.true_zernikes, dtype=np.float64) * 1e9
+        hcipy_nm = None if result.hcipy_zernikes is None else np.asarray(result.hcipy_zernikes, dtype=np.float64) * 1e9
+        fpga_nm = None if result.fpga_zernikes is None else np.asarray(result.fpga_zernikes, dtype=np.float64) * 1e9
+
+        if true_nm is None and hcipy_nm is None and fpga_nm is None:
+            self.show_placeholder("No Zernike coefficient data is available yet.")
+            return
+
+        self.figure.clear()
+        axis = self.figure.subplots()
+
+        x_axis = np.arange(len(result.mode_labels), dtype=np.float64)
+        series_count = sum(values is not None for values in (true_nm, hcipy_nm, fpga_nm))
+        bar_width = 0.22 if series_count >= 3 else 0.32
+        center_offsets = {
+            1: [0.0],
+            2: [-bar_width / 2, bar_width / 2],
+            3: [-bar_width, 0.0, bar_width],
+        }[series_count]
+
+        plotted_series: list[tuple[np.ndarray, str, str]] = []
+        if true_nm is not None:
+            plotted_series.append((true_nm, "True aberration", "#457b9d"))
+        if hcipy_nm is not None:
+            plotted_series.append((hcipy_nm, "HCIPy", "#2a9d8f"))
+        if fpga_nm is not None:
+            plotted_series.append((fpga_nm, "FPGA", "#e76f51"))
+
+        for (values, label, color), offset in zip(plotted_series, center_offsets):
+            axis.bar(x_axis + offset, values, width=bar_width, label=label, color=color)
+
+        axis.axhline(0.0, color="#222222", linewidth=0.8)
+        axis.set_xticks(x_axis)
+        axis.set_xticklabels(result.mode_labels, rotation=45, ha="right")
+        axis.set_ylabel("Coefficient [nm]")
+        axis.set_title("Zernike coefficient comparison")
+        axis.grid(axis="y", alpha=0.2)
+        axis.legend(loc="upper right")
+
+        self.draw_idle()
+
+
+class ZernikeComparisonTab(QtWidgets.QWidget):
+    def __init__(self, parent: QtWidgets.QWidget | None = None) -> None:
+        super().__init__(parent)
+
+        self.message_label = QtWidgets.QLabel(
+            "Compare the injected aberration against the HCIPy reconstruction and the FPGA coefficients when a hardware run completes."
+        )
+        self.message_label.setWordWrap(True)
+
+        self.canvas = ZernikeComparisonCanvas(self)
+        self.toolbar = NavigationToolbar2QT(self.canvas, self)
+
+        self.table = QtWidgets.QTableWidget(0, 4)
+        self.table.setHorizontalHeaderLabels(["Mode", "True (nm)", "HCIPy (nm)", "FPGA (nm)"])
+        self.table.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.Stretch)
+        self.table.verticalHeader().setVisible(False)
+        self.table.setEditTriggers(QtWidgets.QAbstractItemView.EditTrigger.NoEditTriggers)
+        self.table.setSelectionMode(QtWidgets.QAbstractItemView.SelectionMode.NoSelection)
+
+        layout = QtWidgets.QVBoxLayout(self)
+        layout.addWidget(self.message_label)
+        layout.addWidget(self.toolbar)
+        layout.addWidget(self.canvas, 1)
+        layout.addWidget(self.table, 1)
+
+        self.canvas.show_placeholder("Run a local preview or FPGA capture to populate the Zernike comparison chart.")
+
+    def update_result(self, result: RunResult) -> None:
+        if result.source == "local-preview":
+            self.message_label.setText(
+                "Displaying the injected aberration and HCIPy reconstruction from local preview. FPGA bars populate after a hardware run completes."
+            )
+        else:
+            self.message_label.setText(
+                f"Displaying True, HCIPy, and FPGA coefficients from the run at {result.timestamp}."
+            )
+
+        true_nm = None if result.true_zernikes is None else np.asarray(result.true_zernikes, dtype=np.float64) * 1e9
+        hcipy_nm = None if result.hcipy_zernikes is None else np.asarray(result.hcipy_zernikes, dtype=np.float64) * 1e9
+        fpga_nm = None if result.fpga_zernikes is None else np.asarray(result.fpga_zernikes, dtype=np.float64) * 1e9
+
+        self.table.setRowCount(len(result.mode_labels))
+        for row_index, mode_label in enumerate(result.mode_labels):
+            row_values = (
+                mode_label,
+                "n/a" if true_nm is None else f"{true_nm[row_index]:+.3f}",
+                "n/a" if hcipy_nm is None else f"{hcipy_nm[row_index]:+.3f}",
+                "n/a" if fpga_nm is None else f"{fpga_nm[row_index]:+.3f}",
+            )
+            for column, text in enumerate(row_values):
+                item = QtWidgets.QTableWidgetItem(text)
+                if column > 0:
+                    item.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignRight | QtCore.Qt.AlignmentFlag.AlignVCenter)
+                self.table.setItem(row_index, column, item)
+
+        self.canvas.update_result(result)
+
+
+class PlotCanvas(FigureCanvasQTAgg):
+    def __init__(self, parent: QtWidgets.QWidget | None = None) -> None:
+        self.figure = Figure(figsize=(15, 11), tight_layout=True)
+        super().__init__(self.figure)
+        self.setParent(parent)
+
+    def show_placeholder(self, message: str) -> None:
+        self.figure.clear()
+        axis = self.figure.subplots()
+        axis.text(0.5, 0.5, message, ha="center", va="center")
+        axis.set_axis_off()
+        self.draw_idle()
+
+    def _reshape_square_image(self, image: np.ndarray | None) -> np.ndarray | None:
+        if image is None:
+            return None
+        values = np.asarray(image, dtype=np.float64)
+        if values.ndim == 2:
+            return values
+        if values.ndim != 1:
+            return None
+        side = int(round(np.sqrt(values.size)))
+        if side * side != values.size:
+            return None
+        return values.reshape(side, side)
+
+    def _masked_abs_max(self, image: np.ndarray | None, mask: np.ndarray | None = None) -> float:
+        values = self._reshape_square_image(image)
+        if values is None:
+            return 0.0
+        if mask is not None and mask.shape == values.shape:
+            valid_values = values[np.asarray(mask, dtype=bool)]
+        else:
+            valid_values = values.ravel()
+        if valid_values.size == 0:
+            return 0.0
+        return float(np.max(np.abs(valid_values)))
+
+    def _masked_rms(self, image: np.ndarray | None, mask: np.ndarray | None = None) -> float | None:
+        values = self._reshape_square_image(image)
+        if values is None:
+            return None
+        if mask is not None and mask.shape == values.shape:
+            valid_values = values[np.asarray(mask, dtype=bool)]
+        else:
+            valid_values = values.ravel()
+        if valid_values.size == 0:
+            return None
+        return float(np.sqrt(np.mean(valid_values**2)))
+
+    def _plot_image(
         self,
         axis: Axes,
-        values: np.ma.MaskedArray,
+        image: np.ndarray | None,
         title: str,
-        cmap: str = "RdBu_r",
+        *,
+        cmap: str = "inferno",
+        colorbar_label: str | None = None,
+        symmetric: bool = False,
+        mask: np.ndarray | None = None,
+        vmin: float | None = None,
+        vmax: float | None = None,
     ) -> None:
-        valid_values = np.asarray(values.compressed(), dtype=np.float64)
-        vmax = float(np.max(np.abs(valid_values))) if valid_values.size else 1.0
-        image = axis.imshow(values, cmap=cmap, origin="lower", vmin=-vmax, vmax=vmax)
+        values = self._reshape_square_image(image)
+        if values is None:
+            axis.text(0.5, 0.5, "No data", ha="center", va="center")
+            axis.set_title(title)
+            axis.set_xticks([])
+            axis.set_yticks([])
+            return
+
+        plot_values: np.ndarray | np.ma.MaskedArray
+        plot_values = values
+        if mask is not None and mask.shape == values.shape:
+            plot_values = np.ma.array(values, mask=~np.asarray(mask, dtype=bool))
+
+        if symmetric and vmin is None and vmax is None:
+            valid_values = np.asarray(np.ma.array(plot_values).compressed(), dtype=np.float64)
+            dynamic_range = float(np.max(np.abs(valid_values))) if valid_values.size else 1.0
+            vmin = -dynamic_range
+            vmax = dynamic_range
+
+        image_artist = axis.imshow(plot_values, cmap=cmap, origin="lower", vmin=vmin, vmax=vmax)
         axis.set_title(title)
         axis.set_xticks([])
         axis.set_yticks([])
-        self.figure.colorbar(image, ax=axis, fraction=0.046, pad=0.04)
+        if colorbar_label is not None:
+            colorbar = self.figure.colorbar(image_artist, ax=axis, fraction=0.046, pad=0.04)
+            colorbar.set_label(colorbar_label)
+
+    def _plot_slope_field(
+        self,
+        axis: Axes,
+        slopes_xy_grid: np.ndarray | None,
+        mask: np.ndarray | None,
+        title: str,
+    ) -> None:
+        if slopes_xy_grid is None:
+            axis.text(0.5, 0.5, "No slope data", ha="center", va="center")
+            axis.set_title(title)
+            axis.set_xticks([])
+            axis.set_yticks([])
+            return
+
+        slopes = np.asarray(slopes_xy_grid, dtype=np.float64)
+        local_mask = np.ones(slopes.shape[:2], dtype=bool) if mask is None else np.asarray(mask, dtype=bool)
+        slope_x = np.ma.array(slopes[..., 0], mask=~local_mask)
+        slope_y = np.ma.array(slopes[..., 1], mask=~local_mask)
+        magnitude = np.ma.sqrt(slope_x**2 + slope_y**2)
+        image_artist = axis.imshow(magnitude, cmap="viridis", origin="lower")
+
+        row_indices, col_indices = np.indices(local_mask.shape)
+        valid_rows = row_indices[local_mask]
+        valid_cols = col_indices[local_mask]
+        valid_x = np.asarray(slope_x[local_mask], dtype=np.float64)
+        valid_y = np.asarray(slope_y[local_mask], dtype=np.float64)
+        if valid_x.size:
+            max_magnitude = float(np.max(np.hypot(valid_x, valid_y)))
+            quiver_scale = max(max_magnitude * 3.0, 1e-6)
+            axis.quiver(
+                valid_cols,
+                valid_rows,
+                valid_x,
+                valid_y,
+                color="white",
+                angles="xy",
+                scale_units="xy",
+                scale=quiver_scale,
+                width=0.007,
+            )
+
+        axis.set_title(title)
+        axis.set_xticks([])
+        axis.set_yticks([])
+        colorbar = self.figure.colorbar(image_artist, ax=axis, fraction=0.046, pad=0.04)
+        colorbar.set_label("slope magnitude [px]")
+
+    def _plot_slope_delta(
+        self,
+        axis: Axes,
+        fpga_slopes_xy_grid: np.ndarray | None,
+        hcipy_slopes_xy_grid: np.ndarray | None,
+        mask: np.ndarray | None,
+        title: str,
+    ) -> None:
+        if fpga_slopes_xy_grid is None or hcipy_slopes_xy_grid is None:
+            axis.text(0.5, 0.5, "Need HCIPy and FPGA slopes", ha="center", va="center")
+            axis.set_title(title)
+            axis.set_xticks([])
+            axis.set_yticks([])
+            return
+
+        fpga_slopes = np.asarray(fpga_slopes_xy_grid, dtype=np.float64)
+        hcipy_slopes = np.asarray(hcipy_slopes_xy_grid, dtype=np.float64)
+        delta = fpga_slopes - hcipy_slopes
+        magnitude = np.linalg.norm(delta, axis=2)
+        if mask is not None:
+            magnitude = np.ma.array(magnitude, mask=~np.asarray(mask, dtype=bool))
+
+        image_artist = axis.imshow(magnitude, cmap="magma", origin="lower")
+        axis.set_title(title)
+        axis.set_xticks([])
+        axis.set_yticks([])
+        colorbar = self.figure.colorbar(image_artist, ax=axis, fraction=0.046, pad=0.04)
+        colorbar.set_label("|FPGA - HCIPy| [px]")
 
     def _plot_coefficients(self, axis: Axes, result: RunResult) -> None:
         x_axis = np.arange(len(result.mode_labels))
@@ -395,23 +648,16 @@ class PlotCanvas(FigureCanvasQTAgg):
         hcipy_nm = None if result.hcipy_zernikes is None else np.asarray(result.hcipy_zernikes, dtype=np.float64) * 1e9
         fpga_nm = None if result.fpga_zernikes is None else np.asarray(result.fpga_zernikes, dtype=np.float64) * 1e9
 
-        if true_nm is not None and hcipy_nm is not None and fpga_nm is not None:
-            width = 0.24
-            axis.bar(x_axis - width, true_nm, width=width, label="True", color="#457b9d")
-            axis.bar(x_axis, hcipy_nm, width=width, label="HCIPy", color="#2a9d8f")
-            axis.bar(x_axis + width, fpga_nm, width=width, label="FPGA", color="#e76f51")
-            axis.set_title("Coefficient Comparison")
-        elif true_nm is not None and hcipy_nm is not None:
-            width = 0.36
-            axis.bar(x_axis - width / 2, true_nm, width=width, label="True", color="#457b9d")
-            axis.bar(x_axis + width / 2, hcipy_nm, width=width, label="HCIPy", color="#2a9d8f")
-            axis.set_title("HCIPy vs True Coefficients")
-        elif hcipy_nm is not None:
-            axis.bar(x_axis, hcipy_nm, width=0.6, label="HCIPy", color="#2a9d8f")
-            axis.set_title("HCIPy Coefficients")
-        else:
+        if true_nm is not None:
+            axis.plot(x_axis, true_nm, marker="o", linewidth=1.8, color="#457b9d", label="True")
+        if hcipy_nm is not None:
+            axis.plot(x_axis, hcipy_nm, marker="s", linewidth=1.8, color="#2a9d8f", label="HCIPy")
+        if fpga_nm is not None:
+            axis.plot(x_axis, fpga_nm, marker="^", linewidth=1.8, color="#e76f51", label="FPGA")
+
+        if true_nm is None and hcipy_nm is None and fpga_nm is None:
             axis.text(0.5, 0.5, "No coefficient data", ha="center", va="center")
-            axis.set_title("Coefficient View")
+            axis.set_title("Zernike coefficient comparison")
             axis.set_xticks([])
             axis.set_yticks([])
             return
@@ -419,41 +665,141 @@ class PlotCanvas(FigureCanvasQTAgg):
         axis.set_xticks(x_axis)
         axis.set_xticklabels(result.mode_labels, rotation=45, ha="right")
         axis.set_ylabel("Coefficient [nm]")
+        axis.set_title("Zernike coefficient comparison")
+        axis.grid(alpha=0.2)
         axis.legend(loc="upper right")
+
+    def _compute_log_psf(self, opd_map_nm: np.ndarray | None, aperture_mask: np.ndarray | None, wavelength_m: float | None) -> np.ndarray | None:
+        if opd_map_nm is None or aperture_mask is None or wavelength_m is None:
+            return None
+        opd_m = np.asarray(opd_map_nm, dtype=np.float64) * 1e-9
+        pupil = np.asarray(aperture_mask, dtype=np.float64) * np.exp(1j * opd_m * (2.0 * np.pi / wavelength_m))
+        focal = np.fft.fftshift(np.fft.fft2(np.fft.ifftshift(pupil)))
+        psf = np.abs(focal) ** 2
+        peak = float(np.max(psf))
+        if peak <= 0.0:
+            return None
+        return np.log10(np.clip(psf / peak, 1e-12, None))
 
     def update_result(self, result: RunResult) -> None:
         self.figure.clear()
-        axes = self.figure.subplots(2, 2)
+        axes = self.figure.subplots(3, 4)
 
-        image = np.asarray(result.quantized_image)
-        if image.ndim == 1:
-            side = int(np.sqrt(image.size))
-            image = image.reshape(side, side)
+        is_local_preview = result.source == "local-preview"
+        fpga_label = "FPGA-like (host emulation)" if is_local_preview else "FPGA"
+        frame_title = "Quantized detector frame for FPGA" if is_local_preview else "Detector frame sent to FPGA"
+        slope_delta_title = f"{fpga_label} vs HCIPy slope mismatch"
+        opd_vmax = max(
+            1.0,
+            self._masked_abs_max(result.input_opd_map_nm, result.aperture_mask),
+            self._masked_abs_max(result.reconstructed_opd_map_nm, result.aperture_mask),
+            self._masked_abs_max(result.residual_opd_map_nm, result.aperture_mask),
+        )
+        residual_rms_nm = self._masked_rms(result.residual_opd_map_nm, result.aperture_mask)
+        residual_title = "Residual OPD"
+        if residual_rms_nm is not None:
+            residual_title = f"Residual OPD (RMS {residual_rms_nm:.1f} nm)"
 
-        axes[0, 0].imshow(image, cmap="inferno", origin="lower")
-        axes[0, 0].set_title("Quantized detector frame")
-        axes[0, 0].set_xticks([])
-        axes[0, 0].set_yticks([])
+        self.figure.suptitle(
+            f"HCIPy / {fpga_label} diagnostics for {result.source} run at {result.timestamp}",
+            fontsize=14,
+            fontweight="bold",
+        )
 
-        if result.slopes_xy_grid is not None:
-            slope_x = self._masked_component(result.slopes_xy_grid, result.valid_subaperture_mask, 0)
-            self._plot_signed_field(axes[0, 1], slope_x, "Slope X [px]")
-        else:
-            axes[0, 1].text(0.5, 0.5, "No slope data", ha="center", va="center")
-            axes[0, 1].set_title("Slope X [px]")
-            axes[0, 1].set_xticks([])
-            axes[0, 1].set_yticks([])
+        self._plot_image(
+            axes[0, 0],
+            result.reference_image,
+            "Reference WFS image",
+            cmap="inferno",
+            colorbar_label="counts",
+        )
+        self._plot_image(
+            axes[0, 1],
+            result.quantized_image,
+            frame_title,
+            cmap="inferno",
+            colorbar_label="ADU",
+        )
+        self._plot_slope_field(axes[0, 2], result.hcipy_slopes_xy_grid, result.valid_subaperture_mask, "HCIPy slope field")
+        self._plot_slope_field(axes[0, 3], result.slopes_xy_grid, result.valid_subaperture_mask, f"{fpga_label} slope field")
 
-        if result.slopes_xy_grid is not None:
-            slope_y = self._masked_component(result.slopes_xy_grid, result.valid_subaperture_mask, 1)
-            self._plot_signed_field(axes[1, 0], slope_y, "Slope Y [px]")
-        else:
-            axes[1, 0].text(0.5, 0.5, "No slope data", ha="center", va="center")
-            axes[1, 0].set_title("Slope Y [px]")
-            axes[1, 0].set_xticks([])
-            axes[1, 0].set_yticks([])
+        self._plot_image(
+            axes[1, 0],
+            result.input_opd_map_nm,
+            "Input OPD",
+            cmap="RdBu_r",
+            colorbar_label="nm",
+            symmetric=True,
+            mask=result.aperture_mask,
+            vmin=-opd_vmax,
+            vmax=opd_vmax,
+        )
+        self._plot_image(
+            axes[1, 1],
+            result.reconstructed_opd_map_nm,
+            "Reconstructed OPD",
+            cmap="RdBu_r",
+            colorbar_label="nm",
+            symmetric=True,
+            mask=result.aperture_mask,
+            vmin=-opd_vmax,
+            vmax=opd_vmax,
+        )
+        self._plot_image(
+            axes[1, 2],
+            result.residual_opd_map_nm,
+            residual_title,
+            cmap="RdBu_r",
+            colorbar_label="nm",
+            symmetric=True,
+            mask=result.aperture_mask,
+            vmin=-opd_vmax,
+            vmax=opd_vmax,
+        )
+        self._plot_slope_delta(
+            axes[1, 3],
+            result.slopes_xy_grid,
+            result.hcipy_slopes_xy_grid,
+            result.valid_subaperture_mask,
+            slope_delta_title,
+        )
 
-        self._plot_coefficients(axes[1, 1], result)
+        diffraction_limited_psf = self._compute_log_psf(
+            np.zeros_like(result.input_opd_map_nm) if result.input_opd_map_nm is not None else None,
+            result.aperture_mask,
+            result.wavelength_m,
+        )
+        aberrated_psf = self._compute_log_psf(result.input_opd_map_nm, result.aperture_mask, result.wavelength_m)
+        reconstructed_psf = self._compute_log_psf(result.residual_opd_map_nm, result.aperture_mask, result.wavelength_m)
+
+        self._plot_image(
+            axes[2, 0],
+            diffraction_limited_psf,
+            "Diffraction-limited PSF",
+            cmap="inferno",
+            colorbar_label="log10(I / Imax)",
+            vmin=-6,
+            vmax=0,
+        )
+        self._plot_image(
+            axes[2, 1],
+            aberrated_psf,
+            "Aberrated PSF",
+            cmap="inferno",
+            colorbar_label="log10(I / Imax)",
+            vmin=-6,
+            vmax=0,
+        )
+        self._plot_image(
+            axes[2, 2],
+            reconstructed_psf,
+            "Reconstructed PSF",
+            cmap="inferno",
+            colorbar_label="log10(I / Imax)",
+            vmin=-6,
+            vmax=0,
+        )
+        self._plot_coefficients(axes[2, 3], result)
 
         self.draw_idle()
 
@@ -461,15 +807,23 @@ class PlotCanvas(FigureCanvasQTAgg):
 class PlotsTab(QtWidgets.QWidget):
     def __init__(self, parent: QtWidgets.QWidget | None = None) -> None:
         super().__init__(parent)
-        self.subtitle = QtWidgets.QLabel("Plots update after a preview or FPGA run completes.")
+        self.subtitle = QtWidgets.QLabel(
+            "HCIPy-style diagnostics update after a preview or FPGA run completes. Use the toolbar to zoom into pupil, WFS, and PSF structure."
+        )
+        self.subtitle.setWordWrap(True)
         self.canvas = PlotCanvas(self)
+        self.toolbar = NavigationToolbar2QT(self.canvas, self)
 
         layout = QtWidgets.QVBoxLayout(self)
         layout.addWidget(self.subtitle)
+        layout.addWidget(self.toolbar)
         layout.addWidget(self.canvas, 1)
 
     def update_result(self, result: RunResult) -> None:
-        self.subtitle.setText(f"Displaying data from the {result.source} run at {result.timestamp}.")
+        preview_note = " For local preview, FPGA-labeled panels are host-side fixed-point emulation, not hardware readback." if result.source == "local-preview" else ""
+        self.subtitle.setText(
+            f"Displaying HCIPy-style diagnostics from the {result.source} run at {result.timestamp}. The dashboard aligns WFS imagery, slope fields, OPD maps, PSFs, and coefficient traces in one view.{preview_note}"
+        )
         self.canvas.update_result(result)
 
 
@@ -485,11 +839,13 @@ class MainWindow(QtWidgets.QMainWindow):
         self.results_tab = ResultsTab()
         self.accuracy_tab = AccuracyTab()
         self.comparison_tab = ComparisonTab()
+        self.zernike_tab = ZernikeComparisonTab()
         self.plots_tab = PlotsTab()
 
         self.tabs.addTab(self.results_tab, "Run + Results")
         self.tabs.addTab(self.accuracy_tab, "Accuracy Stats")
         self.tabs.addTab(self.comparison_tab, "HCIPy Comparison")
+        self.tabs.addTab(self.zernike_tab, "Zernike Chart")
         self.tabs.addTab(self.plots_tab, "Plots")
         self.setCentralWidget(self.tabs)
 
@@ -518,6 +874,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.results_tab.update_result(result)
         self.accuracy_tab.update_result(result)
         self.comparison_tab.update_result(result)
+        self.zernike_tab.update_result(result)
         self.plots_tab.update_result(result)
         self.statusBar().showMessage(f"Updated UI with the {result.source} run from {result.timestamp}")
 
