@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime
+import os
 from pathlib import Path
 import socket
 import threading
@@ -34,6 +35,11 @@ SUBAPERTURE_PIXELS = 16
 NUM_PACKED_XY = NUM_SUBAPERTURES * 2
 NUM_ZERNIKE = 10
 Q4_23_SCALE = float(1 << 23)
+FPGA_ZERNIKE_Q22_SCALE = float(1 << 22)
+
+# build_rm.py currently generates the checked-in reconstruction matrix with G = 8.
+# Allow an override so the GUI can follow a regenerated matrix without code edits.
+FPGA_RM_GLOBAL_SCALE = float(os.environ.get("FPGA_RM_GLOBAL_SCALE", "8"))
 
 DEFAULT_BIND_IP = "10.48.69.89"
 DEFAULT_BIND_PORT = 80
@@ -46,6 +52,7 @@ class RunResult:
     quantized_image: np.ndarray
     centroids_xy_grid: np.ndarray | None
     slopes_xy_grid: np.ndarray | None
+    fpga_zernikes_raw: np.ndarray | None
     fpga_zernikes: np.ndarray | None
     hcipy_zernikes: np.ndarray | None
     mode_labels: list[str]
@@ -107,6 +114,13 @@ def wait_for_exact_line(sock: socket.socket, expected: bytes, max_lines: int = 8
 def decode_q4_23_from_bytes(payload: bytes, expected_count: int) -> np.ndarray:
     values_i32 = np.frombuffer(payload, dtype="<i4", count=expected_count)
     return values_i32.astype(np.float64) / Q4_23_SCALE
+
+
+def decode_fpga_zernikes_from_bytes(payload: bytes, expected_count: int) -> tuple[np.ndarray, np.ndarray]:
+    raw_values = np.frombuffer(payload, dtype="<i4", count=expected_count).astype(np.int64)
+    coeffs_nm = raw_values.astype(np.float64) * FPGA_RM_GLOBAL_SCALE / FPGA_ZERNIKE_Q22_SCALE
+    coeffs_meters = coeffs_nm * 1e-9
+    return raw_values, coeffs_meters
 
 
 def unpack_xy_vectors(packed_values: np.ndarray, n_vectors: int) -> np.ndarray:
@@ -255,6 +269,7 @@ class FpgaControlService(QtCore.QObject):
                 quantized_image=np.asarray(fpga_like["quantized_image"], dtype=np.uint8),
                 centroids_xy_grid=np.asarray(fpga_like["centroids_grid"], dtype=np.float64),
                 slopes_xy_grid=np.asarray(fpga_like["slopes_grid"], dtype=np.float64),
+                fpga_zernikes_raw=None,
                 fpga_zernikes=None,
                 hcipy_zernikes=np.asarray(hcipy_estimation["estimated_coeffs"], dtype=np.float64),
                 mode_labels=list(simulation["mode_labels"]),
@@ -338,7 +353,7 @@ class FpgaControlService(QtCore.QObject):
 
                 centroids_q4_23 = decode_q4_23_from_bytes(centroid_bytes, NUM_PACKED_XY)
                 slopes_q4_23 = decode_q4_23_from_bytes(slope_bytes, NUM_PACKED_XY)
-                zernikes_q4_23 = decode_q4_23_from_bytes(zernike_bytes, NUM_ZERNIKE)
+                fpga_zernikes_raw, fpga_zernikes_meters = decode_fpga_zernikes_from_bytes(zernike_bytes, NUM_ZERNIKE)
 
                 centroids_xy = unpack_xy_vectors(centroids_q4_23, NUM_SUBAPERTURES)
                 slopes_xy = unpack_xy_vectors(slopes_q4_23, NUM_SUBAPERTURES)
@@ -352,11 +367,13 @@ class FpgaControlService(QtCore.QObject):
                     quantized_image=np.asarray(quantized_image, dtype=np.uint8),
                     centroids_xy_grid=np.asarray(centroids_xy_grid, dtype=np.float64),
                     slopes_xy_grid=np.asarray(slopes_xy_grid, dtype=np.float64),
-                    fpga_zernikes=np.asarray(zernikes_q4_23, dtype=np.float64),
+                    fpga_zernikes_raw=np.asarray(fpga_zernikes_raw, dtype=np.int64),
+                    fpga_zernikes=np.asarray(fpga_zernikes_meters, dtype=np.float64),
                     hcipy_zernikes=np.asarray(hcipy_estimation["estimated_coeffs"], dtype=np.float64),
                     mode_labels=list(simulation["mode_labels"]),
                     notes=[
                         "The current wire protocol is client-initiated; the HPS side sends start.",
+                        f"FPGA coefficients are rescaled with raw / 2^22 * {FPGA_RM_GLOBAL_SCALE:g} nm before HCIPy comparison.",
                         "Coefficient accuracy is compared against the HCIPy estimator for the same synthetic case.",
                     ],
                     client_address=client_label,
@@ -376,6 +393,15 @@ class FpgaControlService(QtCore.QObject):
 
     def _write_result_artifacts(self, result: RunResult) -> None:
         RESULT_DUMP_DIR.mkdir(parents=True, exist_ok=True)
+
+        if result.fpga_zernikes_raw is not None:
+            np.savetxt(
+                RESULT_DUMP_DIR / "fpga_zernikes_raw.txt",
+                result.fpga_zernikes_raw,
+                fmt="%d",
+                header="raw_fpga_coeff",
+                comments="",
+            )
 
         if result.fpga_zernikes is not None:
             np.savetxt(
