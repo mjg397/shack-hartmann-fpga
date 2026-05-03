@@ -26,7 +26,7 @@ module streaming_emulator #(
   reg [7:0] mem [0:65535];
 
   initial begin
-      $readmemh("/root/shack-hartmann-fpga/full_pipeline_sim/data/hcipy_image_rotating.hex", mem);
+      $readmemh("data/hcipy_image_rotating.hex", mem);
   end
 
   // state machine for pixel input

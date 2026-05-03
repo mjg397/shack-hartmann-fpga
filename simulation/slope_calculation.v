@@ -21,14 +21,22 @@ module slope_calculation (
   wire [255:0] subap_bitmap; // row major ordered bitmap
 
   initial begin
-    $readmemh("/root/shack-hartmann-fpga/full_pipeline_sim/data/subaperture_bitmap.hex", subap_bitmap_mem);
+    $readmemh("data/subaperture_bitmap.hex", subap_bitmap_mem);
   end
 
   assign subap_bitmap = subap_bitmap_mem[0];
 
   localparam integer SCALE = 8388608; // 2^23 for 4.23 signed fixed point
-  localparam x_ref = 62914560;
-  localparam y_ref = 62914560;
+  reg [27:0] slopes_ref_x_mem [0:255];
+  reg [27:0] slopes_ref_y_mem [0:255];
+
+  initial begin
+    $readmemh("data/slopes_ref_x.hex", slopes_ref_x_mem);
+    $readmemh("data/slopes_ref_y.hex", slopes_ref_y_mem);
+  end
+
+  wire signed [27:0] x_ref = slopes_ref_x_mem[subapetures_completed - 1];
+  wire signed [27:0] y_ref = slopes_ref_y_mem[subapetures_completed - 1];
 
   wire [26:0] x_centroid_mult;
   wire [26:0] y_centroid_mult;
