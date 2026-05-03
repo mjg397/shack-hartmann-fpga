@@ -26,8 +26,8 @@ hc_output/
 *.html
 
 # temporary dumps, don't push these
-tmp/
+tmp/*
 
 
-.github/
-.vscode/
+.github/*
+.vscode/*
