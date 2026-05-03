@@ -7,6 +7,7 @@ from typing import cast
 
 import numpy as np
 from PySide6 import QtCore, QtGui, QtWidgets
+from matplotlib.axes import Axes
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 
@@ -365,6 +366,61 @@ class PlotCanvas(FigureCanvasQTAgg):
         super().__init__(self.figure)
         self.setParent(parent)
 
+    def _masked_component(self, xy_grid: np.ndarray, mask: np.ndarray | None, component_index: int) -> np.ma.MaskedArray:
+        component = np.asarray(xy_grid[..., component_index], dtype=np.float64)
+        if mask is None:
+            return np.ma.array(component)
+        return np.ma.array(component, mask=~np.asarray(mask, dtype=bool))
+
+    def _plot_signed_field(
+        self,
+        axis: Axes,
+        values: np.ma.MaskedArray,
+        title: str,
+        cmap: str = "RdBu_r",
+    ) -> None:
+        valid_values = np.asarray(values.compressed(), dtype=np.float64)
+        vmax = float(np.max(np.abs(valid_values))) if valid_values.size else 1.0
+        image = axis.imshow(values, cmap=cmap, origin="lower", vmin=-vmax, vmax=vmax)
+        axis.set_title(title)
+        axis.set_xticks([])
+        axis.set_yticks([])
+        self.figure.colorbar(image, ax=axis, fraction=0.046, pad=0.04)
+
+    def _plot_coefficients(self, axis: Axes, result: RunResult) -> None:
+        x_axis = np.arange(len(result.mode_labels))
+        axis.axhline(0.0, color="#222222", linewidth=0.8)
+
+        true_nm = None if result.true_zernikes is None else np.asarray(result.true_zernikes, dtype=np.float64) * 1e9
+        hcipy_nm = None if result.hcipy_zernikes is None else np.asarray(result.hcipy_zernikes, dtype=np.float64) * 1e9
+        fpga_nm = None if result.fpga_zernikes is None else np.asarray(result.fpga_zernikes, dtype=np.float64) * 1e9
+
+        if true_nm is not None and hcipy_nm is not None and fpga_nm is not None:
+            width = 0.24
+            axis.bar(x_axis - width, true_nm, width=width, label="True", color="#457b9d")
+            axis.bar(x_axis, hcipy_nm, width=width, label="HCIPy", color="#2a9d8f")
+            axis.bar(x_axis + width, fpga_nm, width=width, label="FPGA", color="#e76f51")
+            axis.set_title("Coefficient Comparison")
+        elif true_nm is not None and hcipy_nm is not None:
+            width = 0.36
+            axis.bar(x_axis - width / 2, true_nm, width=width, label="True", color="#457b9d")
+            axis.bar(x_axis + width / 2, hcipy_nm, width=width, label="HCIPy", color="#2a9d8f")
+            axis.set_title("HCIPy vs True Coefficients")
+        elif hcipy_nm is not None:
+            axis.bar(x_axis, hcipy_nm, width=0.6, label="HCIPy", color="#2a9d8f")
+            axis.set_title("HCIPy Coefficients")
+        else:
+            axis.text(0.5, 0.5, "No coefficient data", ha="center", va="center")
+            axis.set_title("Coefficient View")
+            axis.set_xticks([])
+            axis.set_yticks([])
+            return
+
+        axis.set_xticks(x_axis)
+        axis.set_xticklabels(result.mode_labels, rotation=45, ha="right")
+        axis.set_ylabel("Coefficient [nm]")
+        axis.legend(loc="upper right")
+
     def update_result(self, result: RunResult) -> None:
         self.figure.clear()
         axes = self.figure.subplots(2, 2)
@@ -379,42 +435,25 @@ class PlotCanvas(FigureCanvasQTAgg):
         axes[0, 0].set_xticks([])
         axes[0, 0].set_yticks([])
 
-        if result.centroids_xy_grid is not None:
-            centroid_mag = np.hypot(result.centroids_xy_grid[..., 0], result.centroids_xy_grid[..., 1])
-            axes[0, 1].imshow(centroid_mag, cmap="viridis", origin="lower")
-            axes[0, 1].set_title("Centroid magnitude")
+        if result.slopes_xy_grid is not None:
+            slope_x = self._masked_component(result.slopes_xy_grid, result.valid_subaperture_mask, 0)
+            self._plot_signed_field(axes[0, 1], slope_x, "Slope X [px]")
         else:
-            axes[0, 1].text(0.5, 0.5, "No centroid data", ha="center", va="center")
-            axes[0, 1].set_title("Centroid magnitude")
-        axes[0, 1].set_xticks([])
-        axes[0, 1].set_yticks([])
+            axes[0, 1].text(0.5, 0.5, "No slope data", ha="center", va="center")
+            axes[0, 1].set_title("Slope X [px]")
+            axes[0, 1].set_xticks([])
+            axes[0, 1].set_yticks([])
 
         if result.slopes_xy_grid is not None:
-            slope_mag = np.hypot(result.slopes_xy_grid[..., 0], result.slopes_xy_grid[..., 1])
-            axes[1, 0].imshow(slope_mag, cmap="magma", origin="lower")
-            axes[1, 0].set_title("Slope magnitude")
+            slope_y = self._masked_component(result.slopes_xy_grid, result.valid_subaperture_mask, 1)
+            self._plot_signed_field(axes[1, 0], slope_y, "Slope Y [px]")
         else:
             axes[1, 0].text(0.5, 0.5, "No slope data", ha="center", va="center")
-            axes[1, 0].set_title("Slope magnitude")
-        axes[1, 0].set_xticks([])
-        axes[1, 0].set_yticks([])
+            axes[1, 0].set_title("Slope Y [px]")
+            axes[1, 0].set_xticks([])
+            axes[1, 0].set_yticks([])
 
-        x_axis = np.arange(len(result.mode_labels))
-        if result.has_accuracy_comparison:
-            axes[1, 1].bar(x_axis - 0.18, result.hcipy_zernikes, width=0.36, label="HCIPy", color="#2a9d8f")
-            axes[1, 1].bar(x_axis + 0.18, result.fpga_zernikes, width=0.36, label="FPGA", color="#e76f51")
-            axes[1, 1].legend(loc="upper right")
-            axes[1, 1].set_title("Zernike comparison")
-        elif result.hcipy_zernikes is not None:
-            axes[1, 1].bar(x_axis, result.hcipy_zernikes, width=0.6, color="#2a9d8f")
-            axes[1, 1].set_title("HCIPy baseline coefficients")
-        else:
-            axes[1, 1].text(0.5, 0.5, "No coefficient data", ha="center", va="center")
-            axes[1, 1].set_title("Coefficient view")
-
-        axes[1, 1].set_xticks(x_axis)
-        axes[1, 1].set_xticklabels(result.mode_labels, rotation=45, ha="right")
-        axes[1, 1].axhline(0.0, color="#222222", linewidth=0.8)
+        self._plot_coefficients(axes[1, 1], result)
 
         self.draw_idle()
 

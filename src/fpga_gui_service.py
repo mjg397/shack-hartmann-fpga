@@ -52,9 +52,11 @@ class RunResult:
     quantized_image: np.ndarray
     centroids_xy_grid: np.ndarray | None
     slopes_xy_grid: np.ndarray | None
+    valid_subaperture_mask: np.ndarray | None
     fpga_zernikes_raw: np.ndarray | None
     fpga_zernikes: np.ndarray | None
     hcipy_zernikes: np.ndarray | None
+    true_zernikes: np.ndarray | None
     mode_labels: list[str]
     notes: list[str] = field(default_factory=list)
     client_address: str | None = None
@@ -269,9 +271,13 @@ class FpgaControlService(QtCore.QObject):
                 quantized_image=np.asarray(fpga_like["quantized_image"], dtype=np.uint8),
                 centroids_xy_grid=np.asarray(fpga_like["centroids_grid"], dtype=np.float64),
                 slopes_xy_grid=np.asarray(fpga_like["slopes_grid"], dtype=np.float64),
+                valid_subaperture_mask=np.asarray(simulation["fpga_subaperture_mask"], dtype=bool).reshape(
+                    NUM_SUBAPERTURES_SIDE, NUM_SUBAPERTURES_SIDE
+                ),
                 fpga_zernikes_raw=None,
                 fpga_zernikes=None,
                 hcipy_zernikes=np.asarray(hcipy_estimation["estimated_coeffs"], dtype=np.float64),
+                true_zernikes=np.asarray(simulation["true_coeffs"], dtype=np.float64),
                 mode_labels=list(simulation["mode_labels"]),
                 notes=[
                     "Local preview uses host-side FPGA-like centroid and slope arithmetic.",
@@ -367,9 +373,13 @@ class FpgaControlService(QtCore.QObject):
                     quantized_image=np.asarray(quantized_image, dtype=np.uint8),
                     centroids_xy_grid=np.asarray(centroids_xy_grid, dtype=np.float64),
                     slopes_xy_grid=np.asarray(slopes_xy_grid, dtype=np.float64),
+                    valid_subaperture_mask=np.asarray(simulation["fpga_subaperture_mask"], dtype=bool).reshape(
+                        NUM_SUBAPERTURES_SIDE, NUM_SUBAPERTURES_SIDE
+                    ),
                     fpga_zernikes_raw=np.asarray(fpga_zernikes_raw, dtype=np.int64),
                     fpga_zernikes=np.asarray(fpga_zernikes_meters, dtype=np.float64),
                     hcipy_zernikes=np.asarray(hcipy_estimation["estimated_coeffs"], dtype=np.float64),
+                    true_zernikes=np.asarray(simulation["true_coeffs"], dtype=np.float64),
                     mode_labels=list(simulation["mode_labels"]),
                     notes=[
                         "The current wire protocol is client-initiated; the HPS side sends start.",
