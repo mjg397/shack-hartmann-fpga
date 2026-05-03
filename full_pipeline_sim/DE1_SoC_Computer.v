@@ -102,7 +102,7 @@ module DE1_SoC_Computer (
 	wire [26:0] rI_reciprocal;
 	wire [7:0] subaps_done_reciprocal;
 
-	intensity_reciprocal reciprocal
+	intensity_reciprocal_pipeline reciprocal
 	(
 		.clk                (clk),
 		.reset              (reset),

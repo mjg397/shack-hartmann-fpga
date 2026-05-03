@@ -88,8 +88,6 @@ VL_ATTR_COLD void Vtb___024root___dump_triggers__stl(Vtb___024root* vlSelf) {
 }
 #endif  // VL_DEBUG
 
-extern const VlWide<128>/*4095:0*/ Vtb__ConstPool__CONST_h29f91db3_0;
-
 VL_ATTR_COLD void Vtb___024root___stl_sequent__TOP__0(Vtb___024root* vlSelf) {
     if (false && vlSelf) {}  // Prevent unused
     Vtb__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
@@ -120,14 +118,30 @@ VL_ATTR_COLD void Vtb___024root___stl_sequent__TOP__0(Vtb___024root* vlSelf) {
                     + (IData)(vlSelf->tb__DOT__dut__DOT__accumulator__DOT__subap_col)));
     vlSelf->tb__DOT__dut__DOT__slopes__DOT__x_mult__DOT__mult_out 
         = (0x7fffffffffffULL & VL_MULS_QQQ(47, (0x7fffffffffffULL 
-                                                & VL_EXTENDS_QI(47,20, vlSelf->tb__DOT__dut__DOT__xI_reciprocal)), 
+                                                & VL_EXTENDS_QI(47,20, 
+                                                                vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__xI_internal
+                                                                [3U])), 
                                            (0x7fffffffffffULL 
                                             & VL_EXTENDS_QI(47,27, vlSelf->tb__DOT__dut__DOT__rI_reciprocal))));
     vlSelf->tb__DOT__dut__DOT__slopes__DOT__y_mult__DOT__mult_out 
         = (0x7fffffffffffULL & VL_MULS_QQQ(47, (0x7fffffffffffULL 
-                                                & VL_EXTENDS_QI(47,20, vlSelf->tb__DOT__dut__DOT__yI_reciprocal)), 
+                                                & VL_EXTENDS_QI(47,20, 
+                                                                vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__yI_internal
+                                                                [3U])), 
                                            (0x7fffffffffffULL 
                                             & VL_EXTENDS_QI(47,27, vlSelf->tb__DOT__dut__DOT__rI_reciprocal))));
+    vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__u_newton_step_0__DOT__prod_mul 
+        = (0x7fffffffffffffULL & ((QData)((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg2_x0_u27)) 
+                                  * (QData)((IData)(
+                                                    (0xfffffffU 
+                                                     & ((IData)(0x8000000U) 
+                                                        - 
+                                                        (0x7ffffffU 
+                                                         & (IData)(
+                                                                   (0x7ffffffULL 
+                                                                    & (((QData)((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg2_a_q1_26)) 
+                                                                        * (QData)((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg2_x0_u27))) 
+                                                                       >> 0x1bU))))))))));
     vlSelf->tb__DOT__dut__DOT__resw_next_state = ((0x10U 
                                                    & (IData)(vlSelf->tb__DOT__dut__DOT__resw_state))
                                                    ? 0U
@@ -170,6 +184,21 @@ VL_ATTR_COLD void Vtb___024root___stl_sequent__TOP__0(Vtb___024root* vlSelf) {
                                                       ((IData)(vlSelf->tb__DOT__dut__DOT__resw_start)
                                                         ? 1U
                                                         : 0U))))));
+    vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__u_newton_step_1__DOT__prod_mul 
+        = (0x7fffffffffffffULL & ((QData)((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg3_x1_q0_27)) 
+                                  * (QData)((IData)(
+                                                    (0xfffffffU 
+                                                     & ((IData)(0x8000000U) 
+                                                        - 
+                                                        (0x7ffffffU 
+                                                         & (IData)(
+                                                                   (0x7ffffffULL 
+                                                                    & (((QData)((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg3_a_q1_26)) 
+                                                                        * (QData)((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg3_x1_q0_27))) 
+                                                                       >> 0x1bU))))))))));
+    vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__v_safe 
+        = ((0U == (IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg1_v_u16))
+            ? 1U : (IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg1_v_u16));
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__0__KET____DOT__prod_x 
         = (0x1fffffffffffULL & VL_MULS_QQQ(45, (0x1fffffffffffULL 
                                                 & VL_EXTENDS_QI(45,18, 
@@ -490,9 +519,91 @@ VL_ATTR_COLD void Vtb___024root___stl_sequent__TOP__0(Vtb___024root* vlSelf) {
                                                                   : 0U))), 
                                            (0x1fffffffffffULL 
                                             & VL_EXTENDS_QI(45,27, vlSelf->tb__DOT__dut__DOT__y_slopes))));
-    vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__v_safe 
-        = ((0U == (IData)(vlSelf->tb__DOT__dut__DOT__intensity_accumulator))
-            ? 1U : (IData)(vlSelf->tb__DOT__dut__DOT__intensity_accumulator));
+    vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__x2_q0_27 
+        = ((0x7ffffffU < (0x1fffffffU & (IData)((0x1fffffffULL 
+                                                 & ((0x2000000ULL 
+                                                     + vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__u_newton_step_1__DOT__prod_mul) 
+                                                    >> 0x1aU)))))
+            ? 0x7ffffffU : (0x7ffffffU & (IData)((0x1fffffffULL 
+                                                  & ((0x2000000ULL 
+                                                      + vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__u_newton_step_1__DOT__prod_mul) 
+                                                     >> 0x1aU)))));
+    __Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x 
+        = vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__v_safe;
+    __Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__Vfuncout 
+        = (((((((((0x8000U == (0x8000U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x))) 
+                  | (0x4000U == (0xc000U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))) 
+                 | (0x2000U == (0xe000U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))) 
+                | (0x1000U == (0xf000U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))) 
+               | (0x800U == (0xf800U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))) 
+              | (0x400U == (0xfc00U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))) 
+             | (0x200U == (0xfe00U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))) 
+            | (0x100U == (0xff00U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x))))
+            ? ((0x8000U == (0x8000U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))
+                ? 0U : ((0x4000U == (0xc000U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))
+                         ? 1U : ((0x2000U == (0xe000U 
+                                              & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))
+                                  ? 2U : ((0x1000U 
+                                           == (0xf000U 
+                                               & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))
+                                           ? 3U : (
+                                                   (0x800U 
+                                                    == 
+                                                    (0xf800U 
+                                                     & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))
+                                                    ? 4U
+                                                    : 
+                                                   ((0x400U 
+                                                     == 
+                                                     (0xfc00U 
+                                                      & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))
+                                                     ? 5U
+                                                     : 
+                                                    ((0x200U 
+                                                      == 
+                                                      (0xfe00U 
+                                                       & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))
+                                                      ? 6U
+                                                      : 7U)))))))
+            : (((((((((0x80U == (0xff80U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x))) 
+                      | (0x40U == (0xffc0U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))) 
+                     | (0x20U == (0xffe0U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))) 
+                    | (0x10U == (0xfff0U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))) 
+                   | (8U == (0xfff8U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))) 
+                  | (4U == (0xfffcU & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))) 
+                 | (2U == (0xfffeU & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))) 
+                | (1U == (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))
+                ? ((0x80U == (0xff80U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))
+                    ? 8U : ((0x40U == (0xffc0U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))
+                             ? 9U : ((0x20U == (0xffe0U 
+                                                & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))
+                                      ? 0xaU : ((0x10U 
+                                                 == 
+                                                 (0xfff0U 
+                                                  & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))
+                                                 ? 0xbU
+                                                 : 
+                                                ((8U 
+                                                  == 
+                                                  (0xfff8U 
+                                                   & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))
+                                                  ? 0xcU
+                                                  : 
+                                                 ((4U 
+                                                   == 
+                                                   (0xfffcU 
+                                                    & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))
+                                                   ? 0xdU
+                                                   : 
+                                                  ((2U 
+                                                    == 
+                                                    (0xfffeU 
+                                                     & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))
+                                                    ? 0xeU
+                                                    : 0xfU)))))))
+                : 0x10U));
+    vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__shift_left 
+        = __Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__Vfuncout;
     vlSelf->tb__DOT__dut__DOT__em__DOT__mac_sum[0U] 
         = (0x7fffffffffffffULL & ((((QData)((IData)(
                                                     (0x3ffU 
@@ -863,232 +974,29 @@ VL_ATTR_COLD void Vtb___024root___stl_sequent__TOP__0(Vtb___024root* vlSelf) {
                                                                                 >> 0x2cU)))))))) 
                                               << 0x2dU) 
                                              | vlSelf->tb__DOT__dut__DOT__em__DOT__mac_gen__BRA__9__KET____DOT__prod_y))));
-    __Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x 
-        = vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__v_safe;
-    __Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__Vfuncout 
-        = (((((((((0x8000U == (0x8000U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x))) 
-                  | (0x4000U == (0xc000U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))) 
-                 | (0x2000U == (0xe000U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))) 
-                | (0x1000U == (0xf000U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))) 
-               | (0x800U == (0xf800U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))) 
-              | (0x400U == (0xfc00U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))) 
-             | (0x200U == (0xfe00U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))) 
-            | (0x100U == (0xff00U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x))))
-            ? ((0x8000U == (0x8000U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))
-                ? 0U : ((0x4000U == (0xc000U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))
-                         ? 1U : ((0x2000U == (0xe000U 
-                                              & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))
-                                  ? 2U : ((0x1000U 
-                                           == (0xf000U 
-                                               & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))
-                                           ? 3U : (
-                                                   (0x800U 
-                                                    == 
-                                                    (0xf800U 
-                                                     & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))
-                                                    ? 4U
-                                                    : 
-                                                   ((0x400U 
-                                                     == 
-                                                     (0xfc00U 
-                                                      & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))
-                                                     ? 5U
-                                                     : 
-                                                    ((0x200U 
-                                                      == 
-                                                      (0xfe00U 
-                                                       & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))
-                                                      ? 6U
-                                                      : 7U)))))))
-            : (((((((((0x80U == (0xff80U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x))) 
-                      | (0x40U == (0xffc0U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))) 
-                     | (0x20U == (0xffe0U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))) 
-                    | (0x10U == (0xfff0U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))) 
-                   | (8U == (0xfff8U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))) 
-                  | (4U == (0xfffcU & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))) 
-                 | (2U == (0xfffeU & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))) 
-                | (1U == (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))
-                ? ((0x80U == (0xff80U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))
-                    ? 8U : ((0x40U == (0xffc0U & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))
-                             ? 9U : ((0x20U == (0xffe0U 
-                                                & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))
-                                      ? 0xaU : ((0x10U 
-                                                 == 
-                                                 (0xfff0U 
-                                                  & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))
-                                                 ? 0xbU
-                                                 : 
-                                                ((8U 
-                                                  == 
-                                                  (0xfff8U 
-                                                   & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))
-                                                  ? 0xcU
-                                                  : 
-                                                 ((4U 
-                                                   == 
-                                                   (0xfffcU 
-                                                    & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))
-                                                   ? 0xdU
-                                                   : 
-                                                  ((2U 
-                                                    == 
-                                                    (0xfffeU 
-                                                     & (IData)(__Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__x)))
-                                                    ? 0xeU
-                                                    : 0xfU)))))))
-                : 0x10U));
-    vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__shift_left 
-        = __Vfunc_tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__clz16__0__Vfuncout;
-    vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15 
-        = (0xffffU & ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__v_safe) 
-                      << (IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__shift_left)));
-    vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__u_newton_step_0__DOT__prod_mul 
-        = (0x7fffffffffffffULL & ((QData)((IData)((0x7fff800U 
-                                                   & ((((0U 
-                                                         == 
-                                                         (0x1fU 
-                                                          & VL_SHIFTL_III(12,12,32, 
-                                                                          (0xffU 
-                                                                           & ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
-                                                                              >> 7U)), 4U)))
-                                                         ? 0U
-                                                         : 
-                                                        (Vtb__ConstPool__CONST_h29f91db3_0[
-                                                         (((IData)(0xfU) 
-                                                           + 
-                                                           (0xfffU 
-                                                            & VL_SHIFTL_III(12,12,32, 
-                                                                            (0xffU 
-                                                                             & ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
-                                                                                >> 7U)), 4U))) 
-                                                          >> 5U)] 
-                                                         << 
-                                                         ((IData)(0x20U) 
-                                                          - 
-                                                          (0x1fU 
-                                                           & VL_SHIFTL_III(12,12,32, 
-                                                                           (0xffU 
-                                                                            & ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
-                                                                               >> 7U)), 4U))))) 
-                                                       | (Vtb__ConstPool__CONST_h29f91db3_0[
-                                                          (0x7fU 
-                                                           & (VL_SHIFTL_III(12,12,32, 
-                                                                            (0xffU 
-                                                                             & ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
-                                                                                >> 7U)), 4U) 
-                                                              >> 5U))] 
-                                                          >> 
-                                                          (0x1fU 
-                                                           & VL_SHIFTL_III(12,12,32, 
-                                                                           (0xffU 
-                                                                            & ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
-                                                                               >> 7U)), 4U)))) 
-                                                      << 0xbU)))) 
-                                  * (QData)((IData)(
-                                                    (0xfffffffU 
-                                                     & ((IData)(0x8000000U) 
-                                                        - 
-                                                        (0x7ffffffU 
-                                                         & (IData)(
-                                                                   (0x7ffffffULL 
-                                                                    & (((QData)((IData)(
-                                                                                ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
-                                                                                << 0xbU))) 
-                                                                        * (QData)((IData)(
-                                                                                (0x7fff800U 
-                                                                                & ((((0U 
-                                                                                == 
-                                                                                (0x1fU 
-                                                                                & VL_SHIFTL_III(12,12,32, 
-                                                                                (0xffU 
-                                                                                & ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
-                                                                                >> 7U)), 4U)))
-                                                                                 ? 0U
-                                                                                 : 
-                                                                                (Vtb__ConstPool__CONST_h29f91db3_0[
-                                                                                (((IData)(0xfU) 
-                                                                                + 
-                                                                                (0xfffU 
-                                                                                & VL_SHIFTL_III(12,12,32, 
-                                                                                (0xffU 
-                                                                                & ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
-                                                                                >> 7U)), 4U))) 
-                                                                                >> 5U)] 
-                                                                                << 
-                                                                                ((IData)(0x20U) 
-                                                                                - 
-                                                                                (0x1fU 
-                                                                                & VL_SHIFTL_III(12,12,32, 
-                                                                                (0xffU 
-                                                                                & ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
-                                                                                >> 7U)), 4U))))) 
-                                                                                | (Vtb__ConstPool__CONST_h29f91db3_0[
-                                                                                (0x7fU 
-                                                                                & (VL_SHIFTL_III(12,12,32, 
-                                                                                (0xffU 
-                                                                                & ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
-                                                                                >> 7U)), 4U) 
-                                                                                >> 5U))] 
-                                                                                >> 
-                                                                                (0x1fU 
-                                                                                & VL_SHIFTL_III(12,12,32, 
-                                                                                (0xffU 
-                                                                                & ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
-                                                                                >> 7U)), 4U)))) 
-                                                                                << 0xbU))))) 
-                                                                       >> 0x1bU))))))))));
-    vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__x1_q0_27 
-        = ((0x7ffffffU < (0x1fffffffU & (IData)((0x1fffffffULL 
-                                                 & ((0x2000000ULL 
-                                                     + vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__u_newton_step_0__DOT__prod_mul) 
-                                                    >> 0x1aU)))))
-            ? 0x7ffffffU : (0x7ffffffU & (IData)((0x1fffffffULL 
-                                                  & ((0x2000000ULL 
-                                                      + vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__u_newton_step_0__DOT__prod_mul) 
-                                                     >> 0x1aU)))));
-    vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__u_newton_step_1__DOT__prod_mul 
-        = (0x7fffffffffffffULL & ((QData)((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__x1_q0_27)) 
-                                  * (QData)((IData)(
-                                                    (0xfffffffU 
-                                                     & ((IData)(0x8000000U) 
-                                                        - 
-                                                        (0x7ffffffU 
-                                                         & (IData)(
-                                                                   (0x7ffffffULL 
-                                                                    & (((QData)((IData)(
-                                                                                ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
-                                                                                << 0xbU))) 
-                                                                        * (QData)((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__x1_q0_27))) 
-                                                                       >> 0x1bU))))))))));
-    vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__x2_q0_27 
-        = ((0x7ffffffU < (0x1fffffffU & (IData)((0x1fffffffULL 
-                                                 & ((0x2000000ULL 
-                                                     + vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__u_newton_step_1__DOT__prod_mul) 
-                                                    >> 0x1aU)))))
-            ? 0x7ffffffU : (0x7ffffffU & (IData)((0x1fffffffULL 
-                                                  & ((0x2000000ULL 
-                                                      + vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__u_newton_step_1__DOT__prod_mul) 
-                                                     >> 0x1aU)))));
     vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__out_q0_27_ext 
         = (0xfffffffU & ((0U == (0x1fU & ((IData)(0xfU) 
-                                          - (IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__shift_left))))
+                                          - (IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg3_shift_left))))
                           ? vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__x2_q0_27
                           : ((0xfffffffU & (vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__x2_q0_27 
                                             + ((0U 
                                                 == 
                                                 (0x1fU 
                                                  & ((IData)(0xfU) 
-                                                    - (IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__shift_left))))
+                                                    - (IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg3_shift_left))))
                                                 ? 0U
                                                 : (0x7ffffffU 
                                                    & ((IData)(1U) 
                                                       << 
                                                       (0x1fU 
                                                        & (((IData)(0xfU) 
-                                                           - (IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__shift_left)) 
+                                                           - (IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg3_shift_left)) 
                                                           - (IData)(1U)))))))) 
                              >> (0x1fU & ((IData)(0xfU) 
-                                          - (IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__shift_left))))));
+                                          - (IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg3_shift_left))))));
+    vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15 
+        = (0xffffU & ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__v_safe) 
+                      << (IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__shift_left)));
 }
 
 VL_ATTR_COLD void Vtb___024root___eval_stl(Vtb___024root* vlSelf) {
@@ -1184,10 +1092,7 @@ VL_ATTR_COLD void Vtb___024root___ctor_var_reset(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__intensity_accumulator = VL_RAND_RESET_I(16);
     vlSelf->tb__DOT__dut__DOT__xI_accumulator = VL_RAND_RESET_I(20);
     vlSelf->tb__DOT__dut__DOT__yI_accumulator = VL_RAND_RESET_I(20);
-    vlSelf->tb__DOT__dut__DOT__xI_reciprocal = VL_RAND_RESET_I(20);
-    vlSelf->tb__DOT__dut__DOT__yI_reciprocal = VL_RAND_RESET_I(20);
     vlSelf->tb__DOT__dut__DOT__rI_reciprocal = VL_RAND_RESET_I(27);
-    vlSelf->tb__DOT__dut__DOT__subaps_done_reciprocal = VL_RAND_RESET_I(8);
     vlSelf->tb__DOT__dut__DOT__x_centroid = VL_RAND_RESET_I(27);
     vlSelf->tb__DOT__dut__DOT__y_centroid = VL_RAND_RESET_I(27);
     vlSelf->tb__DOT__dut__DOT__x_slopes = VL_RAND_RESET_I(27);
@@ -1238,12 +1143,29 @@ VL_ATTR_COLD void Vtb___024root___ctor_var_reset(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__dut__DOT__accumulator__DOT__subap_done_delay = VL_RAND_RESET_I(1);
     vlSelf->tb__DOT__dut__DOT__accumulator__DOT__subap_idx_delay = VL_RAND_RESET_I(8);
     vlSelf->tb__DOT__dut__DOT__accumulator__DOT__j = VL_RAND_RESET_I(32);
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
+        vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__xI_internal[__Vi0] = VL_RAND_RESET_I(20);
+    }
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
+        vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__yI_internal[__Vi0] = VL_RAND_RESET_I(20);
+    }
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
+        vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__centroids_done_internal[__Vi0] = VL_RAND_RESET_I(8);
+    }
     vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__v_safe = VL_RAND_RESET_I(16);
     vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__shift_left = VL_RAND_RESET_I(5);
     vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15 = VL_RAND_RESET_I(16);
-    vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__x1_q0_27 = VL_RAND_RESET_I(27);
     vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__x2_q0_27 = VL_RAND_RESET_I(27);
     vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__out_q0_27_ext = VL_RAND_RESET_I(28);
+    vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg1_v_u16 = VL_RAND_RESET_I(16);
+    vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg2_x0_u27 = VL_RAND_RESET_I(27);
+    vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg2_a_q1_26 = VL_RAND_RESET_I(27);
+    vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg2_v_is_zero = VL_RAND_RESET_I(1);
+    vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg2_shift_left = VL_RAND_RESET_I(5);
+    vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg3_x1_q0_27 = VL_RAND_RESET_I(27);
+    vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg3_a_q1_26 = VL_RAND_RESET_I(27);
+    vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg3_v_is_zero = VL_RAND_RESET_I(1);
+    vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg3_shift_left = VL_RAND_RESET_I(5);
     vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__u_newton_step_0__DOT__prod_mul = VL_RAND_RESET_Q(55);
     vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__u_newton_step_1__DOT__prod_mul = VL_RAND_RESET_Q(55);
     for (int __Vi0 = 0; __Vi0 < 1; ++__Vi0) {

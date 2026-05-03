@@ -182,10 +182,13 @@ void Vtb___024root__trace_chg_0_sub_0(Vtb___024root* vlSelf, VerilatedVcd::Buffe
         bufp->chgSData(oldp+50,(vlSelf->tb__DOT__dut__DOT__intensity_accumulator),16);
         bufp->chgIData(oldp+51,(vlSelf->tb__DOT__dut__DOT__xI_accumulator),20);
         bufp->chgIData(oldp+52,(vlSelf->tb__DOT__dut__DOT__yI_accumulator),20);
-        bufp->chgIData(oldp+53,(vlSelf->tb__DOT__dut__DOT__xI_reciprocal),20);
-        bufp->chgIData(oldp+54,(vlSelf->tb__DOT__dut__DOT__yI_reciprocal),20);
+        bufp->chgIData(oldp+53,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__xI_internal
+                                [3U]),20);
+        bufp->chgIData(oldp+54,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__yI_internal
+                                [3U]),20);
         bufp->chgIData(oldp+55,(vlSelf->tb__DOT__dut__DOT__rI_reciprocal),27);
-        bufp->chgCData(oldp+56,(vlSelf->tb__DOT__dut__DOT__subaps_done_reciprocal),8);
+        bufp->chgCData(oldp+56,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__centroids_done_internal
+                                [3U]),8);
         bufp->chgIData(oldp+57,(vlSelf->tb__DOT__dut__DOT__x_centroid),27);
         bufp->chgIData(oldp+58,(vlSelf->tb__DOT__dut__DOT__y_centroid),27);
         bufp->chgIData(oldp+59,(vlSelf->tb__DOT__dut__DOT__x_slopes),27);
@@ -333,7 +336,7 @@ void Vtb___024root__trace_chg_0_sub_0(Vtb___024root* vlSelf, VerilatedVcd::Buffe
         bufp->chgBit(oldp+219,(((~ (IData)(vlSelf->tb__DOT__dut__DOT__key_reset_sync__DOT__sync_d)) 
                                 & ((IData)(vlSelf->tb__DOT__dut__DOT__key_reset_sync__DOT__sync_ff) 
                                    >> 1U))));
-        bufp->chgIData(oldp+220,(((0U == (IData)(vlSelf->tb__DOT__dut__DOT__intensity_accumulator))
+        bufp->chgIData(oldp+220,(((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg3_v_is_zero)
                                    ? 0x7ffffffU : (
                                                    (0x7ffffffU 
                                                     < vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__out_q0_27_ext)
@@ -341,17 +344,30 @@ void Vtb___024root__trace_chg_0_sub_0(Vtb___024root* vlSelf, VerilatedVcd::Buffe
                                                     : 
                                                    (0x7ffffffU 
                                                     & vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__out_q0_27_ext)))),27);
-        bufp->chgBit(oldp+221,((0U == (IData)(vlSelf->tb__DOT__dut__DOT__intensity_accumulator))));
-        bufp->chgBit(oldp+222,(((0U == (IData)(vlSelf->tb__DOT__dut__DOT__intensity_accumulator)) 
+        bufp->chgBit(oldp+221,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg3_v_is_zero));
+        bufp->chgBit(oldp+222,(((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg3_v_is_zero) 
                                 | (0x7ffffffU < vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__out_q0_27_ext))));
-        bufp->chgSData(oldp+223,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__v_safe),16);
-        bufp->chgCData(oldp+224,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__shift_left),5);
-        bufp->chgSData(oldp+225,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15),16);
-        bufp->chgIData(oldp+226,(((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
+        bufp->chgIData(oldp+223,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__xI_internal[0]),20);
+        bufp->chgIData(oldp+224,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__xI_internal[1]),20);
+        bufp->chgIData(oldp+225,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__xI_internal[2]),20);
+        bufp->chgIData(oldp+226,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__xI_internal[3]),20);
+        bufp->chgIData(oldp+227,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__yI_internal[0]),20);
+        bufp->chgIData(oldp+228,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__yI_internal[1]),20);
+        bufp->chgIData(oldp+229,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__yI_internal[2]),20);
+        bufp->chgIData(oldp+230,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__yI_internal[3]),20);
+        bufp->chgCData(oldp+231,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__centroids_done_internal[0]),8);
+        bufp->chgCData(oldp+232,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__centroids_done_internal[1]),8);
+        bufp->chgCData(oldp+233,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__centroids_done_internal[2]),8);
+        bufp->chgCData(oldp+234,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__centroids_done_internal[3]),8);
+        bufp->chgBit(oldp+235,((0U == (IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg1_v_u16))));
+        bufp->chgSData(oldp+236,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__v_safe),16);
+        bufp->chgCData(oldp+237,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__shift_left),5);
+        bufp->chgSData(oldp+238,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15),16);
+        bufp->chgIData(oldp+239,(((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
                                   << 0xbU)),27);
-        bufp->chgCData(oldp+227,((0xffU & ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
+        bufp->chgCData(oldp+240,((0xffU & ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
                                            >> 7U))),8);
-        bufp->chgSData(oldp+228,((0xffffU & (((0U == 
+        bufp->chgSData(oldp+241,((0xffffU & (((0U == 
                                                (0x1fU 
                                                 & VL_SHIFTL_III(12,12,32, 
                                                                 (0xffU 
@@ -388,7 +404,7 @@ void Vtb___024root__trace_chg_0_sub_0(Vtb___024root* vlSelf, VerilatedVcd::Buffe
                                                                  (0xffU 
                                                                   & ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
                                                                      >> 7U)), 4U)))))),16);
-        bufp->chgIData(oldp+229,((0x7fff800U & ((((0U 
+        bufp->chgIData(oldp+242,((0x7fff800U & ((((0U 
                                                    == 
                                                    (0x1fU 
                                                     & VL_SHIFTL_III(12,12,32, 
@@ -428,37 +444,48 @@ void Vtb___024root__trace_chg_0_sub_0(Vtb___024root* vlSelf, VerilatedVcd::Buffe
                                                                       & ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
                                                                          >> 7U)), 4U)))) 
                                                 << 0xbU))),27);
-        bufp->chgIData(oldp+230,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__x1_q0_27),27);
-        bufp->chgBit(oldp+231,((0x7ffffffU < (0x1fffffffU 
+        bufp->chgIData(oldp+243,(((0x7ffffffU < (0x1fffffffU 
+                                                 & (IData)(
+                                                           (0x1fffffffULL 
+                                                            & ((0x2000000ULL 
+                                                                + vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__u_newton_step_0__DOT__prod_mul) 
+                                                               >> 0x1aU)))))
+                                   ? 0x7ffffffU : (0x7ffffffU 
+                                                   & (IData)(
+                                                             (0x1fffffffULL 
+                                                              & ((0x2000000ULL 
+                                                                  + vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__u_newton_step_0__DOT__prod_mul) 
+                                                                 >> 0x1aU)))))),27);
+        bufp->chgBit(oldp+244,((0x7ffffffU < (0x1fffffffU 
                                               & (IData)(
                                                         (0x1fffffffULL 
                                                          & ((0x2000000ULL 
                                                              + vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__u_newton_step_0__DOT__prod_mul) 
                                                             >> 0x1aU)))))));
-        bufp->chgIData(oldp+232,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__x2_q0_27),27);
-        bufp->chgBit(oldp+233,((0x7ffffffU < (0x1fffffffU 
+        bufp->chgIData(oldp+245,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__x2_q0_27),27);
+        bufp->chgBit(oldp+246,((0x7ffffffU < (0x1fffffffU 
                                               & (IData)(
                                                         (0x1fffffffULL 
                                                          & ((0x2000000ULL 
                                                              + vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__u_newton_step_1__DOT__prod_mul) 
                                                             >> 0x1aU)))))));
-        bufp->chgCData(oldp+234,((0x1fU & ((IData)(0xfU) 
-                                           - (IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__shift_left)))),5);
-        bufp->chgIData(oldp+235,(((0U == (0x1fU & ((IData)(0xfU) 
-                                                   - (IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__shift_left))))
+        bufp->chgCData(oldp+247,((0x1fU & ((IData)(0xfU) 
+                                           - (IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg3_shift_left)))),5);
+        bufp->chgIData(oldp+248,(((0U == (0x1fU & ((IData)(0xfU) 
+                                                   - (IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg3_shift_left))))
                                    ? 0U : (0x7ffffffU 
                                            & ((IData)(1U) 
                                               << (0x1fU 
                                                   & (((IData)(0xfU) 
-                                                      - (IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__shift_left)) 
+                                                      - (IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg3_shift_left)) 
                                                      - (IData)(1U))))))),27);
-        bufp->chgIData(oldp+236,((0xfffffffU & (vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__x2_q0_27 
+        bufp->chgIData(oldp+249,((0xfffffffU & (vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__x2_q0_27 
                                                 + (
                                                    (0U 
                                                     == 
                                                     (0x1fU 
                                                      & ((IData)(0xfU) 
-                                                        - (IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__shift_left))))
+                                                        - (IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg3_shift_left))))
                                                     ? 0U
                                                     : 
                                                    (0x7ffffffU 
@@ -466,218 +493,91 @@ void Vtb___024root__trace_chg_0_sub_0(Vtb___024root* vlSelf, VerilatedVcd::Buffe
                                                        << 
                                                        (0x1fU 
                                                         & (((IData)(0xfU) 
-                                                            - (IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__shift_left)) 
+                                                            - (IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg3_shift_left)) 
                                                            - (IData)(1U))))))))),28);
-        bufp->chgIData(oldp+237,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__out_q0_27_ext),28);
-        bufp->chgBit(oldp+238,((0x7ffffffU < vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__out_q0_27_ext)));
-        bufp->chgQData(oldp+239,((0x3fffffffffffffULL 
-                                  & ((QData)((IData)(
-                                                     ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
-                                                      << 0xbU))) 
-                                     * (QData)((IData)(
-                                                       (0x7fff800U 
-                                                        & ((((0U 
-                                                              == 
-                                                              (0x1fU 
-                                                               & VL_SHIFTL_III(12,12,32, 
-                                                                               (0xffU 
-                                                                                & ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
-                                                                                >> 7U)), 4U)))
-                                                              ? 0U
-                                                              : 
-                                                             (Vtb__ConstPool__CONST_h29f91db3_0[
-                                                              (((IData)(0xfU) 
-                                                                + 
-                                                                (0xfffU 
-                                                                 & VL_SHIFTL_III(12,12,32, 
-                                                                                (0xffU 
-                                                                                & ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
-                                                                                >> 7U)), 4U))) 
-                                                               >> 5U)] 
-                                                              << 
-                                                              ((IData)(0x20U) 
-                                                               - 
-                                                               (0x1fU 
-                                                                & VL_SHIFTL_III(12,12,32, 
-                                                                                (0xffU 
-                                                                                & ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
-                                                                                >> 7U)), 4U))))) 
-                                                            | (Vtb__ConstPool__CONST_h29f91db3_0[
-                                                               (0x7fU 
-                                                                & (VL_SHIFTL_III(12,12,32, 
-                                                                                (0xffU 
-                                                                                & ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
-                                                                                >> 7U)), 4U) 
-                                                                   >> 5U))] 
-                                                               >> 
-                                                               (0x1fU 
-                                                                & VL_SHIFTL_III(12,12,32, 
-                                                                                (0xffU 
-                                                                                & ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
-                                                                                >> 7U)), 4U)))) 
-                                                           << 0xbU))))))),54);
-        bufp->chgIData(oldp+241,((0x7ffffffU & (IData)(
+        bufp->chgIData(oldp+250,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__out_q0_27_ext),28);
+        bufp->chgBit(oldp+251,((0x7ffffffU < vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__out_q0_27_ext)));
+        bufp->chgSData(oldp+252,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg1_v_u16),16);
+        bufp->chgIData(oldp+253,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg2_x0_u27),27);
+        bufp->chgIData(oldp+254,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg2_a_q1_26),27);
+        bufp->chgBit(oldp+255,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg2_v_is_zero));
+        bufp->chgCData(oldp+256,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg2_shift_left),5);
+        bufp->chgIData(oldp+257,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg3_x1_q0_27),27);
+        bufp->chgIData(oldp+258,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg3_a_q1_26),27);
+        bufp->chgCData(oldp+259,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg3_shift_left),5);
+        bufp->chgQData(oldp+260,((0x3fffffffffffffULL 
+                                  & ((QData)((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg2_a_q1_26)) 
+                                     * (QData)((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg2_x0_u27))))),54);
+        bufp->chgIData(oldp+262,((0x7ffffffU & (IData)(
                                                        (0x7ffffffULL 
-                                                        & (((QData)((IData)(
-                                                                            ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
-                                                                             << 0xbU))) 
-                                                            * (QData)((IData)(
-                                                                              (0x7fff800U 
-                                                                               & ((((0U 
-                                                                                == 
-                                                                                (0x1fU 
-                                                                                & VL_SHIFTL_III(12,12,32, 
-                                                                                (0xffU 
-                                                                                & ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
-                                                                                >> 7U)), 4U)))
-                                                                                 ? 0U
-                                                                                 : 
-                                                                                (Vtb__ConstPool__CONST_h29f91db3_0[
-                                                                                (((IData)(0xfU) 
-                                                                                + 
-                                                                                (0xfffU 
-                                                                                & VL_SHIFTL_III(12,12,32, 
-                                                                                (0xffU 
-                                                                                & ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
-                                                                                >> 7U)), 4U))) 
-                                                                                >> 5U)] 
-                                                                                << 
-                                                                                ((IData)(0x20U) 
-                                                                                - 
-                                                                                (0x1fU 
-                                                                                & VL_SHIFTL_III(12,12,32, 
-                                                                                (0xffU 
-                                                                                & ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
-                                                                                >> 7U)), 4U))))) 
-                                                                                | (Vtb__ConstPool__CONST_h29f91db3_0[
-                                                                                (0x7fU 
-                                                                                & (VL_SHIFTL_III(12,12,32, 
-                                                                                (0xffU 
-                                                                                & ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
-                                                                                >> 7U)), 4U) 
-                                                                                >> 5U))] 
-                                                                                >> 
-                                                                                (0x1fU 
-                                                                                & VL_SHIFTL_III(12,12,32, 
-                                                                                (0xffU 
-                                                                                & ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
-                                                                                >> 7U)), 4U)))) 
-                                                                                << 0xbU))))) 
+                                                        & (((QData)((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg2_a_q1_26)) 
+                                                            * (QData)((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg2_x0_u27))) 
                                                            >> 0x1bU))))),28);
-        bufp->chgIData(oldp+242,((0xfffffffU & ((IData)(0x8000000U) 
+        bufp->chgIData(oldp+263,((0xfffffffU & ((IData)(0x8000000U) 
                                                 - (0x7ffffffU 
                                                    & (IData)(
                                                              (0x7ffffffULL 
-                                                              & (((QData)((IData)(
-                                                                                ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
-                                                                                << 0xbU))) 
-                                                                  * (QData)((IData)(
-                                                                                (0x7fff800U 
-                                                                                & ((((0U 
-                                                                                == 
-                                                                                (0x1fU 
-                                                                                & VL_SHIFTL_III(12,12,32, 
-                                                                                (0xffU 
-                                                                                & ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
-                                                                                >> 7U)), 4U)))
-                                                                                 ? 0U
-                                                                                 : 
-                                                                                (Vtb__ConstPool__CONST_h29f91db3_0[
-                                                                                (((IData)(0xfU) 
-                                                                                + 
-                                                                                (0xfffU 
-                                                                                & VL_SHIFTL_III(12,12,32, 
-                                                                                (0xffU 
-                                                                                & ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
-                                                                                >> 7U)), 4U))) 
-                                                                                >> 5U)] 
-                                                                                << 
-                                                                                ((IData)(0x20U) 
-                                                                                - 
-                                                                                (0x1fU 
-                                                                                & VL_SHIFTL_III(12,12,32, 
-                                                                                (0xffU 
-                                                                                & ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
-                                                                                >> 7U)), 4U))))) 
-                                                                                | (Vtb__ConstPool__CONST_h29f91db3_0[
-                                                                                (0x7fU 
-                                                                                & (VL_SHIFTL_III(12,12,32, 
-                                                                                (0xffU 
-                                                                                & ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
-                                                                                >> 7U)), 4U) 
-                                                                                >> 5U))] 
-                                                                                >> 
-                                                                                (0x1fU 
-                                                                                & VL_SHIFTL_III(12,12,32, 
-                                                                                (0xffU 
-                                                                                & ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
-                                                                                >> 7U)), 4U)))) 
-                                                                                << 0xbU))))) 
+                                                              & (((QData)((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg2_a_q1_26)) 
+                                                                  * (QData)((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg2_x0_u27))) 
                                                                  >> 0x1bU))))))),28);
-        bufp->chgQData(oldp+243,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__u_newton_step_0__DOT__prod_mul),55);
-        bufp->chgIData(oldp+245,((0x1fffffffU & (IData)(
+        bufp->chgQData(oldp+264,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__u_newton_step_0__DOT__prod_mul),55);
+        bufp->chgIData(oldp+266,((0x1fffffffU & (IData)(
                                                         (0x1fffffffULL 
                                                          & ((0x2000000ULL 
                                                              + vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__u_newton_step_0__DOT__prod_mul) 
                                                             >> 0x1aU))))),29);
-        bufp->chgQData(oldp+246,((0x3fffffffffffffULL 
-                                  & ((QData)((IData)(
-                                                     ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
-                                                      << 0xbU))) 
-                                     * (QData)((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__x1_q0_27))))),54);
-        bufp->chgIData(oldp+248,((0x7ffffffU & (IData)(
+        bufp->chgQData(oldp+267,((0x3fffffffffffffULL 
+                                  & ((QData)((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg3_a_q1_26)) 
+                                     * (QData)((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg3_x1_q0_27))))),54);
+        bufp->chgIData(oldp+269,((0x7ffffffU & (IData)(
                                                        (0x7ffffffULL 
-                                                        & (((QData)((IData)(
-                                                                            ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
-                                                                             << 0xbU))) 
-                                                            * (QData)((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__x1_q0_27))) 
+                                                        & (((QData)((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg3_a_q1_26)) 
+                                                            * (QData)((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg3_x1_q0_27))) 
                                                            >> 0x1bU))))),28);
-        bufp->chgIData(oldp+249,((0xfffffffU & ((IData)(0x8000000U) 
+        bufp->chgIData(oldp+270,((0xfffffffU & ((IData)(0x8000000U) 
                                                 - (0x7ffffffU 
                                                    & (IData)(
                                                              (0x7ffffffULL 
-                                                              & (((QData)((IData)(
-                                                                                ((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15) 
-                                                                                << 0xbU))) 
-                                                                  * (QData)((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__x1_q0_27))) 
+                                                              & (((QData)((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg3_a_q1_26)) 
+                                                                  * (QData)((IData)(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg3_x1_q0_27))) 
                                                                  >> 0x1bU))))))),28);
-        bufp->chgQData(oldp+250,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__u_newton_step_1__DOT__prod_mul),55);
-        bufp->chgIData(oldp+252,((0x1fffffffU & (IData)(
+        bufp->chgQData(oldp+271,(vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__u_newton_step_1__DOT__prod_mul),55);
+        bufp->chgIData(oldp+273,((0x1fffffffU & (IData)(
                                                         (0x1fffffffULL 
                                                          & ((0x2000000ULL 
                                                              + vlSelf->tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__u_newton_step_1__DOT__prod_mul) 
                                                             >> 0x1aU))))),29);
-        bufp->chgIData(oldp+253,((0x7ffffffU & (IData)(
+        bufp->chgIData(oldp+274,((0x7ffffffU & (IData)(
                                                        (vlSelf->tb__DOT__dut__DOT__slopes__DOT__x_mult__DOT__mult_out 
                                                         >> 4U)))),27);
-        bufp->chgIData(oldp+254,((0x7ffffffU & (IData)(
+        bufp->chgIData(oldp+275,((0x7ffffffU & (IData)(
                                                        (vlSelf->tb__DOT__dut__DOT__slopes__DOT__y_mult__DOT__mult_out 
                                                         >> 4U)))),27);
-        bufp->chgIData(oldp+255,((0xfffffffU & (VL_EXTENDS_II(28,27, 
+        bufp->chgIData(oldp+276,((0xfffffffU & (VL_EXTENDS_II(28,27, 
                                                               (0x7ffffffU 
                                                                & (IData)(
                                                                          (vlSelf->tb__DOT__dut__DOT__slopes__DOT__x_mult__DOT__mult_out 
                                                                           >> 4U)))) 
                                                 - (IData)(0x3c00000U)))),28);
-        bufp->chgIData(oldp+256,((0xfffffffU & (VL_EXTENDS_II(28,27, 
+        bufp->chgIData(oldp+277,((0xfffffffU & (VL_EXTENDS_II(28,27, 
                                                               (0x7ffffffU 
                                                                & (IData)(
                                                                          (vlSelf->tb__DOT__dut__DOT__slopes__DOT__y_mult__DOT__mult_out 
                                                                           >> 4U)))) 
                                                 - (IData)(0x3c00000U)))),28);
-        bufp->chgCData(oldp+257,(vlSelf->tb__DOT__dut__DOT__slopes__DOT__current_subap),8);
-        bufp->chgQData(oldp+258,(vlSelf->tb__DOT__dut__DOT__slopes__DOT__x_mult__DOT__mult_out),47);
-        bufp->chgQData(oldp+260,(vlSelf->tb__DOT__dut__DOT__slopes__DOT__y_mult__DOT__mult_out),47);
-        bufp->chgCData(oldp+262,(vlSelf->tb__DOT__dut__DOT__streamer__DOT__line_counter),8);
-        bufp->chgCData(oldp+263,(vlSelf->tb__DOT__dut__DOT__streamer__DOT__row_counter),8);
-        bufp->chgCData(oldp+264,(vlSelf->tb__DOT__dut__DOT__streamer__DOT__h_blank_counter),2);
-        bufp->chgCData(oldp+265,(vlSelf->tb__DOT__dut__DOT__streamer__DOT__v_blank_counter),8);
-        bufp->chgCData(oldp+266,(vlSelf->tb__DOT__dut__DOT__streamer__DOT__state),2);
+        bufp->chgCData(oldp+278,(vlSelf->tb__DOT__dut__DOT__slopes__DOT__current_subap),8);
+        bufp->chgQData(oldp+279,(vlSelf->tb__DOT__dut__DOT__slopes__DOT__x_mult__DOT__mult_out),47);
+        bufp->chgQData(oldp+281,(vlSelf->tb__DOT__dut__DOT__slopes__DOT__y_mult__DOT__mult_out),47);
+        bufp->chgCData(oldp+283,(vlSelf->tb__DOT__dut__DOT__streamer__DOT__line_counter),8);
+        bufp->chgCData(oldp+284,(vlSelf->tb__DOT__dut__DOT__streamer__DOT__row_counter),8);
+        bufp->chgCData(oldp+285,(vlSelf->tb__DOT__dut__DOT__streamer__DOT__h_blank_counter),2);
+        bufp->chgCData(oldp+286,(vlSelf->tb__DOT__dut__DOT__streamer__DOT__v_blank_counter),8);
+        bufp->chgCData(oldp+287,(vlSelf->tb__DOT__dut__DOT__streamer__DOT__state),2);
     }
-    bufp->chgBit(oldp+267,(vlSelf->tb__DOT__clk));
-    bufp->chgBit(oldp+268,(vlSelf->tb__DOT__key_reset));
-    bufp->chgBit(oldp+269,(vlSelf->tb__DOT__hps_reset));
-    bufp->chgIData(oldp+270,(vlSelf->tb__DOT__i),32);
+    bufp->chgBit(oldp+288,(vlSelf->tb__DOT__clk));
+    bufp->chgBit(oldp+289,(vlSelf->tb__DOT__key_reset));
+    bufp->chgBit(oldp+290,(vlSelf->tb__DOT__hps_reset));
+    bufp->chgIData(oldp+291,(vlSelf->tb__DOT__i),32);
 }
 
 void Vtb___024root__trace_cleanup(void* voidSelf, VerilatedVcd* /*unused*/) {

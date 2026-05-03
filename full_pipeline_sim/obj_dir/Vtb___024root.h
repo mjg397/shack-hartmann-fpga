@@ -32,7 +32,6 @@ class alignas(VL_CACHE_LINE_BYTES) Vtb___024root final : public VerilatedModule 
         CData/*1:0*/ tb__DOT__dut__DOT__start_sync;
         CData/*0:0*/ tb__DOT__dut__DOT__full_frame_complete_accumulator;
         CData/*7:0*/ tb__DOT__dut__DOT__subaps_done_accumulator;
-        CData/*7:0*/ tb__DOT__dut__DOT__subaps_done_reciprocal;
         CData/*0:0*/ tb__DOT__dut__DOT__new_subapeture;
         CData/*0:0*/ tb__DOT__dut__DOT__subap_valid;
         CData/*0:0*/ tb__DOT__dut__DOT__done;
@@ -57,6 +56,10 @@ class alignas(VL_CACHE_LINE_BYTES) Vtb___024root final : public VerilatedModule 
         CData/*0:0*/ tb__DOT__dut__DOT__accumulator__DOT__subap_done_delay;
         CData/*7:0*/ tb__DOT__dut__DOT__accumulator__DOT__subap_idx_delay;
         CData/*4:0*/ tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__shift_left;
+        CData/*0:0*/ tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg2_v_is_zero;
+        CData/*4:0*/ tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg2_shift_left;
+        CData/*0:0*/ tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg3_v_is_zero;
+        CData/*4:0*/ tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg3_shift_left;
         CData/*7:0*/ tb__DOT__dut__DOT__slopes__DOT__current_subap;
         CData/*0:0*/ tb__DOT__dut__DOT__em__DOT__state;
         CData/*7:0*/ tb__DOT__dut__DOT__em__DOT__sub_counter;
@@ -75,15 +78,14 @@ class alignas(VL_CACHE_LINE_BYTES) Vtb___024root final : public VerilatedModule 
         SData/*10:0*/ tb__DOT__dut__DOT__write_zernike_count;
         SData/*15:0*/ tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__v_safe;
         SData/*15:0*/ tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__a_q1_15;
+        SData/*15:0*/ tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg1_v_u16;
         IData/*31:0*/ tb__DOT__i;
         IData/*31:0*/ tb__DOT__dut__DOT__result_rdata;
+    };
+    struct {
         IData/*31:0*/ tb__DOT__dut__DOT__result_wdata;
         IData/*19:0*/ tb__DOT__dut__DOT__xI_accumulator;
         IData/*19:0*/ tb__DOT__dut__DOT__yI_accumulator;
-        IData/*19:0*/ tb__DOT__dut__DOT__xI_reciprocal;
-    };
-    struct {
-        IData/*19:0*/ tb__DOT__dut__DOT__yI_reciprocal;
         IData/*26:0*/ tb__DOT__dut__DOT__rI_reciprocal;
         IData/*26:0*/ tb__DOT__dut__DOT__x_centroid;
         IData/*26:0*/ tb__DOT__dut__DOT__y_centroid;
@@ -95,9 +97,12 @@ class alignas(VL_CACHE_LINE_BYTES) Vtb___024root final : public VerilatedModule 
         IData/*26:0*/ tb__DOT__dut__DOT__x_slopes_out;
         IData/*26:0*/ tb__DOT__dut__DOT__y_slopes_out;
         IData/*31:0*/ tb__DOT__dut__DOT__accumulator__DOT__j;
-        IData/*26:0*/ tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__x1_q0_27;
         IData/*26:0*/ tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__x2_q0_27;
         IData/*27:0*/ tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__out_q0_27_ext;
+        IData/*26:0*/ tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg2_x0_u27;
+        IData/*26:0*/ tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg2_a_q1_26;
+        IData/*26:0*/ tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg3_x1_q0_27;
+        IData/*26:0*/ tb__DOT__dut__DOT__reciprocal__DOT__recip__DOT__stg3_a_q1_26;
         IData/*31:0*/ tb__DOT__dut__DOT__em__DOT__i;
         IData/*26:0*/ tb__DOT__dut__DOT__em__DOT____Vlvbound_h017c4131__0;
         IData/*31:0*/ __VactIterCount;
@@ -132,6 +137,9 @@ class alignas(VL_CACHE_LINE_BYTES) Vtb___024root final : public VerilatedModule 
         VlUnpacked<SData/*15:0*/, 256> tb__DOT__dut__DOT__accumulator__DOT__i;
         VlUnpacked<IData/*19:0*/, 256> tb__DOT__dut__DOT__accumulator__DOT__x_i;
         VlUnpacked<IData/*19:0*/, 256> tb__DOT__dut__DOT__accumulator__DOT__y_i;
+        VlUnpacked<IData/*19:0*/, 4> tb__DOT__dut__DOT__reciprocal__DOT__xI_internal;
+        VlUnpacked<IData/*19:0*/, 4> tb__DOT__dut__DOT__reciprocal__DOT__yI_internal;
+        VlUnpacked<CData/*7:0*/, 4> tb__DOT__dut__DOT__reciprocal__DOT__centroids_done_internal;
         VlUnpacked<VlWide<8>/*255:0*/, 1> tb__DOT__dut__DOT__slopes__DOT__subap_bitmap_mem;
         VlUnpacked<IData/*17:0*/, 1320> tb__DOT__dut__DOT__em__DOT__e_rom_x;
         VlUnpacked<IData/*17:0*/, 1320> tb__DOT__dut__DOT__em__DOT__e_rom_y;

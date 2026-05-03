@@ -1,5 +1,3 @@
-`timescale 1ns/1ps
-
 module async_reset (
     input  wire reset_async,
     input  wire clk,

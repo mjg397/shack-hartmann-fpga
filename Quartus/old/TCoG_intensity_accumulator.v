@@ -115,9 +115,9 @@ assign subap_idx = (subap_row * NUM_SUBAPETURES_SQRT + subap_col);
   always @(posedge clk) begin
     if (reset) begin
       for (j = 0; j < NUM_SUBAPETURES_SQRT*NUM_SUBAPETURES_SQRT; j = j + 1) begin
-              i[j]   = 16'b0; 
-              x_i[j] = 20'b0;
-              y_i[j] = 20'b0;
+              i[j]   <= 16'b0; 
+              x_i[j] <= 20'b0;
+              y_i[j] <= 20'b0;
       end
     end
     else if (valid) begin
