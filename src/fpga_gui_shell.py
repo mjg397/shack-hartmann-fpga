@@ -4,626 +4,490 @@ import os
 import sys
 from collections.abc import MutableMapping
 from typing import cast
+from pathlib import Path
 
 import numpy as np
 from PySide6 import QtCore, QtGui, QtWidgets
-from matplotlib.axes import Axes
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
 
+# Ensure shwfs_utils is in path
+SRC_DIR = Path(__file__).resolve().parent
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
+
+import shwfs_utils
 from fpga_gui_service import (
     DEFAULT_BIND_IP,
     DEFAULT_BIND_PORT,
-    FPGA_RM_GLOBAL_SCALE,
     FpgaControlService,
     RunResult,
+    NUM_VALID_SUBAPERTURES,
 )
 
+# ===========================================================================
+# STYLING CONSTANTS (PREMIUM DARK THEME)
+# ===========================================================================
+BG_COLOR = "#0B0E14"
+SURFACE_COLOR = "#1A202C"
+ACCENT_COLOR = "#00D1FF"  # Cyan
+SUCCESS_COLOR = "#00F59B" # Green
+ERROR_COLOR = "#FF4B4B"   # Red
+TEXT_COLOR = "#E0E0E0"
+SECONDARY_TEXT = "#A0AEC0"
+BORDER_COLOR = "#2D3748"
 
-class ResultsTab(QtWidgets.QWidget):
+# ===========================================================================
+# CUSTOM WIDGETS
+# ===========================================================================
+
+class InfoCard(QtWidgets.QFrame):
+    """A premium-styled information card."""
+    def __init__(self, title: str, value: str = "n/a", parent: QtWidgets.QWidget | None = None) -> None:
+        super().__init__(parent)
+        self.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+        self.setStyleSheet(f"""
+            InfoCard {{
+                background-color: {SURFACE_COLOR};
+                border: 1px solid {BORDER_COLOR};
+                border-radius: 12px;
+                padding: 10px;
+            }}
+        """)
+        
+        layout = QtWidgets.QVBoxLayout(self)
+        self.title_label = QtWidgets.QLabel(title.upper())
+        self.title_label.setStyleSheet(f"color: {SECONDARY_TEXT}; font-size: 10px; font-weight: bold; letter-spacing: 1px;")
+        
+        self.value_label = QtWidgets.QLabel(value)
+        self.value_label.setStyleSheet(f"color: {ACCENT_COLOR}; font-size: 18px; font-weight: bold;")
+        self.value_label.setWordWrap(True)
+        
+        layout.addWidget(self.title_label)
+        layout.addWidget(self.value_label)
+        layout.addStretch()
+
+    def set_value(self, value: str) -> None:
+        self.value_label.setText(value)
+
+class PlotCanvas(FigureCanvasQTAgg):
+    """Enhanced Matplotlib canvas with premium styling."""
+    def __init__(self, parent: QtWidgets.QWidget | None = None) -> None:
+        self.figure = Figure(figsize=(12, 10), facecolor=BG_COLOR)
+        super().__init__(self.figure)
+        self.setParent(parent)
+        plt.style.use("dark_background")
+
+    def update_result(self, result: RunResult) -> None:
+        self.figure.clear()
+        # 2x2 Grid for standard telemetry
+        axes = self.figure.subplots(2, 2)
+        self.figure.subplots_adjust(hspace=0.3, wspace=0.2)
+
+        # 1. Detector Image
+        img = np.asarray(result.quantized_image)
+        if img.ndim == 1:
+            side = int(np.sqrt(img.size))
+            img = img.reshape(side, side)
+        
+        ax0 = axes[0, 0]
+        ax0.imshow(img, cmap="magma", origin="lower")
+        ax0.set_title("DETECTOR FRAME", color=TEXT_COLOR, fontsize=10, fontweight="bold")
+        ax0.axis("off")
+
+        # 2. Slopes Field (Quiver)
+        ax1 = axes[0, 1]
+        if result.slopes_xy_grid is not None:
+            # We use a subset for visualization if it's too dense, but 16x16 is fine
+            grid = result.slopes_xy_grid
+            sx = grid[..., 0]
+            sy = grid[..., 1]
+            ax1.imshow(img, cmap="magma", origin="lower", alpha=0.3)
+            
+            y_coords, x_coords = np.indices(sx.shape)
+            ax1.quiver(x_coords, y_coords, sx, sy, color=ACCENT_COLOR, scale=0.5, width=0.005)
+            ax1.set_title("DIFFERENTIAL SLOPES", color=TEXT_COLOR, fontsize=10, fontweight="bold")
+        else:
+            ax1.text(0.5, 0.5, "NO SLOPE DATA", ha="center", va="center", color=SECONDARY_TEXT)
+        ax1.axis("off")
+
+        # 3. Zernike Comparison
+        ax2 = axes[1, 0]
+        x_axis = np.arange(len(result.mode_labels))
+        width = 0.35
+        
+        if result.hcipy_zernikes is not None:
+            ax2.bar(x_axis - width/2, result.hcipy_zernikes * 1e9, width, label="HCIPy", color="#34495E", alpha=0.8)
+        
+        if result.fpga_zernikes is not None:
+            ax2.bar(x_axis + width/2, result.fpga_zernikes * 1e9, width, label="FPGA", color=ACCENT_COLOR)
+            
+        ax2.set_xticks(x_axis)
+        ax2.set_xticklabels(result.mode_labels, rotation=45, ha="right", fontsize=8)
+        ax2.set_ylabel("Amplitude [nm]")
+        ax2.set_title("ZERNIKE COEFFICIENTS", color=TEXT_COLOR, fontsize=10, fontweight="bold")
+        ax2.legend(fontsize=8, framealpha=0.1)
+        ax2.axhline(0, color=TEXT_COLOR, linewidth=0.5, alpha=0.3)
+
+        # 4. Error distribution or PSF
+        ax3 = axes[1, 1]
+        if result.has_accuracy_comparison:
+            errors = (result.fpga_zernikes - result.hcipy_zernikes) * 1e9
+            ax3.stem(x_axis, errors, linefmt=f"{ERROR_COLOR}-", markerfmt=f"{ERROR_COLOR}o", basefmt="w-")
+            ax3.set_title("RECONSTRUCTION ERROR [nm]", color=TEXT_COLOR, fontsize=10, fontweight="bold")
+            ax3.set_xticks(x_axis)
+            ax3.set_xticklabels(result.mode_labels, rotation=45, ha="right", fontsize=8)
+        else:
+            ax3.text(0.5, 0.5, "AWAITING COMPARISON", ha="center", va="center", color=SECONDARY_TEXT)
+        
+        self.draw_idle()
+
+class AoDemoCanvas(FigureCanvasQTAgg):
+    """Specialized canvas for the AO Imaging Demo."""
+    def __init__(self, parent: QtWidgets.QWidget | None = None) -> None:
+        self.figure = Figure(figsize=(12, 10), facecolor=BG_COLOR)
+        super().__init__(self.figure)
+        self.setParent(parent)
+
+    def update_result(self, result: RunResult) -> None:
+        self.figure.clear()
+        if result.fpga_zernikes is None or result.hcipy_zernikes is None:
+            ax = self.figure.add_subplot(111)
+            ax.text(0.5, 0.5, "RUN SIMULATION TO GENERATE AO DEMO", ha="center", va="center", color=SECONDARY_TEXT, fontsize=14)
+            ax.axis("off")
+            self.draw_idle()
+            return
+
+        try:
+            # Reconstruct phase using shwfs_utils helpers
+            # We'll use a simplified 128x128 grid for speed in GUI
+            side = 128
+            pupil_grid = shwfs_utils.hcipy.make_pupil_grid(side, 1.0)
+            aperture = shwfs_utils.hcipy.circular_aperture(0.9)(pupil_grid)
+            
+            z_basis = shwfs_utils.hcipy.make_zernike_basis(len(result.mode_labels), 1.0, pupil_grid, 1)
+            
+            # Reconstruction phase fields
+            phase_hcipy = z_basis.linear_combination(result.hcipy_zernikes)
+            phase_fpga = z_basis.linear_combination(result.fpga_zernikes)
+            
+            # Propagation to PSF
+            wf_ref = shwfs_utils.hcipy.Wavefront(aperture, 1.0)
+            wf_aber = shwfs_utils.hcipy.Wavefront(aperture * np.exp(1j * (phase_hcipy)), 1.0)
+            wf_corr = shwfs_utils.hcipy.Wavefront(aperture * np.exp(1j * (phase_hcipy - phase_fpga)), 1.0)
+            
+            prop = shwfs_utils.hcipy.FraunhoferPropagator(pupil_grid, shwfs_utils.hcipy.make_focal_grid(8, 4))
+            
+            psf_ref = prop(wf_ref).intensity
+            psf_aber = prop(wf_aber).intensity
+            psf_corr = prop(wf_corr).intensity
+            
+            # Normalization
+            peak = psf_ref.max()
+            strehl_aber = psf_aber.max() / peak
+            strehl_corr = psf_corr.max() / peak
+            
+            axes = self.figure.subplots(1, 2)
+            self.figure.suptitle(f"STREHL RATIO IMPROVEMENT: {strehl_aber:.2f} \u2192 {strehl_corr:.2f}", color=SUCCESS_COLOR, fontsize=16, fontweight="bold")
+            
+            # Aberrated PSF
+            ax0 = axes[0]
+            shwfs_utils.hcipy.imshow_field(np.log10(psf_aber / peak + 1e-6), ax=ax0, cmap="magma", vmin=-4, vmax=0)
+            ax0.set_title("UNCORRECTED PSF (LOG SCALE)", color=TEXT_COLOR, fontsize=10)
+            ax0.axis("off")
+            
+            # Corrected PSF
+            ax1 = axes[1]
+            shwfs_utils.hcipy.imshow_field(np.log10(psf_corr / peak + 1e-6), ax=ax1, cmap="magma", vmin=-4, vmax=0)
+            ax1.set_title("FPGA CORRECTED PSF (LOG SCALE)", color=TEXT_COLOR, fontsize=10)
+            ax1.axis("off")
+            
+        except Exception as e:
+            ax = self.figure.add_subplot(111)
+            ax.text(0.5, 0.5, f"ERROR GENERATING PSF: {e}", ha="center", va="center", color=ERROR_COLOR)
+            ax.axis("off")
+
+        self.draw_idle()
+
+# ===========================================================================
+# MAIN TABS
+# ===========================================================================
+
+class DashboardTab(QtWidgets.QWidget):
     start_server_requested = QtCore.Signal(str, int)
     stop_server_requested = QtCore.Signal()
     preview_requested = QtCore.Signal()
 
     def __init__(self, parent: QtWidgets.QWidget | None = None) -> None:
         super().__init__(parent)
-
-        self.server_state_value = QtWidgets.QLabel("Stopped")
-        self.client_state_value = QtWidgets.QLabel("No client connected")
-        self.last_run_value = QtWidgets.QLabel("No runs yet")
-        self.note_value = QtWidgets.QLabel("Start listening for a hardware run or generate a local preview.")
-        self.note_value.setWordWrap(True)
-
+        
+        # Left Panel: Controls & Status
+        left_panel = QtWidgets.QWidget()
+        left_panel.setFixedWidth(350)
+        left_layout = QtWidgets.QVBoxLayout(left_panel)
+        
+        # 1. Connection Controls
+        conn_box = QtWidgets.QGroupBox("SYSTEM CONTROL")
+        conn_layout = QtWidgets.QGridLayout(conn_box)
+        
         self.host_edit = QtWidgets.QLineEdit(DEFAULT_BIND_IP)
         self.port_spin = QtWidgets.QSpinBox()
         self.port_spin.setRange(1, 65535)
         self.port_spin.setValue(DEFAULT_BIND_PORT)
+        
+        self.start_btn = QtWidgets.QPushButton("ARM SERVER")
+        self.stop_btn = QtWidgets.QPushButton("STOP")
+        self.preview_btn = QtWidgets.QPushButton("LOCAL SIMULATION")
+        
+        self.start_btn.setStyleSheet(f"background-color: {ACCENT_COLOR}; color: {BG_COLOR}; font-weight: bold;")
+        self.stop_btn.setStyleSheet(f"background-color: {ERROR_COLOR}; color: white;")
+        self.preview_btn.setStyleSheet(f"background-color: {SURFACE_COLOR}; border: 1px solid {ACCENT_COLOR}; color: {ACCENT_COLOR};")
 
-        self.start_button = QtWidgets.QPushButton("Start Listening")
-        self.stop_button = QtWidgets.QPushButton("Stop Server")
-        self.preview_button = QtWidgets.QPushButton("Run Local Preview")
-
-        self.start_button.clicked.connect(self._emit_start_server)
-        self.stop_button.clicked.connect(self.stop_server_requested.emit)
-        self.preview_button.clicked.connect(self.preview_requested.emit)
-
-        self.coeff_table = QtWidgets.QTableWidget(0, 4)
-        self.coeff_table.setHorizontalHeaderLabels(["Mode", "HCIPy (m)", "FPGA (m)", "Error (m)"])
-        self.coeff_table.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.Stretch)
-        self.coeff_table.verticalHeader().setVisible(False)
-        self.coeff_table.setEditTriggers(QtWidgets.QAbstractItemView.EditTrigger.NoEditTriggers)
-        self.coeff_table.setSelectionMode(QtWidgets.QAbstractItemView.SelectionMode.NoSelection)
-
+        conn_layout.addWidget(QtWidgets.QLabel("HOST"), 0, 0)
+        conn_layout.addWidget(self.host_edit, 0, 1)
+        conn_layout.addWidget(QtWidgets.QLabel("PORT"), 1, 0)
+        conn_layout.addWidget(self.port_spin, 1, 1)
+        conn_layout.addWidget(self.start_btn, 2, 0, 1, 2)
+        conn_layout.addWidget(self.stop_btn, 3, 0, 1, 2)
+        conn_layout.addWidget(self.preview_btn, 4, 0, 1, 2)
+        
+        # 2. Status Cards
+        self.server_status = InfoCard("SERVER STATE", "Stopped")
+        self.client_status = InfoCard("CONNECTION", "Disconnected")
+        self.run_status = InfoCard("LAST RUN", "No Data")
+        
+        # 3. Log
         self.log_output = QtWidgets.QPlainTextEdit()
         self.log_output.setReadOnly(True)
-        self.log_output.setMaximumBlockCount(1000)
+        self.log_output.setStyleSheet(f"background-color: {BG_COLOR}; border: 1px solid {BORDER_COLOR}; color: {SECONDARY_TEXT}; font-family: 'Consolas', 'Monaco', monospace; font-size: 10px;")
+        
+        left_layout.addWidget(conn_box)
+        left_layout.addWidget(self.server_status)
+        left_layout.addWidget(self.client_status)
+        left_layout.addWidget(self.run_status)
+        left_layout.addWidget(QtWidgets.QLabel("SYSTEM LOGS"))
+        left_layout.addWidget(self.log_output, 1)
+        
+        # Right Panel: Visualization
+        right_panel = QtWidgets.QWidget()
+        right_layout = QtWidgets.QVBoxLayout(right_panel)
+        self.canvas = PlotCanvas()
+        right_layout.addWidget(self.canvas)
+        
+        # Main Layout
+        main_layout = QtWidgets.QHBoxLayout(self)
+        main_layout.addWidget(left_panel)
+        main_layout.addWidget(right_panel, 1)
 
-        controls_layout = QtWidgets.QHBoxLayout()
-        controls_layout.addWidget(QtWidgets.QLabel("Bind IP"))
-        controls_layout.addWidget(self.host_edit, 1)
-        controls_layout.addWidget(QtWidgets.QLabel("Port"))
-        controls_layout.addWidget(self.port_spin)
-        controls_layout.addWidget(self.start_button)
-        controls_layout.addWidget(self.stop_button)
-        controls_layout.addWidget(self.preview_button)
+        # Signals
+        self.start_btn.clicked.connect(self._emit_start)
+        self.stop_btn.clicked.connect(self.stop_server_requested.emit)
+        self.preview_btn.clicked.connect(self.preview_requested.emit)
 
-        status_layout = QtWidgets.QGridLayout()
-        status_layout.addWidget(self._make_card("Server State", self.server_state_value), 0, 0)
-        status_layout.addWidget(self._make_card("Client State", self.client_state_value), 0, 1)
-        status_layout.addWidget(self._make_card("Last Run", self.last_run_value), 0, 2)
-
-        guidance_box = QtWidgets.QGroupBox("Protocol Notes")
-        guidance_layout = QtWidgets.QVBoxLayout(guidance_box)
-        guidance_layout.addWidget(
-            QtWidgets.QLabel(
-                "The current TCP protocol is client-initiated. The HPS client sends start, "
-                "so the host GUI primarily arms the server, shows connection state, and displays the latest run."
-            )
-        )
-        guidance_layout.addWidget(self.note_value)
-
-        coeff_box = QtWidgets.QGroupBox("Latest Coefficient Comparison")
-        coeff_layout = QtWidgets.QVBoxLayout(coeff_box)
-        coeff_layout.addWidget(self.coeff_table)
-
-        log_box = QtWidgets.QGroupBox("Session Log")
-        log_layout = QtWidgets.QVBoxLayout(log_box)
-        log_layout.addWidget(self.log_output)
-
-        layout = QtWidgets.QVBoxLayout(self)
-        layout.addLayout(controls_layout)
-        layout.addLayout(status_layout)
-        layout.addWidget(guidance_box)
-        layout.addWidget(coeff_box, 1)
-        layout.addWidget(log_box, 1)
-
-    def _make_card(self, title: str, value_label: QtWidgets.QLabel) -> QtWidgets.QGroupBox:
-        value_label.setObjectName("ValueCard")
-        card = QtWidgets.QGroupBox(title)
-        layout = QtWidgets.QVBoxLayout(card)
-        layout.addWidget(value_label)
-        return card
-
-    def _emit_start_server(self) -> None:
+    def _emit_start(self) -> None:
         self.start_server_requested.emit(self.host_edit.text().strip(), int(self.port_spin.value()))
 
-    def append_log(self, message: str) -> None:
-        self.log_output.appendPlainText(message)
-
-    def set_server_state(self, state: str) -> None:
-        self.server_state_value.setText(state)
-
-    def set_client_state(self, state: str) -> None:
-        self.client_state_value.setText(state)
-
     def update_result(self, result: RunResult) -> None:
-        suffix = f" via {result.client_address}" if result.client_address else ""
-        self.last_run_value.setText(f"{result.source} at {result.timestamp}{suffix}")
-        self.note_value.setText(" ".join(result.notes) if result.notes else "No additional notes.")
-
-        baseline = result.hcipy_zernikes
-        measured = result.fpga_zernikes
-        row_count = len(result.mode_labels)
-        self.coeff_table.setRowCount(row_count)
-        for row_index, mode_label in enumerate(result.mode_labels):
-            hcipy_text = "n/a"
-            fpga_text = "n/a"
-            error_text = "n/a"
-            if baseline is not None and row_index < len(baseline):
-                hcipy_text = f"{float(baseline[row_index]):+.6e}"
-            if measured is not None and row_index < len(measured):
-                fpga_text = f"{float(measured[row_index]):+.6e}"
-            if baseline is not None and measured is not None and row_index < len(baseline) and row_index < len(measured):
-                error_text = f"{float(measured[row_index] - baseline[row_index]):+.6e}"
-
-            for column, text in enumerate((mode_label, hcipy_text, fpga_text, error_text)):
-                item = QtWidgets.QTableWidgetItem(text)
-                if column > 0:
-                    item.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignRight | QtCore.Qt.AlignmentFlag.AlignVCenter)
-                self.coeff_table.setItem(row_index, column, item)
-
+        self.run_status.set_value(f"{result.source.upper()}\n{result.timestamp}")
+        self.canvas.update_result(result)
+        
+    def append_log(self, message: str) -> None:
+        self.log_output.appendPlainText(f"[{QtCore.QTime.currentTime().toString()}] {message}")
 
 class AccuracyTab(QtWidgets.QWidget):
     def __init__(self, parent: QtWidgets.QWidget | None = None) -> None:
         super().__init__(parent)
-
-        self.message_label = QtWidgets.QLabel("No FPGA run has completed yet.")
-        self.message_label.setWordWrap(True)
-
-        self.rmse_value = QtWidgets.QLabel("n/a")
-        self.mae_value = QtWidgets.QLabel("n/a")
-        self.max_error_value = QtWidgets.QLabel("n/a")
-        self.correlation_value = QtWidgets.QLabel("n/a")
-
-        self.metrics_table = QtWidgets.QTableWidget(0, 5)
-        self.metrics_table.setHorizontalHeaderLabels(["Mode", "HCIPy (m)", "FPGA (m)", "Abs Error (m)", "Rel Error %"])
-        self.metrics_table.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.Stretch)
-        self.metrics_table.verticalHeader().setVisible(False)
-        self.metrics_table.setEditTriggers(QtWidgets.QAbstractItemView.EditTrigger.NoEditTriggers)
-        self.metrics_table.setSelectionMode(QtWidgets.QAbstractItemView.SelectionMode.NoSelection)
-
-        summary_layout = QtWidgets.QGridLayout()
-        summary_layout.addWidget(self._make_metric_card("RMSE", self.rmse_value), 0, 0)
-        summary_layout.addWidget(self._make_metric_card("Mean Abs Error", self.mae_value), 0, 1)
-        summary_layout.addWidget(self._make_metric_card("Max Abs Error", self.max_error_value), 0, 2)
-        summary_layout.addWidget(self._make_metric_card("Correlation", self.correlation_value), 0, 3)
-
+        
         layout = QtWidgets.QVBoxLayout(self)
-        layout.addWidget(self.message_label)
-        layout.addLayout(summary_layout)
-        layout.addWidget(self.metrics_table, 1)
-
-    def _make_metric_card(self, title: str, value_label: QtWidgets.QLabel) -> QtWidgets.QGroupBox:
-        value_label.setObjectName("ValueCard")
-        card = QtWidgets.QGroupBox(title)
-        layout = QtWidgets.QVBoxLayout(card)
-        layout.addWidget(value_label)
-        return card
-
-    def update_result(self, result: RunResult) -> None:
-        if not result.has_accuracy_comparison:
-            self.message_label.setText(
-                "Local preview is available, but FPGA-vs-HCIPy accuracy metrics populate after a hardware run completes."
-            )
-            self.metrics_table.setRowCount(0)
-            for label in (self.rmse_value, self.mae_value, self.max_error_value, self.correlation_value):
-                label.setText("n/a")
-            return
-
-        baseline = np.asarray(result.hcipy_zernikes, dtype=np.float64)
-        measured = np.asarray(result.fpga_zernikes, dtype=np.float64)
-        errors = measured - baseline
-        abs_errors = np.abs(errors)
-        with np.errstate(divide="ignore", invalid="ignore"):
-            rel_errors = np.where(np.abs(baseline) > 1e-12, abs_errors / np.abs(baseline) * 100.0, np.nan)
-
-        rmse = float(np.sqrt(np.mean(errors**2)))
-        mae = float(np.mean(abs_errors))
-        max_error = float(np.max(abs_errors))
-        correlation = float(np.corrcoef(baseline, measured)[0, 1]) if baseline.size > 1 else float("nan")
-
-        self.message_label.setText(
-            f"Accuracy metrics for the most recent FPGA run at {result.timestamp}."
-        )
-        self.rmse_value.setText(f"{rmse:.6e}")
-        self.mae_value.setText(f"{mae:.6e}")
-        self.max_error_value.setText(f"{max_error:.6e}")
-        self.correlation_value.setText("n/a" if np.isnan(correlation) else f"{correlation:.5f}")
-
-        self.metrics_table.setRowCount(len(result.mode_labels))
-        for row_index, mode_label in enumerate(result.mode_labels):
-            row_values = (
-                mode_label,
-                f"{baseline[row_index]:+.6e}",
-                f"{measured[row_index]:+.6e}",
-                f"{abs_errors[row_index]:.6e}",
-                "n/a" if np.isnan(rel_errors[row_index]) else f"{rel_errors[row_index]:.3f}",
-            )
-            for column, text in enumerate(row_values):
-                item = QtWidgets.QTableWidgetItem(text)
-                if column > 0:
-                    item.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignRight | QtCore.Qt.AlignmentFlag.AlignVCenter)
-                self.metrics_table.setItem(row_index, column, item)
-
-
-class ComparisonCanvas(FigureCanvasQTAgg):
-    def __init__(self, parent: QtWidgets.QWidget | None = None) -> None:
-        self.figure = Figure(figsize=(10, 4), tight_layout=True)
-        super().__init__(self.figure)
-        self.setParent(parent)
-
-    def show_placeholder(self, message: str) -> None:
-        self.figure.clear()
-        axis = self.figure.subplots()
-        axis.text(0.5, 0.5, message, ha="center", va="center")
-        axis.set_axis_off()
-        self.draw_idle()
-
-    def update_result(self, result: RunResult) -> None:
-        if not result.has_accuracy_comparison:
-            self.show_placeholder("Comparison plots appear after an FPGA run completes.")
-            return
-
-        baseline_nm = np.asarray(result.hcipy_zernikes, dtype=np.float64) * 1e9
-        measured_nm = np.asarray(result.fpga_zernikes, dtype=np.float64) * 1e9
-        errors_nm = measured_nm - baseline_nm
-
-        self.figure.clear()
-        axes = self.figure.subplots(1, 2)
-
-        combined = np.concatenate((baseline_nm, measured_nm))
-        max_extent = max(1.0, float(np.max(np.abs(combined))) * 1.1)
-
-        axes[0].scatter(baseline_nm, measured_nm, color="#e76f51", s=48)
-        axes[0].plot([-max_extent, max_extent], [-max_extent, max_extent], linestyle="--", color="#264653")
-        for index, label in enumerate(result.mode_labels):
-            axes[0].annotate(label, (baseline_nm[index], measured_nm[index]), textcoords="offset points", xytext=(4, 4))
-        axes[0].set_xlim(-max_extent, max_extent)
-        axes[0].set_ylim(-max_extent, max_extent)
-        axes[0].set_xlabel("HCIPy (nm)")
-        axes[0].set_ylabel("FPGA (nm)")
-        axes[0].set_title("Coefficient Correlation")
-        axes[0].grid(alpha=0.25)
-
-        x_axis = np.arange(len(result.mode_labels))
-        colors = ["#e76f51" if value >= 0.0 else "#2a9d8f" for value in errors_nm]
-        axes[1].bar(x_axis, errors_nm, color=colors)
-        axes[1].axhline(0.0, color="#264653", linewidth=0.9)
-        axes[1].set_xticks(x_axis)
-        axes[1].set_xticklabels(result.mode_labels, rotation=45, ha="right")
-        axes[1].set_ylabel("FPGA - HCIPy (nm)")
-        axes[1].set_title("Signed Error By Mode")
-
-        self.draw_idle()
-
-
-class ComparisonTab(QtWidgets.QWidget):
-    def __init__(self, parent: QtWidgets.QWidget | None = None) -> None:
-        super().__init__(parent)
-
-        self.message_label = QtWidgets.QLabel("No FPGA run has completed yet.")
-        self.message_label.setWordWrap(True)
-
-        self.scale_value = QtWidgets.QLabel(f"G = {FPGA_RM_GLOBAL_SCALE:g}")
-        self.mean_bias_value = QtWidgets.QLabel("n/a")
-        self.worst_mode_value = QtWidgets.QLabel("n/a")
-
-        self.canvas = ComparisonCanvas(self)
-        self.canvas.show_placeholder("Comparison plots appear after an FPGA run completes.")
-
+        
+        # Metrics Row
+        metrics_layout = QtWidgets.QHBoxLayout()
+        self.rmse_card = InfoCard("RMSE (nm)")
+        self.mae_card = InfoCard("MAE (nm)")
+        self.max_card = InfoCard("MAX ERROR (nm)")
+        self.corr_card = InfoCard("CORRELATION")
+        
+        metrics_layout.addWidget(self.rmse_card)
+        metrics_layout.addWidget(self.mae_card)
+        metrics_layout.addWidget(self.max_card)
+        metrics_layout.addWidget(self.corr_card)
+        
+        # Table
         self.table = QtWidgets.QTableWidget(0, 5)
-        self.table.setHorizontalHeaderLabels(["Mode", "HCIPy (nm)", "FPGA (nm)", "Error (nm)", "FPGA Raw"])
+        self.table.setHorizontalHeaderLabels(["MODE", "HCIPY (nm)", "FPGA (nm)", "ABS ERR (nm)", "REL ERR %"])
         self.table.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.Stretch)
         self.table.verticalHeader().setVisible(False)
         self.table.setEditTriggers(QtWidgets.QAbstractItemView.EditTrigger.NoEditTriggers)
-        self.table.setSelectionMode(QtWidgets.QAbstractItemView.SelectionMode.NoSelection)
-
-        summary_layout = QtWidgets.QGridLayout()
-        summary_layout.addWidget(self._make_metric_card("RM Scale", self.scale_value), 0, 0)
-        summary_layout.addWidget(self._make_metric_card("Mean Bias", self.mean_bias_value), 0, 1)
-        summary_layout.addWidget(self._make_metric_card("Worst Mode", self.worst_mode_value), 0, 2)
-
-        layout = QtWidgets.QVBoxLayout(self)
-        layout.addWidget(self.message_label)
-        layout.addLayout(summary_layout)
-        layout.addWidget(self.canvas, 1)
+        self.table.setStyleSheet(f"""
+            QTableWidget {{
+                background-color: {SURFACE_COLOR};
+                gridline-color: {BORDER_COLOR};
+                color: {TEXT_COLOR};
+                border: 1px solid {BORDER_COLOR};
+            }}
+            QHeaderView::section {{
+                background-color: {BORDER_COLOR};
+                color: {ACCENT_COLOR};
+                font-weight: bold;
+                padding: 6px;
+                border: none;
+            }}
+        """)
+        
+        layout.addLayout(metrics_layout)
         layout.addWidget(self.table, 1)
 
-    def _make_metric_card(self, title: str, value_label: QtWidgets.QLabel) -> QtWidgets.QGroupBox:
-        value_label.setObjectName("ValueCard")
-        card = QtWidgets.QGroupBox(title)
-        layout = QtWidgets.QVBoxLayout(card)
-        layout.addWidget(value_label)
-        return card
-
     def update_result(self, result: RunResult) -> None:
-        self.scale_value.setText(f"G = {FPGA_RM_GLOBAL_SCALE:g}")
         if not result.has_accuracy_comparison:
-            self.message_label.setText("HCIPy-vs-FPGA comparison populates after a hardware run completes.")
-            self.mean_bias_value.setText("n/a")
-            self.worst_mode_value.setText("n/a")
-            self.table.setRowCount(0)
-            self.canvas.show_placeholder("Comparison plots appear after an FPGA run completes.")
             return
 
-        baseline_nm = np.asarray(result.hcipy_zernikes, dtype=np.float64) * 1e9
-        measured_nm = np.asarray(result.fpga_zernikes, dtype=np.float64) * 1e9
-        errors_nm = measured_nm - baseline_nm
-        raw_values = result.fpga_zernikes_raw
-
-        worst_index = int(np.argmax(np.abs(errors_nm)))
-        self.message_label.setText(
-            f"Comparing the HCIPy baseline against FPGA outputs from the run at {result.timestamp}."
-        )
-        self.mean_bias_value.setText(f"{float(np.mean(errors_nm)):+.3f} nm")
-        self.worst_mode_value.setText(f"{result.mode_labels[worst_index]} ({errors_nm[worst_index]:+.3f} nm)")
-
+        baseline = np.asarray(result.hcipy_zernikes, dtype=np.float64) * 1e9
+        measured = np.asarray(result.fpga_zernikes, dtype=np.float64) * 1e9
+        errors = measured - baseline
+        abs_errors = np.abs(errors)
+        
+        rmse = np.sqrt(np.mean(errors**2))
+        mae = np.mean(abs_errors)
+        max_err = np.max(abs_errors)
+        corr = np.corrcoef(baseline, measured)[0, 1] if baseline.size > 1 else 1.0
+        
+        self.rmse_card.set_value(f"{rmse:.3f}")
+        self.mae_card.set_value(f"{mae:.3f}")
+        self.max_card.set_value(f"{max_err:.3f}")
+        self.corr_card.set_value(f"{corr:.5f}")
+        
         self.table.setRowCount(len(result.mode_labels))
-        for row_index, mode_label in enumerate(result.mode_labels):
-            raw_text = "n/a"
-            if raw_values is not None and row_index < len(raw_values):
-                raw_text = str(int(raw_values[row_index]))
-
-            row_values = (
-                mode_label,
-                f"{baseline_nm[row_index]:+.3f}",
-                f"{measured_nm[row_index]:+.3f}",
-                f"{errors_nm[row_index]:+.3f}",
-                raw_text,
-            )
-            for column, text in enumerate(row_values):
+        for i, label in enumerate(result.mode_labels):
+            rel_err = (abs_errors[i] / abs(baseline[i]) * 100) if abs(baseline[i]) > 1e-6 else 0.0
+            row_data = [
+                label,
+                f"{baseline[i]:.3f}",
+                f"{measured[i]:.3f}",
+                f"{abs_errors[i]:.3f}",
+                f"{rel_err:.2f}%"
+            ]
+            for col, text in enumerate(row_data):
                 item = QtWidgets.QTableWidgetItem(text)
-                if column > 0:
+                if col > 0:
                     item.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignRight | QtCore.Qt.AlignmentFlag.AlignVCenter)
-                self.table.setItem(row_index, column, item)
+                self.table.setItem(i, col, item)
 
-        self.canvas.update_result(result)
-
-
-class PlotCanvas(FigureCanvasQTAgg):
-    def __init__(self, parent: QtWidgets.QWidget | None = None) -> None:
-        self.figure = Figure(figsize=(10, 8), tight_layout=True)
-        super().__init__(self.figure)
-        self.setParent(parent)
-
-    def _masked_component(self, xy_grid: np.ndarray, mask: np.ndarray | None, component_index: int) -> np.ma.MaskedArray:
-        component = np.asarray(xy_grid[..., component_index], dtype=np.float64)
-        if mask is None:
-            return np.ma.array(component)
-        return np.ma.array(component, mask=~np.asarray(mask, dtype=bool))
-
-    def _plot_signed_field(
-        self,
-        axis: Axes,
-        values: np.ma.MaskedArray,
-        title: str,
-        cmap: str = "RdBu_r",
-    ) -> None:
-        valid_values = np.asarray(values.compressed(), dtype=np.float64)
-        vmax = float(np.max(np.abs(valid_values))) if valid_values.size else 1.0
-        image = axis.imshow(values, cmap=cmap, origin="lower", vmin=-vmax, vmax=vmax)
-        axis.set_title(title)
-        axis.set_xticks([])
-        axis.set_yticks([])
-        self.figure.colorbar(image, ax=axis, fraction=0.046, pad=0.04)
-
-    def _plot_coefficients(self, axis: Axes, result: RunResult) -> None:
-        x_axis = np.arange(len(result.mode_labels))
-        axis.axhline(0.0, color="#222222", linewidth=0.8)
-
-        true_nm = None if result.true_zernikes is None else np.asarray(result.true_zernikes, dtype=np.float64) * 1e9
-        hcipy_nm = None if result.hcipy_zernikes is None else np.asarray(result.hcipy_zernikes, dtype=np.float64) * 1e9
-        fpga_nm = None if result.fpga_zernikes is None else np.asarray(result.fpga_zernikes, dtype=np.float64) * 1e9
-
-        if true_nm is not None and hcipy_nm is not None and fpga_nm is not None:
-            width = 0.24
-            axis.bar(x_axis - width, true_nm, width=width, label="True", color="#457b9d")
-            axis.bar(x_axis, hcipy_nm, width=width, label="HCIPy", color="#2a9d8f")
-            axis.bar(x_axis + width, fpga_nm, width=width, label="FPGA", color="#e76f51")
-            axis.set_title("Coefficient Comparison")
-        elif true_nm is not None and hcipy_nm is not None:
-            width = 0.36
-            axis.bar(x_axis - width / 2, true_nm, width=width, label="True", color="#457b9d")
-            axis.bar(x_axis + width / 2, hcipy_nm, width=width, label="HCIPy", color="#2a9d8f")
-            axis.set_title("HCIPy vs True Coefficients")
-        elif hcipy_nm is not None:
-            axis.bar(x_axis, hcipy_nm, width=0.6, label="HCIPy", color="#2a9d8f")
-            axis.set_title("HCIPy Coefficients")
-        else:
-            axis.text(0.5, 0.5, "No coefficient data", ha="center", va="center")
-            axis.set_title("Coefficient View")
-            axis.set_xticks([])
-            axis.set_yticks([])
-            return
-
-        axis.set_xticks(x_axis)
-        axis.set_xticklabels(result.mode_labels, rotation=45, ha="right")
-        axis.set_ylabel("Coefficient [nm]")
-        axis.legend(loc="upper right")
-
-    def update_result(self, result: RunResult) -> None:
-        self.figure.clear()
-        axes = self.figure.subplots(2, 2)
-
-        image = np.asarray(result.quantized_image)
-        if image.ndim == 1:
-            side = int(np.sqrt(image.size))
-            image = image.reshape(side, side)
-
-        axes[0, 0].imshow(image, cmap="inferno", origin="lower")
-        axes[0, 0].set_title("Quantized detector frame")
-        axes[0, 0].set_xticks([])
-        axes[0, 0].set_yticks([])
-
-        if result.slopes_xy_grid is not None:
-            slope_x = self._masked_component(result.slopes_xy_grid, result.valid_subaperture_mask, 0)
-            self._plot_signed_field(axes[0, 1], slope_x, "Slope X [px]")
-        else:
-            axes[0, 1].text(0.5, 0.5, "No slope data", ha="center", va="center")
-            axes[0, 1].set_title("Slope X [px]")
-            axes[0, 1].set_xticks([])
-            axes[0, 1].set_yticks([])
-
-        if result.slopes_xy_grid is not None:
-            slope_y = self._masked_component(result.slopes_xy_grid, result.valid_subaperture_mask, 1)
-            self._plot_signed_field(axes[1, 0], slope_y, "Slope Y [px]")
-        else:
-            axes[1, 0].text(0.5, 0.5, "No slope data", ha="center", va="center")
-            axes[1, 0].set_title("Slope Y [px]")
-            axes[1, 0].set_xticks([])
-            axes[1, 0].set_yticks([])
-
-        self._plot_coefficients(axes[1, 1], result)
-
-        self.draw_idle()
-
-
-class PlotsTab(QtWidgets.QWidget):
-    def __init__(self, parent: QtWidgets.QWidget | None = None) -> None:
-        super().__init__(parent)
-        self.subtitle = QtWidgets.QLabel("Plots update after a preview or FPGA run completes.")
-        self.canvas = PlotCanvas(self)
-
-        layout = QtWidgets.QVBoxLayout(self)
-        layout.addWidget(self.subtitle)
-        layout.addWidget(self.canvas, 1)
-
-    def update_result(self, result: RunResult) -> None:
-        self.subtitle.setText(f"Displaying data from the {result.source} run at {result.timestamp}.")
-        self.canvas.update_result(result)
-
+# ===========================================================================
+# MAIN WINDOW
+# ===========================================================================
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self) -> None:
         super().__init__()
-        self.setWindowTitle("Shack-Hartmann FPGA Control Shell")
-        self.resize(1380, 920)
-
+        self.setWindowTitle("FPGA SHWFS CONTROL TERMINAL v3.0")
+        self.resize(1400, 950)
+        self.setAcceptDrops(True)
+        
+        # Service
         self.service = FpgaControlService(self)
-
+        
+        # Tabs
         self.tabs = QtWidgets.QTabWidget()
-        self.results_tab = ResultsTab()
-        self.accuracy_tab = AccuracyTab()
-        self.comparison_tab = ComparisonTab()
-        self.plots_tab = PlotsTab()
-
-        self.tabs.addTab(self.results_tab, "Run + Results")
-        self.tabs.addTab(self.accuracy_tab, "Accuracy Stats")
-        self.tabs.addTab(self.comparison_tab, "HCIPy Comparison")
-        self.tabs.addTab(self.plots_tab, "Plots")
+        self.dashboard = DashboardTab()
+        self.accuracy = AccuracyTab()
+        self.ao_demo = AoDemoCanvas()
+        
+        self.tabs.addTab(self.dashboard, "DASHBOARD")
+        self.tabs.addTab(self.accuracy, "ACCURACY METRICS")
+        self.tabs.addTab(self.ao_demo, "AO IMAGING DEMO")
+        
         self.setCentralWidget(self.tabs)
-
-        self.results_tab.start_server_requested.connect(self.service.start_server)
-        self.results_tab.stop_server_requested.connect(self.service.stop_server)
-        self.results_tab.preview_requested.connect(self.service.generate_local_preview)
-
-        self.service.log_message.connect(self.results_tab.append_log)
-        self.service.server_state_changed.connect(self.results_tab.set_server_state)
-        self.service.client_state_changed.connect(self.results_tab.set_client_state)
-        self.service.error_reported.connect(self._handle_error)
+        
+        # Dark Theme Styling
+        self.setStyleSheet(f"""
+            QMainWindow {{
+                background-color: {BG_COLOR};
+            }}
+            QTabWidget::pane {{
+                border: 1px solid {BORDER_COLOR};
+                background: {BG_COLOR};
+            }}
+            QTabBar::tab {{
+                background: {SURFACE_COLOR};
+                color: {SECONDARY_TEXT};
+                padding: 12px 30px;
+                border-top-left-radius: 8px;
+                border-top-right-radius: 8px;
+                margin-right: 2px;
+                font-weight: bold;
+                font-size: 11px;
+            }}
+            QTabBar::tab:selected {{
+                background: {BG_COLOR};
+                color: {ACCENT_COLOR};
+                border-bottom: 2px solid {ACCENT_COLOR};
+            }}
+            QGroupBox {{
+                color: {ACCENT_COLOR};
+                font-weight: bold;
+                border: 1px solid {BORDER_COLOR};
+                border-radius: 8px;
+                margin-top: 15px;
+                padding-top: 10px;
+            }}
+            QGroupBox::title {{
+                subcontrol-origin: margin;
+                left: 10px;
+                padding: 0 5px;
+            }}
+            QLabel {{
+                color: {TEXT_COLOR};
+            }}
+            QLineEdit, QSpinBox {{
+                background: {SURFACE_COLOR};
+                border: 1px solid {BORDER_COLOR};
+                border-radius: 4px;
+                color: {TEXT_COLOR};
+                padding: 5px;
+            }}
+        """)
+        
+        # Signal Connections
+        self.dashboard.start_server_requested.connect(self.service.start_server)
+        self.dashboard.stop_server_requested.connect(self.service.stop_server)
+        self.dashboard.preview_requested.connect(self.service.generate_local_preview)
+        
+        self.service.log_message.connect(self.dashboard.append_log)
+        self.service.server_state_changed.connect(self.dashboard.server_status.set_value)
+        self.service.client_state_changed.connect(self.dashboard.client_status.set_value)
         self.service.run_completed.connect(self._handle_result)
+        self.service.error_reported.connect(self._handle_error)
 
-        self.statusBar().showMessage("Ready")
-
-    def closeEvent(self, event: QtGui.QCloseEvent) -> None:
-        self.service.stop_server()
-        super().closeEvent(event)
-
-    def _handle_error(self, message: str) -> None:
-        self.results_tab.append_log(message)
-        self.statusBar().showMessage("Last action failed")
-        QtWidgets.QMessageBox.critical(self, "FPGA Control Shell", message)
+        self.statusBar().showMessage("SYSTEM READY")
+        self.statusBar().setStyleSheet(f"color: {SECONDARY_TEXT}; border-top: 1px solid {BORDER_COLOR};")
 
     def _handle_result(self, result: RunResult) -> None:
-        self.results_tab.update_result(result)
-        self.accuracy_tab.update_result(result)
-        self.comparison_tab.update_result(result)
-        self.plots_tab.update_result(result)
-        self.statusBar().showMessage(f"Updated UI with the {result.source} run from {result.timestamp}")
+        self.dashboard.update_result(result)
+        self.accuracy.update_result(result)
+        self.ao_demo.update_result(result)
+        self.statusBar().showMessage(f"RUN COMPLETED: {result.source.upper()} at {result.timestamp}", 5000)
 
-
-def configure_qt_platform(
-    *,
-    platform_name: str | None = None,
-    environment: MutableMapping[str, str] | None = None,
-) -> None:
-    platform_name = sys.platform if platform_name is None else platform_name
-    environment = os.environ if environment is None else environment
-
-    if environment.get("QT_QPA_PLATFORM"):
-        return
-
-    if platform_name.startswith("win") or platform_name == "darwin":
-        return
-
-    has_linux_display = bool(environment.get("DISPLAY") or environment.get("WAYLAND_DISPLAY"))
-    if platform_name.startswith("linux") and not has_linux_display:
-        raise RuntimeError(
-            "No GUI display was detected. If you are launching from a dev container, WSL, or remote Linux shell, "
-            "run the app with a local desktop Python on Windows, or explicitly set QT_QPA_PLATFORM=offscreen for tests."
-        )
-
-
-def build_application() -> QtWidgets.QApplication:
-    configure_qt_platform()
-    existing_app = QtWidgets.QApplication.instance()
-    if existing_app is None:
-        app = QtWidgets.QApplication(sys.argv)
-    else:
-        app = cast(QtWidgets.QApplication, existing_app)
-    app.setStyle("Fusion")
-    app.setStyleSheet(
-        """
-        QMainWindow, QWidget {
-            background: #f4efe6;
-            color: #1d2a33;
-        }
-        QGroupBox {
-            border: 1px solid #d5c8b5;
-            border-radius: 10px;
-            margin-top: 12px;
-            padding-top: 12px;
-            font-weight: 600;
-            background: #fffaf2;
-        }
-        QGroupBox::title {
-            subcontrol-origin: margin;
-            left: 12px;
-            padding: 0 4px 0 4px;
-        }
-        QPushButton {
-            background: #264653;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 10px 14px;
-            min-height: 18px;
-        }
-        QPushButton:hover {
-            background: #2f5d6c;
-        }
-        QPushButton:pressed {
-            background: #1d3740;
-        }
-        QLineEdit, QSpinBox, QPlainTextEdit, QTableWidget, QTabWidget::pane {
-            background: #fffdf8;
-            border: 1px solid #d8ccba;
-            border-radius: 8px;
-        }
-        QHeaderView::section {
-            background: #e9dcc8;
-            color: #1d2a33;
-            padding: 6px;
-            border: none;
-        }
-        QLabel#ValueCard {
-            font-size: 18px;
-            font-weight: 700;
-            color: #b3532f;
-        }
-        QTabBar::tab {
-            background: #dec9a6;
-            color: #1d2a33;
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
-            padding: 10px 16px;
-            margin-right: 4px;
-        }
-        QTabBar::tab:selected {
-            background: #264653;
-            color: white;
-        }
-        """
-    )
-    return app
-
+    def _handle_error(self, message: str) -> None:
+        QtWidgets.QMessageBox.critical(self, "SYSTEM ERROR", message)
+        self.dashboard.append_log(f"ERROR: {message}")
 
 def main() -> int:
-    app = build_application()
+    # High DPI scaling
+    QtCore.QCoreApplication.setAttribute(QtCore.Qt.ApplicationAttribute.AA_EnableHighDpiScaling)
+    
+    app = QtWidgets.QApplication(sys.argv)
+    app.setStyle("Fusion")
+    
+    # Custom Palette for dark mode fallback
+    palette = QtGui.QPalette()
+    palette.setColor(QtGui.QPalette.ColorGroup.All, QtGui.QPalette.ColorRole.Window, QtGui.QColor(BG_COLOR))
+    palette.setColor(QtGui.QPalette.ColorGroup.All, QtGui.QPalette.ColorRole.WindowText, QtGui.QColor(TEXT_COLOR))
+    app.setPalette(palette)
+    
     window = MainWindow()
     window.show()
     return app.exec()
 
-
 if __name__ == "__main__":
-    raise SystemExit(main())
+    sys.exit(main())
