@@ -11,7 +11,10 @@ from hcipy import (
     evaluate_supersampled,
     Wavefront,
     Field,
-    SquareShackHartmannWavefrontSensorOptics,
+    CartesianGrid,
+    SeparatedCoords,
+    MicroLensArray,
+    ShackHartmannWavefrontSensorOptics,
     ShackHartmannWavefrontSensorEstimator,
     NoiselessDetector,
     Magnifier,
@@ -206,7 +209,7 @@ def generate_shwfs_case(
     oversizing_factor = 16 / 15
     wavelength_wfs = 0.7e-6
     f_number = 50
-    sh_diameter = 5e-3
+    sh_diameter = 5e-3 * oversizing_factor
 
     num_pupil_pixels = int(240 * oversizing_factor)
     pupil_grid_diameter = telescope_diameter * oversizing_factor
@@ -220,18 +223,23 @@ def generate_shwfs_case(
     )
     aperture = evaluate_supersampled(aperture_gen, pupil_grid, 4)
 
-    magnification = sh_diameter / telescope_diameter
+    magnification = 5e-3 / telescope_diameter
     magnifier = Magnifier(magnification)
-    shwfs = SquareShackHartmannWavefrontSensorOptics(
-        pupil_grid.scaled(magnification),
-        f_number,
-        num_lenslets,
-        sh_diameter,
-    )
-
+    
+    # HCIPy's SquareShackHartmannWavefrontSensorOptics generates an asymmetric 
+    # grid because of np.arange. We must manually generate a centered grid.
+    lenslet_diameter = sh_diameter / num_lenslets
+    x_centers = np.linspace(-sh_diameter/2 + lenslet_diameter/2, 
+                             sh_diameter/2 - lenslet_diameter/2, 
+                             num_lenslets)
+    mla_grid = CartesianGrid(SeparatedCoords((x_centers, x_centers)))
+    focal_length = f_number * lenslet_diameter
+    micro_lens_array = MicroLensArray(pupil_grid.scaled(magnification), mla_grid, focal_length)
+    
+    shwfs = ShackHartmannWavefrontSensorOptics(pupil_grid.scaled(magnification), micro_lens_array)
     base_estimator = ShackHartmannWavefrontSensorEstimator(
-        shwfs.mla_grid,
-        shwfs.micro_lens_array.mla_index,
+        mla_grid,
+        micro_lens_array.mla_index,
     )
 
     wf_ref = Wavefront(aperture, wavelength_wfs)
@@ -248,10 +256,22 @@ def generate_shwfs_case(
     )
     flux_limit = fluxes.max() * 0.5
 
+    # Run a quick estimation on the reference image to find spot locations
+    q_img = quantize_shwfs_image(image_ref)
+    ref_est = run_fpga_like_estimation(q_img, 16, 16)
+    c_q23 = ref_est["centroids_q4_23"].astype(float) / (1 << 23)
+    c_x, c_y = c_q23[:, 0], c_q23[:, 1]
+    
+    # Keep only subapertures where the reference spot is centrally located 
+    # (between 5.5 and 9.5 in the 16x16 block)
+    valid_x = (c_x > 5.5) & (c_x < 9.5)
+    valid_y = (c_y > 5.5) & (c_y < 9.5)
+    
+    combined_mask = (fluxes > flux_limit) & valid_x & valid_y
+    valid_indices = base_estimator.estimation_subapertures[combined_mask]
+
     valid_subaperture_mask = shwfs.mla_grid.zeros(dtype="bool")
-    valid_subaperture_mask[
-        base_estimator.estimation_subapertures[fluxes > flux_limit]
-    ] = True
+    valid_subaperture_mask[valid_indices] = True
 
     estimator = ShackHartmannWavefrontSensorEstimator(
         shwfs.mla_grid,
@@ -351,11 +371,7 @@ def generate_shwfs_case(
         "estimator": estimator,
         "valid_subaperture_mask": np.asarray(valid_subaperture_mask, dtype=bool),
         "valid_subaperture_indices": np.asarray(estimator.estimation_subapertures, dtype=int),
-        "fpga_subaperture_mask": collapse_subaperture_mask(
-            np.asarray(valid_subaperture_mask, dtype=bool).reshape(32, 32),
-            factor=2,
-            reduction="any",
-        ),
+        "fpga_subaperture_mask": np.asarray(valid_subaperture_mask, dtype=bool),
     }
 
 

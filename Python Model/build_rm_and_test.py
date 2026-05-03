@@ -41,13 +41,18 @@ wf_out_ref = shwfs_optics(magnifier(wf_ref))
 detector_grid = wf_out_ref.electric_field.grid
 camera = NoiselessDetector(detector_grid)
 
-# ── 2. Load bitmap ─────────────────────────────────────────────────────────
-with open('../full_pipeline_sim/data/subaperture_bitmap.hex') as f:
-    bitmap_hex = f.read().strip()
-bitmap_bin_lsb_first = bin(int(bitmap_hex, 16))[2:].zfill(256)[::-1]
-valid_mask = np.array([b == '1' for b in bitmap_bin_lsb_first])
+# ── 2. Get and write bitmap ────────────────────────────────────────────────
+valid_mask = case["fpga_subaperture_mask"].ravel()
 n_valid = int(valid_mask.sum())
 print(f"Bitmap: {n_valid} valid subapertures")
+
+bitmap_bin_lsb_first = "".join(["1" if b else "0" for b in valid_mask])
+bitmap_hex = hex(int(bitmap_bin_lsb_first[::-1], 2))[2:].zfill(64).upper()
+
+output_dir = Path('../full_pipeline_sim/data')
+with open(output_dir / 'subaperture_bitmap.hex', 'w') as f:
+    f.write(f"{bitmap_hex}\n")
+print(f"Wrote bitmap to subaperture_bitmap.hex")
 
 # ── 3. Helpers ─────────────────────────────────────────────────────────────
 SCALE_Q23 = 1 << 23
