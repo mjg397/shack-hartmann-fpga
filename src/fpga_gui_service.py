@@ -7,7 +7,7 @@ from pathlib import Path
 import socket
 import threading
 import traceback
-from typing import cast
+from typing import Any, cast
 
 import numpy as np
 from PySide6 import QtCore
@@ -18,12 +18,14 @@ from shwfs_utils import (
     reshape_subaperture_xy,
     run_fpga_like_estimation,
     run_hcipy_estimation,
+    write_shwfs_hex,
 )
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent
 RESULT_DUMP_DIR = REPO_ROOT / "output_dumps"
+SIMULATION_DATA_DIR = REPO_ROOT / "simulation" / "data"
 
 CENTROID_SIZE = 4
 SLOPE_SIZE = 4
@@ -51,22 +53,21 @@ class RunResult:
     source: str
     timestamp: str
     quantized_image: np.ndarray
-    wavelength_m: float | None
-    reference_image: np.ndarray | None
-    aberrated_image: np.ndarray | None
     centroids_xy_grid: np.ndarray | None
     slopes_xy_grid: np.ndarray | None
-    hcipy_slopes_xy_grid: np.ndarray | None
     valid_subaperture_mask: np.ndarray | None
     fpga_zernikes_raw: np.ndarray | None
     fpga_zernikes: np.ndarray | None
     hcipy_zernikes: np.ndarray | None
     true_zernikes: np.ndarray | None
-    input_opd_map_nm: np.ndarray | None
-    reconstructed_opd_map_nm: np.ndarray | None
-    residual_opd_map_nm: np.ndarray | None
-    aperture_mask: np.ndarray | None
     mode_labels: list[str]
+    reference_image: np.ndarray | None = None
+    hcipy_slopes_xy_grid: np.ndarray | None = None
+    input_opd_map_nm: np.ndarray | None = None
+    reconstructed_opd_map_nm: np.ndarray | None = None
+    residual_opd_map_nm: np.ndarray | None = None
+    aperture_mask: np.ndarray | None = None
+    wavelength_m: float | None = None
     notes: list[str] = field(default_factory=list)
     client_address: str | None = None
 
@@ -140,6 +141,38 @@ def unpack_xy_vectors(packed_values: np.ndarray, n_vectors: int) -> np.ndarray:
     x_vals = packed_values[:n_vectors]
     y_vals = packed_values[n_vectors:]
     return np.column_stack((x_vals, y_vals))
+
+
+def _reshape_field_to_nm(field_like: object | None, side_length: int) -> np.ndarray | None:
+    if field_like is None:
+        return None
+    return np.asarray(field_like, dtype=np.float64).reshape(side_length, side_length) * 1e9
+
+
+def _build_run_result_diagnostics(
+    simulation: dict[str, object],
+    hcipy_estimation: dict[str, object],
+) -> dict[str, Any]:
+    pupil_pixels = int(cast(int, simulation["num_pupil_pixels"]))
+    valid_indices = np.asarray(simulation["valid_subaperture_indices"], dtype=int)
+    hcipy_slopes_xy = np.column_stack(
+        (
+            np.asarray(hcipy_estimation["slope_x"], dtype=np.float64),
+            np.asarray(hcipy_estimation["slope_y"], dtype=np.float64),
+        )
+    )
+    full_hcipy_slopes_xy = np.full((NUM_SUBAPERTURES, 2), np.nan, dtype=np.float64)
+    full_hcipy_slopes_xy[valid_indices] = hcipy_slopes_xy
+
+    return {
+        "reference_image": np.asarray(simulation["image_ref"], dtype=np.float64),
+        "hcipy_slopes_xy_grid": reshape_subaperture_xy(full_hcipy_slopes_xy, NUM_SUBAPERTURES_SIDE),
+        "input_opd_map_nm": _reshape_field_to_nm(simulation["input_opd_field"], pupil_pixels),
+        "reconstructed_opd_map_nm": _reshape_field_to_nm(hcipy_estimation["reconstructed_opd_field"], pupil_pixels),
+        "residual_opd_map_nm": _reshape_field_to_nm(hcipy_estimation["residual_field"], pupil_pixels),
+        "aperture_mask": np.asarray(simulation["aperture"], dtype=np.float64).reshape(pupil_pixels, pupil_pixels),
+        "wavelength_m": float(cast(float, simulation["wavelength"])),
+    }
 
 
 def save_xy_grid(path: Path, xy_grid: np.ndarray, x_label: str, y_label: str) -> None:
@@ -274,16 +307,13 @@ class FpgaControlService(QtCore.QObject):
                 num_subapertures_side=NUM_SUBAPERTURES_SIDE,
                 subaperture_pixels=SUBAPERTURE_PIXELS,
             )
+            diagnostics = _build_run_result_diagnostics(simulation, hcipy_estimation)
             result = RunResult(
                 source="local-preview",
                 timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                 quantized_image=np.asarray(fpga_like["quantized_image"], dtype=np.uint8),
-                wavelength_m=float(cast(float, simulation["wavelength"])),
-                reference_image=np.asarray(simulation["image_ref"], dtype=np.float64),
-                aberrated_image=np.asarray(simulation["image_aber"], dtype=np.float64),
                 centroids_xy_grid=np.asarray(fpga_like["centroids_grid"], dtype=np.float64),
                 slopes_xy_grid=np.asarray(fpga_like["slopes_grid"], dtype=np.float64),
-                hcipy_slopes_xy_grid=self._build_hcipy_slope_grid(simulation, hcipy_estimation),
                 valid_subaperture_mask=np.asarray(simulation["fpga_subaperture_mask"], dtype=bool).reshape(
                     NUM_SUBAPERTURES_SIDE, NUM_SUBAPERTURES_SIDE
                 ),
@@ -291,13 +321,8 @@ class FpgaControlService(QtCore.QObject):
                 fpga_zernikes=None,
                 hcipy_zernikes=np.asarray(hcipy_estimation["estimated_coeffs"], dtype=np.float64),
                 true_zernikes=np.asarray(simulation["true_coeffs"], dtype=np.float64),
-                input_opd_map_nm=self._field_to_map_nm(simulation["input_opd_field"], simulation["num_pupil_pixels"]),
-                reconstructed_opd_map_nm=self._field_to_map_nm(
-                    hcipy_estimation["reconstructed_opd_field"], simulation["num_pupil_pixels"]
-                ),
-                residual_opd_map_nm=self._field_to_map_nm(hcipy_estimation["residual_field"], simulation["num_pupil_pixels"]),
-                aperture_mask=self._field_to_mask(simulation["aperture"], simulation["num_pupil_pixels"]),
-                mode_labels=[str(label) for label in cast(list[object], simulation["mode_labels"])],
+                mode_labels=list(cast(list[str], simulation["mode_labels"])),
+                **diagnostics,
                 notes=[
                     "Local preview uses host-side FPGA-like centroid and slope arithmetic.",
                     "FPGA coefficient comparison appears after a hardware run completes.",
@@ -332,36 +357,6 @@ class FpgaControlService(QtCore.QObject):
         )
         return simulation, hcipy_estimation
 
-    def _field_to_map_nm(self, field_like: object | None, num_pupil_pixels: object) -> np.ndarray | None:
-        if field_like is None:
-            return None
-        side = int(cast(int, num_pupil_pixels))
-        values = np.asarray(field_like, dtype=np.float64)
-        return values.reshape(side, side) * 1e9
-
-    def _field_to_mask(self, field_like: object | None, num_pupil_pixels: object) -> np.ndarray | None:
-        if field_like is None:
-            return None
-        side = int(cast(int, num_pupil_pixels))
-        values = np.asarray(field_like, dtype=np.float64)
-        return values.reshape(side, side) > 0.5
-
-    def _build_hcipy_slope_grid(self, simulation: dict[str, object], estimation: dict[str, np.ndarray]) -> np.ndarray | None:
-        valid_indices = np.asarray(simulation["valid_subaperture_indices"], dtype=np.int64)
-        slope_x = np.asarray(estimation["slope_x"], dtype=np.float64)
-        slope_y = np.asarray(estimation["slope_y"], dtype=np.float64)
-        if valid_indices.size != slope_x.size or valid_indices.size != slope_y.size:
-            return None
-
-        slopes_grid = np.full((NUM_SUBAPERTURES_SIDE, NUM_SUBAPERTURES_SIDE, 2), np.nan, dtype=np.float64)
-        for index, x_value, y_value in zip(valid_indices, slope_x, slope_y):
-            row_idx = int(index) // NUM_SUBAPERTURES_SIDE
-            col_idx = int(index) % NUM_SUBAPERTURES_SIDE
-            if row_idx < NUM_SUBAPERTURES_SIDE and col_idx < NUM_SUBAPERTURES_SIDE:
-                slopes_grid[row_idx, col_idx, 0] = float(x_value)
-                slopes_grid[row_idx, col_idx, 1] = float(y_value)
-        return slopes_grid
-
     def _handle_client(self, client_socket: socket.socket, client_label: str) -> None:
         client_socket.settimeout(CLIENT_TIMEOUT_SEC)
         try:
@@ -382,6 +377,7 @@ class FpgaControlService(QtCore.QObject):
                 simulation, hcipy_estimation = self._build_simulation_bundle()
 
                 quantized_image = quantize_shwfs_image(simulation["image_aber"])
+                write_shwfs_hex(SIMULATION_DATA_DIR / "hcipy_image.hex", quantized_image)
                 coeff_payload = quantized_image.tobytes(order="C")
                 client_socket.sendall(coeff_payload)
                 self.log_message.emit("Sent quantized detector frame to the FPGA client.")
@@ -415,17 +411,14 @@ class FpgaControlService(QtCore.QObject):
 
                 centroids_xy_grid = reshape_subaperture_xy(centroids_xy, NUM_SUBAPERTURES_SIDE)
                 slopes_xy_grid = reshape_subaperture_xy(slopes_xy, NUM_SUBAPERTURES_SIDE)
+                diagnostics = _build_run_result_diagnostics(simulation, hcipy_estimation)
 
                 result = RunResult(
                     source="fpga",
                     timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                     quantized_image=np.asarray(quantized_image, dtype=np.uint8),
-                    wavelength_m=float(cast(float, simulation["wavelength"])),
-                    reference_image=np.asarray(simulation["image_ref"], dtype=np.float64),
-                    aberrated_image=np.asarray(simulation["image_aber"], dtype=np.float64),
                     centroids_xy_grid=np.asarray(centroids_xy_grid, dtype=np.float64),
                     slopes_xy_grid=np.asarray(slopes_xy_grid, dtype=np.float64),
-                    hcipy_slopes_xy_grid=self._build_hcipy_slope_grid(simulation, hcipy_estimation),
                     valid_subaperture_mask=np.asarray(simulation["fpga_subaperture_mask"], dtype=bool).reshape(
                         NUM_SUBAPERTURES_SIDE, NUM_SUBAPERTURES_SIDE
                     ),
@@ -433,15 +426,8 @@ class FpgaControlService(QtCore.QObject):
                     fpga_zernikes=np.asarray(fpga_zernikes_meters, dtype=np.float64),
                     hcipy_zernikes=np.asarray(hcipy_estimation["estimated_coeffs"], dtype=np.float64),
                     true_zernikes=np.asarray(simulation["true_coeffs"], dtype=np.float64),
-                    input_opd_map_nm=self._field_to_map_nm(simulation["input_opd_field"], simulation["num_pupil_pixels"]),
-                    reconstructed_opd_map_nm=self._field_to_map_nm(
-                        hcipy_estimation["reconstructed_opd_field"], simulation["num_pupil_pixels"]
-                    ),
-                    residual_opd_map_nm=self._field_to_map_nm(
-                        hcipy_estimation["residual_field"], simulation["num_pupil_pixels"]
-                    ),
-                    aperture_mask=self._field_to_mask(simulation["aperture"], simulation["num_pupil_pixels"]),
-                    mode_labels=[str(label) for label in cast(list[object], simulation["mode_labels"])],
+                    mode_labels=list(cast(list[str], simulation["mode_labels"])),
+                    **diagnostics,
                     notes=[
                         "The current wire protocol is client-initiated; the HPS side sends start.",
                         f"FPGA coefficients are rescaled with raw / 2^22 * {FPGA_RM_GLOBAL_SCALE:g} nm before HCIPy comparison.",

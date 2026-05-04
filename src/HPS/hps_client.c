@@ -24,6 +24,9 @@
 #define SIGN_EXTEND_4_23(v) \
     (((v) & (1u << 26)) ? ((v) | 0xF8000000u) : ((v) & 0x07FFFFFFu))
 
+#define SIGN_EXTEND_4_22(v) \
+    (((v) & (1u << 25)) ? ((v) | 0xFC000000u) : ((v) & 0x03FFFFFFu))
+
 #define MAX 4096
 #define PORT 80
 #define SA struct sockaddr
@@ -49,6 +52,7 @@ uint32_t zernike_coeffs[10];
 #define SRAM_SPAN             0x1FFF
 #define CTRL_REG_F2H_OFFSET   0x2000
 #define CTRL_REG_H2F_OFFSET   0x2010
+#define INTENSITY_SRAM_DMA_ADDR 0x08000000
 
 // h2f bus
 // RAM FPGA port s2
@@ -101,8 +105,7 @@ uint8_t data[65536] ;
 int fd;	
 
 // DMA helper functions
-void DMA_transfer_bytes(uint8_t *data, int N, volatile unsigned int *DMA_status_ptr, volatile unsigned int *DMA_read_ptr, 
-						volatile unsigned int *DMA_write_ptr, volatile unsigned int *DMA_length_ptr, volatile unsigned int *DMA_cntl_ptr) 
+void DMA_transfer_bytes(uint32_t src_phys_addr, int N, volatile unsigned int *DMA_status_ptr) 
 	{
 		// === DMA transfer HPS->FPGA 
 		// set up DMA
@@ -110,9 +113,9 @@ void DMA_transfer_bytes(uint8_t *data, int N, volatile unsigned int *DMA_status_
 		// section 25.4.3 Tables 224 and 225
 		*(DMA_status_ptr) = 0;
 		// read bus-master gets data from HPS addr=0xffff0000
-		*(DMA_status_ptr+1) = HPS_ONCHIP_BASE ;
+        *(DMA_status_ptr+1) = src_phys_addr;
 		// write bus_master for fpga sram is mapped to 0x08000000 
-		*(DMA_status_ptr+2) = 0x08000000 ;
+        *(DMA_status_ptr+2) = INTENSITY_SRAM_DMA_ADDR;
 		// copy N bytes (65536 for coeff array)
 		*(DMA_status_ptr+3) = N ;
 		// set bit 2 for WORD transfer
@@ -123,6 +126,17 @@ void DMA_transfer_bytes(uint8_t *data, int N, volatile unsigned int *DMA_status_
 		*(DMA_status_ptr+6) = 0b10001100;
 		while ((*(DMA_status_ptr) & 0x010) == 0) WAIT;
 	}
+
+static void print_sample_bytes(const char *label, const uint8_t *buf, size_t len)
+{
+    size_t sample_len = len < 16 ? len : 16;
+
+    printf("%s", label);
+    for (size_t i = 0; i < sample_len; i++) {
+        printf(" %02X", buf[i]);
+    }
+    printf("\n");
+}
 
 void fabricate_results() {
     for (uint32_t i = 0; i < 512; i++) {
@@ -518,7 +532,7 @@ int main(int argc, char **argv)
 
     // assign IP, PORT
     servaddr.sin_family = AF_INET;
-    servaddr.sin_addr.s_addr = inet_addr("10.41.230.185");
+    servaddr.sin_addr.s_addr = inet_addr("10.48.129.113");
     servaddr.sin_port = htons(PORT);
 
     // connect the client socket to server socket
@@ -544,7 +558,12 @@ int main(int argc, char **argv)
 
     printf("Starting DMA transfer\n");
     // Coefficients should now be in array
-    DMA_transfer_bytes(coeffs, sizeof(coeffs), DMA_status_ptr, DMA_read_ptr, DMA_write_ptr, DMA_length_ptr, DMA_cntl_ptr);
+
+    memcpy((void *)hps_onchip_virtual_base, coeffs, sizeof(coeffs));
+    print_sample_bytes("Received coeff sample:", coeffs, sizeof(coeffs));
+    print_sample_bytes("Staged coeff sample:", (const uint8_t *)hps_onchip_virtual_base, sizeof(coeffs));
+
+    DMA_transfer_bytes(HPS_ONCHIP_BASE, sizeof(coeffs), DMA_status_ptr);
     printf("DMA Transfer complete.\n");
     // send ack to fpga? start compute
     // wait for results
@@ -572,8 +591,8 @@ int main(int argc, char **argv)
     printf("Compute done \n");
 
     // write output to result arrays
-    // Values are 4.23 fixed point (1 sign bit + 3 integer bits + 23 fractional bits = 27 bits).
-    // Sign-extend bit 26 into the unused upper 5 bits so Python can divide by 2^23 directly.
+    // Slopes and centroids are Q4.23 fixed point.
+    // Zernike coefficients are Q4.22 fixed point and need a different sign-extension mask.
 
     for (i = 0; i < 1034; i++) {
         if (i < 512) {
@@ -581,7 +600,8 @@ int main(int argc, char **argv)
         } else if (i < 1024) {
             centroids[i - 512] = SIGN_EXTEND_4_23(sram_ptr[i]); // *(sram_ptr + (i * sizeof(centroids[i - 512])))
         } else if (i < 1034) {
-            zernike_coeffs[i - 1024] = SIGN_EXTEND_4_23(sram_ptr[i]); // *(sram_ptr + (i * sizeof(zernike_coeffs[i - 1024])))
+            printf("Zernike %d : %x\n", i - 1024, sram_ptr[i]);
+            zernike_coeffs[i - 1024] = SIGN_EXTEND_4_22(sram_ptr[i]); // *(sram_ptr + (i * sizeof(zernike_coeffs[i - 1024])))
         }
     }
 

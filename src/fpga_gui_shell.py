@@ -20,6 +20,19 @@ from fpga_gui_service import (
 )
 
 
+def _align_mode_labels_and_series(
+    mode_labels: list[str], *series: np.ndarray | None
+) -> tuple[list[str], list[np.ndarray | None]]:
+    count = len(mode_labels)
+    for values in series:
+        if values is not None:
+            count = min(count, len(values))
+
+    aligned_labels = list(mode_labels[:count])
+    aligned_series = [None if values is None else np.asarray(values)[:count] for values in series]
+    return aligned_labels, aligned_series
+
+
 class ResultsTab(QtWidgets.QWidget):
     start_server_requested = QtCore.Signal(str, int)
     stop_server_requested = QtCore.Signal()
@@ -192,6 +205,16 @@ class AccuracyTab(QtWidgets.QWidget):
 
         baseline = np.asarray(result.hcipy_zernikes, dtype=np.float64)
         measured = np.asarray(result.fpga_zernikes, dtype=np.float64)
+        mode_labels, aligned_series = _align_mode_labels_and_series(result.mode_labels, baseline, measured)
+        baseline = cast(np.ndarray, aligned_series[0])
+        measured = cast(np.ndarray, aligned_series[1])
+        if not mode_labels:
+            self.message_label.setText("No overlapping HCIPy/FPGA coefficient data is available for accuracy metrics.")
+            self.metrics_table.setRowCount(0)
+            for label in (self.rmse_value, self.mae_value, self.max_error_value, self.correlation_value):
+                label.setText("n/a")
+            return
+
         errors = measured - baseline
         abs_errors = np.abs(errors)
         with np.errstate(divide="ignore", invalid="ignore"):
@@ -210,8 +233,8 @@ class AccuracyTab(QtWidgets.QWidget):
         self.max_error_value.setText(f"{max_error:.6e}")
         self.correlation_value.setText("n/a" if np.isnan(correlation) else f"{correlation:.5f}")
 
-        self.metrics_table.setRowCount(len(result.mode_labels))
-        for row_index, mode_label in enumerate(result.mode_labels):
+        self.metrics_table.setRowCount(len(mode_labels))
+        for row_index, mode_label in enumerate(mode_labels):
             row_values = (
                 mode_label,
                 f"{baseline[row_index]:+.6e}",
@@ -246,6 +269,13 @@ class ComparisonCanvas(FigureCanvasQTAgg):
 
         baseline_nm = np.asarray(result.hcipy_zernikes, dtype=np.float64) * 1e9
         measured_nm = np.asarray(result.fpga_zernikes, dtype=np.float64) * 1e9
+        mode_labels, aligned_series = _align_mode_labels_and_series(result.mode_labels, baseline_nm, measured_nm)
+        baseline_nm = cast(np.ndarray, aligned_series[0])
+        measured_nm = cast(np.ndarray, aligned_series[1])
+        if not mode_labels:
+            self.show_placeholder("No overlapping HCIPy/FPGA coefficient data is available yet.")
+            return
+
         errors_nm = measured_nm - baseline_nm
 
         self.figure.clear()
@@ -256,7 +286,7 @@ class ComparisonCanvas(FigureCanvasQTAgg):
 
         axes[0].scatter(baseline_nm, measured_nm, color="#e76f51", s=48)
         axes[0].plot([-max_extent, max_extent], [-max_extent, max_extent], linestyle="--", color="#264653")
-        for index, label in enumerate(result.mode_labels):
+        for index, label in enumerate(mode_labels):
             axes[0].annotate(label, (baseline_nm[index], measured_nm[index]), textcoords="offset points", xytext=(4, 4))
         axes[0].set_xlim(-max_extent, max_extent)
         axes[0].set_ylim(-max_extent, max_extent)
@@ -265,12 +295,12 @@ class ComparisonCanvas(FigureCanvasQTAgg):
         axes[0].set_title("Coefficient Correlation")
         axes[0].grid(alpha=0.25)
 
-        x_axis = np.arange(len(result.mode_labels))
+        x_axis = np.arange(len(mode_labels))
         colors = ["#e76f51" if value >= 0.0 else "#2a9d8f" for value in errors_nm]
         axes[1].bar(x_axis, errors_nm, color=colors)
         axes[1].axhline(0.0, color="#264653", linewidth=0.9)
         axes[1].set_xticks(x_axis)
-        axes[1].set_xticklabels(result.mode_labels, rotation=45, ha="right")
+        axes[1].set_xticklabels(mode_labels, rotation=45, ha="right")
         axes[1].set_ylabel("FPGA - HCIPy (nm)")
         axes[1].set_title("Signed Error By Mode")
 
@@ -328,6 +358,17 @@ class ComparisonTab(QtWidgets.QWidget):
 
         baseline_nm = np.asarray(result.hcipy_zernikes, dtype=np.float64) * 1e9
         measured_nm = np.asarray(result.fpga_zernikes, dtype=np.float64) * 1e9
+        mode_labels, aligned_series = _align_mode_labels_and_series(result.mode_labels, baseline_nm, measured_nm)
+        baseline_nm = cast(np.ndarray, aligned_series[0])
+        measured_nm = cast(np.ndarray, aligned_series[1])
+        if not mode_labels:
+            self.message_label.setText("No overlapping HCIPy/FPGA coefficient data is available yet.")
+            self.mean_bias_value.setText("n/a")
+            self.worst_mode_value.setText("n/a")
+            self.table.setRowCount(0)
+            self.canvas.show_placeholder("No overlapping HCIPy/FPGA coefficient data is available yet.")
+            return
+
         errors_nm = measured_nm - baseline_nm
         raw_values = result.fpga_zernikes_raw
 
@@ -336,10 +377,10 @@ class ComparisonTab(QtWidgets.QWidget):
             f"Comparing the HCIPy baseline against FPGA outputs from the run at {result.timestamp}."
         )
         self.mean_bias_value.setText(f"{float(np.mean(errors_nm)):+.3f} nm")
-        self.worst_mode_value.setText(f"{result.mode_labels[worst_index]} ({errors_nm[worst_index]:+.3f} nm)")
+        self.worst_mode_value.setText(f"{mode_labels[worst_index]} ({errors_nm[worst_index]:+.3f} nm)")
 
-        self.table.setRowCount(len(result.mode_labels))
-        for row_index, mode_label in enumerate(result.mode_labels):
+        self.table.setRowCount(len(mode_labels))
+        for row_index, mode_label in enumerate(mode_labels):
             raw_text = "n/a"
             if raw_values is not None and row_index < len(raw_values):
                 raw_text = str(int(raw_values[row_index]))
@@ -382,10 +423,18 @@ class ZernikeComparisonCanvas(FigureCanvasQTAgg):
             self.show_placeholder("No Zernike coefficient data is available yet.")
             return
 
+        mode_labels, aligned_series = _align_mode_labels_and_series(result.mode_labels, true_nm, hcipy_nm, fpga_nm)
+        true_nm = aligned_series[0]
+        hcipy_nm = aligned_series[1]
+        fpga_nm = aligned_series[2]
+        if not mode_labels:
+            self.show_placeholder("No Zernike coefficient data is available yet.")
+            return
+
         self.figure.clear()
         axis = self.figure.subplots()
 
-        x_axis = np.arange(len(result.mode_labels), dtype=np.float64)
+        x_axis = np.arange(len(mode_labels), dtype=np.float64)
         series_count = sum(values is not None for values in (true_nm, hcipy_nm, fpga_nm))
         bar_width = 0.22 if series_count >= 3 else 0.32
         center_offsets = {
@@ -407,7 +456,7 @@ class ZernikeComparisonCanvas(FigureCanvasQTAgg):
 
         axis.axhline(0.0, color="#222222", linewidth=0.8)
         axis.set_xticks(x_axis)
-        axis.set_xticklabels(result.mode_labels, rotation=45, ha="right")
+        axis.set_xticklabels(mode_labels, rotation=45, ha="right")
         axis.set_ylabel("Coefficient [nm]")
         axis.set_title("Zernike coefficient comparison")
         axis.grid(axis="y", alpha=0.2)
@@ -456,9 +505,13 @@ class ZernikeComparisonTab(QtWidgets.QWidget):
         true_nm = None if result.true_zernikes is None else np.asarray(result.true_zernikes, dtype=np.float64) * 1e9
         hcipy_nm = None if result.hcipy_zernikes is None else np.asarray(result.hcipy_zernikes, dtype=np.float64) * 1e9
         fpga_nm = None if result.fpga_zernikes is None else np.asarray(result.fpga_zernikes, dtype=np.float64) * 1e9
+        mode_labels, aligned_series = _align_mode_labels_and_series(result.mode_labels, true_nm, hcipy_nm, fpga_nm)
+        true_nm = aligned_series[0]
+        hcipy_nm = aligned_series[1]
+        fpga_nm = aligned_series[2]
 
-        self.table.setRowCount(len(result.mode_labels))
-        for row_index, mode_label in enumerate(result.mode_labels):
+        self.table.setRowCount(len(mode_labels))
+        for row_index, mode_label in enumerate(mode_labels):
             row_values = (
                 mode_label,
                 "n/a" if true_nm is None else f"{true_nm[row_index]:+.3f}",
@@ -641,19 +694,11 @@ class PlotCanvas(FigureCanvasQTAgg):
         colorbar.set_label("|FPGA - HCIPy| [px]")
 
     def _plot_coefficients(self, axis: Axes, result: RunResult) -> None:
-        x_axis = np.arange(len(result.mode_labels))
         axis.axhline(0.0, color="#222222", linewidth=0.8)
 
         true_nm = None if result.true_zernikes is None else np.asarray(result.true_zernikes, dtype=np.float64) * 1e9
         hcipy_nm = None if result.hcipy_zernikes is None else np.asarray(result.hcipy_zernikes, dtype=np.float64) * 1e9
         fpga_nm = None if result.fpga_zernikes is None else np.asarray(result.fpga_zernikes, dtype=np.float64) * 1e9
-
-        if true_nm is not None:
-            axis.plot(x_axis, true_nm, marker="o", linewidth=1.8, color="#457b9d", label="True")
-        if hcipy_nm is not None:
-            axis.plot(x_axis, hcipy_nm, marker="s", linewidth=1.8, color="#2a9d8f", label="HCIPy")
-        if fpga_nm is not None:
-            axis.plot(x_axis, fpga_nm, marker="^", linewidth=1.8, color="#e76f51", label="FPGA")
 
         if true_nm is None and hcipy_nm is None and fpga_nm is None:
             axis.text(0.5, 0.5, "No coefficient data", ha="center", va="center")
@@ -662,8 +707,28 @@ class PlotCanvas(FigureCanvasQTAgg):
             axis.set_yticks([])
             return
 
+        mode_labels, aligned_series = _align_mode_labels_and_series(result.mode_labels, true_nm, hcipy_nm, fpga_nm)
+        true_nm = aligned_series[0]
+        hcipy_nm = aligned_series[1]
+        fpga_nm = aligned_series[2]
+        if not mode_labels:
+            axis.text(0.5, 0.5, "No coefficient data", ha="center", va="center")
+            axis.set_title("Zernike coefficient comparison")
+            axis.set_xticks([])
+            axis.set_yticks([])
+            return
+
+        x_axis = np.arange(len(mode_labels))
+
+        if true_nm is not None:
+            axis.plot(x_axis, true_nm, marker="o", linewidth=1.8, color="#457b9d", label="True")
+        if hcipy_nm is not None:
+            axis.plot(x_axis, hcipy_nm, marker="s", linewidth=1.8, color="#2a9d8f", label="HCIPy")
+        if fpga_nm is not None:
+            axis.plot(x_axis, fpga_nm, marker="^", linewidth=1.8, color="#e76f51", label="FPGA")
+
         axis.set_xticks(x_axis)
-        axis.set_xticklabels(result.mode_labels, rotation=45, ha="right")
+        axis.set_xticklabels(mode_labels, rotation=45, ha="right")
         axis.set_ylabel("Coefficient [nm]")
         axis.set_title("Zernike coefficient comparison")
         axis.grid(alpha=0.2)

@@ -24,6 +24,7 @@ SUBAPERTURE_PIXELS = 16
 NUM_PACKED_XY = NUM_SUBAPERTURES * 2
 NUM_ZERNIKE = 10
 Q4_23_SCALE = float(1 << 23)
+Q4_22_SCALE = float(1 << 22)
 
 bind_ip = "10.48.69.89" 
 bind_port = 80
@@ -172,7 +173,7 @@ def decode_q4_23_from_bytes(payload, expected_count):
     return values_i32.astype(np.float64) / Q4_23_SCALE
 
 
-def summarize_fixed_point_payload(name, payload, expected_count, scale):
+def summarize_fixed_point_payload(name, payload, expected_count, scale, format_label="Q4.23"):
     raw_values = np.frombuffer(payload, dtype="<i4", count=expected_count)
     nonzero_count = int(np.count_nonzero(raw_values))
     print(
@@ -181,11 +182,11 @@ def summarize_fixed_point_payload(name, payload, expected_count, scale):
     )
 
     if nonzero_count == 0:
-        print(f"     [!] {name} payload is all zeros before Q4.23 scaling")
+        print(f"     [!] {name} payload is all zeros before {format_label} scaling")
 
     scaled_values = raw_values.astype(np.float64) / scale
     print(
-        f"     {name} Q4.23 stats: min={scaled_values.min():.6e}, "
+        f"     {name} {format_label} stats: min={scaled_values.min():.6e}, "
         f"max={scaled_values.max():.6e}"
     )
     return scaled_values
@@ -381,7 +382,8 @@ def handle_client(client_socket):
                 client_socket.sendall(b"zernike_done\n")
                 print("     Zernike coefficients received and acked.")
 
-                # Decode returned Q4.23 fixed-point values into float arrays.
+                # Decode returned fixed-point values into float arrays.
+                # Centroids and slopes are Q4.23; Zernikes are Q4.22.
                 centroids_q423 = summarize_fixed_point_payload(
                     "Centroids",
                     centroid_bytes,
@@ -394,11 +396,12 @@ def handle_client(client_socket):
                     NUM_PACKED_XY,
                     Q4_23_SCALE,
                 )
-                zernikes_q423 = summarize_fixed_point_payload(
+                zernikes_q422 = summarize_fixed_point_payload(
                     "Zernikes",
                     zernike_bytes,
                     NUM_ZERNIKE,
-                    Q4_23_SCALE,
+                    Q4_22_SCALE,
+                    format_label="Q4.22",
                 )
 
                 # Packed format: [X0..X255, Y0..Y255] for both centroids and slopes.
@@ -413,7 +416,7 @@ def handle_client(client_socket):
                 dump_fpga_float_results(
                     slopes_xy_grid,
                     centroids_xy_grid,
-                    zernikes_q423,
+                    zernikes_q422,
                     simulation["mode_labels"],
                 )
                 dump_hcipy_zernike_results(
@@ -421,7 +424,7 @@ def handle_client(client_socket):
                     simulation["mode_labels"],
                 )
                 dump_zernike_comparison(
-                    zernikes_q423,
+                    zernikes_q422,
                     hcipy_estimation["estimated_coeffs"],
                     simulation["mode_labels"],
                 )
@@ -432,7 +435,7 @@ def handle_client(client_socket):
                 print(
                     f"     slope grid shape={slopes_xy_grid.shape}, "
                     f"centroid grid shape={centroids_xy_grid.shape}, "
-                    f"zernike shape={zernikes_q423.shape}"
+                    f"zernike shape={zernikes_q422.shape}"
                 )
 
             case _:
