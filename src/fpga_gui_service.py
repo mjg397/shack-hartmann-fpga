@@ -52,6 +52,9 @@ class RunResult:
     mode_labels: list[str]
     notes: list[str] = field(default_factory=list)
     client_address: str | None = None
+    simulation_data: dict | None = None
+    hcipy_estimation_data: dict | None = None
+    true_coeffs: np.ndarray | None = None
 
     @property
     def has_accuracy_comparison(self) -> bool:
@@ -256,13 +259,16 @@ class FpgaControlService(QtCore.QObject):
                 quantized_image=np.asarray(fpga_like["quantized_image"], dtype=np.uint8),
                 centroids_xy_grid=np.asarray(fpga_like["centroids_grid"], dtype=np.float64),
                 slopes_xy_grid=np.asarray(fpga_like["slopes_grid"], dtype=np.float64),
-                fpga_zernikes=np.asarray(fpga_like["estimated_coeffs"], dtype=np.float64), # Show simulated FPGA result
+                fpga_zernikes=np.asarray(fpga_like["estimated_coeffs"], dtype=np.float64),
                 hcipy_zernikes=np.asarray(hcipy_estimation["estimated_coeffs"], dtype=np.float64),
                 mode_labels=list(simulation["mode_labels"]),
                 notes=[
                     f"Local preview simulating {NUM_VALID_SUBAPERTURES} valid subapertures.",
                     "Using host-side bit-accurate centroid and slope arithmetic.",
                 ],
+                simulation_data=simulation,
+                hcipy_estimation_data=hcipy_estimation,
+                true_coeffs=np.asarray(simulation["true_coeffs"], dtype=np.float64),
             )
             self.run_completed.emit(result)
             self.log_message.emit("Local preview finished.")
@@ -368,6 +374,9 @@ class FpgaControlService(QtCore.QObject):
                         "Coefficient accuracy is compared against the HCIPy estimator for the same synthetic case.",
                     ],
                     client_address=client_label,
+                    simulation_data=simulation,
+                    hcipy_estimation_data=hcipy_estimation,
+                    true_coeffs=np.asarray(simulation["true_coeffs"], dtype=np.float64),
                 )
                 self._write_result_artifacts(result)
                 self.run_completed.emit(result)
