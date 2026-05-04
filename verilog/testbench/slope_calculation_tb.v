@@ -76,11 +76,9 @@ module slope_calculation_tb(
     begin
       subapetures_completed = subap;
 
-
       rec_intensity = rec;
-
-      x_intensity   = xi;             // integer
-      y_intensity   = yi;             // integer
+      x_intensity   = xi;
+      y_intensity   = yi;
     end
   endtask
 
