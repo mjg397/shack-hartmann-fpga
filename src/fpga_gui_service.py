@@ -13,6 +13,7 @@ import numpy as np
 from PySide6 import QtCore
 
 from shwfs_utils import (
+    build_fpga_estimation,
     generate_shwfs_case,
     quantize_shwfs_image,
     reshape_subaperture_xy,
@@ -66,6 +67,8 @@ class RunResult:
     input_opd_map_nm: np.ndarray | None = None
     reconstructed_opd_map_nm: np.ndarray | None = None
     residual_opd_map_nm: np.ndarray | None = None
+    fpga_reconstructed_opd_map_nm: np.ndarray | None = None
+    fpga_residual_opd_map_nm: np.ndarray | None = None
     aperture_mask: np.ndarray | None = None
     wavelength_m: float | None = None
     notes: list[str] = field(default_factory=list)
@@ -439,6 +442,24 @@ class FpgaControlService(QtCore.QObject):
                 slopes_xy_grid = reshape_subaperture_xy(slopes_xy, NUM_SUBAPERTURES_SIDE)
                 diagnostics = _build_run_result_diagnostics(simulation, hcipy_estimation)
 
+                # Reconstruct OPD from the FPGA Zernike coefficients
+                fpga_estimation = build_fpga_estimation(
+                    slopes_xy=slopes_xy,
+                    estimated_coeffs=fpga_zernikes_meters,
+                    zernike_modes=simulation["zernike_modes"],
+                    aperture=simulation["aperture"],
+                    shwfs=simulation["shwfs"],
+                    num_lenslets=NUM_SUBAPERTURES_SIDE,
+                    measured_opd_field=simulation["input_opd_field"],
+                )
+                pupil_pixels = int(cast(int, simulation["num_pupil_pixels"]))
+                fpga_reconstructed_opd_map_nm = _reshape_field_to_nm(
+                    fpga_estimation["reconstructed_opd_field"], pupil_pixels
+                )
+                fpga_residual_opd_map_nm = _reshape_field_to_nm(
+                    fpga_estimation["residual_field"], pupil_pixels
+                )
+
                 result = RunResult(
                     source="fpga",
                     timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -454,6 +475,8 @@ class FpgaControlService(QtCore.QObject):
                     true_zernikes=np.asarray(simulation["true_coeffs"], dtype=np.float64),
                     mode_labels=list(cast(list[str], simulation["mode_labels"])),
                     **diagnostics,
+                    fpga_reconstructed_opd_map_nm=fpga_reconstructed_opd_map_nm,
+                    fpga_residual_opd_map_nm=fpga_residual_opd_map_nm,
                     notes=[
                         "The current wire protocol is client-initiated; the HPS side sends start.",
                         f"FPGA coefficients are rescaled with raw / 2^22 * {FPGA_RM_GLOBAL_SCALE:g} nm before HCIPy comparison.",

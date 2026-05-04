@@ -909,6 +909,382 @@ class PlotsTab(QtWidgets.QWidget):
         self.canvas.update_result(result)
 
 
+class FpgaPlotCanvas(FigureCanvasQTAgg):
+    """Diagnostic plot canvas using FPGA-reconstructed OPD maps.
+
+    This mirrors PlotCanvas but substitutes the HCIPy OPD reconstruction
+    with the OPD reconstructed from the FPGA Zernike coefficients, giving
+    a side-by-side visual comparison of FPGA reconstruction quality.
+    """
+
+    def __init__(self, parent: QtWidgets.QWidget | None = None) -> None:
+        self.figure = Figure(figsize=(15, 11), tight_layout=True)
+        super().__init__(self.figure)
+        self.setParent(parent)
+
+    def show_placeholder(self, message: str) -> None:
+        self.figure.clear()
+        axis = self.figure.subplots()
+        axis.text(0.5, 0.5, message, ha="center", va="center")
+        axis.set_axis_off()
+        self.draw_idle()
+
+    def _reshape_square_image(self, image: np.ndarray | None) -> np.ndarray | None:
+        if image is None:
+            return None
+        values = np.asarray(image, dtype=np.float64)
+        if values.ndim == 2:
+            return values
+        if values.ndim != 1:
+            return None
+        side = int(round(np.sqrt(values.size)))
+        if side * side != values.size:
+            return None
+        return values.reshape(side, side)
+
+    def _masked_abs_max(self, image: np.ndarray | None, mask: np.ndarray | None = None) -> float:
+        values = self._reshape_square_image(image)
+        if values is None:
+            return 0.0
+        if mask is not None and mask.shape == values.shape:
+            valid_values = values[np.asarray(mask, dtype=bool)]
+        else:
+            valid_values = values.ravel()
+        if valid_values.size == 0:
+            return 0.0
+        return float(np.max(np.abs(valid_values)))
+
+    def _masked_rms(self, image: np.ndarray | None, mask: np.ndarray | None = None) -> float | None:
+        values = self._reshape_square_image(image)
+        if values is None:
+            return None
+        if mask is not None and mask.shape == values.shape:
+            valid_values = values[np.asarray(mask, dtype=bool)]
+        else:
+            valid_values = values.ravel()
+        if valid_values.size == 0:
+            return None
+        return float(np.sqrt(np.mean(valid_values**2)))
+
+    def _plot_image(
+        self,
+        axis: Axes,
+        image: np.ndarray | None,
+        title: str,
+        *,
+        cmap: str = "inferno",
+        colorbar_label: str | None = None,
+        symmetric: bool = False,
+        mask: np.ndarray | None = None,
+        vmin: float | None = None,
+        vmax: float | None = None,
+    ) -> None:
+        values = self._reshape_square_image(image)
+        if values is None:
+            axis.text(0.5, 0.5, "No data", ha="center", va="center")
+            axis.set_title(title)
+            axis.set_xticks([])
+            axis.set_yticks([])
+            return
+
+        plot_values: np.ndarray | np.ma.MaskedArray
+        plot_values = values
+        if mask is not None and mask.shape == values.shape:
+            plot_values = np.ma.array(values, mask=~np.asarray(mask, dtype=bool))
+
+        if symmetric and vmin is None and vmax is None:
+            valid_values = np.asarray(np.ma.array(plot_values).compressed(), dtype=np.float64)
+            dynamic_range = float(np.max(np.abs(valid_values))) if valid_values.size else 1.0
+            vmin = -dynamic_range
+            vmax = dynamic_range
+
+        image_artist = axis.imshow(plot_values, cmap=cmap, origin="lower", vmin=vmin, vmax=vmax)
+        axis.set_title(title)
+        axis.set_xticks([])
+        axis.set_yticks([])
+        if colorbar_label is not None:
+            colorbar = self.figure.colorbar(image_artist, ax=axis, fraction=0.046, pad=0.04)
+            colorbar.set_label(colorbar_label)
+
+    def _plot_slope_field(
+        self,
+        axis: Axes,
+        slopes_xy_grid: np.ndarray | None,
+        mask: np.ndarray | None,
+        title: str,
+    ) -> None:
+        if slopes_xy_grid is None:
+            axis.text(0.5, 0.5, "No slope data", ha="center", va="center")
+            axis.set_title(title)
+            axis.set_xticks([])
+            axis.set_yticks([])
+            return
+
+        slopes = np.asarray(slopes_xy_grid, dtype=np.float64)
+        local_mask = np.ones(slopes.shape[:2], dtype=bool) if mask is None else np.asarray(mask, dtype=bool)
+        slope_x = np.ma.array(slopes[..., 0], mask=~local_mask)
+        slope_y = np.ma.array(slopes[..., 1], mask=~local_mask)
+        magnitude = np.ma.sqrt(slope_x**2 + slope_y**2)
+        image_artist = axis.imshow(magnitude, cmap="viridis", origin="lower")
+
+        row_indices, col_indices = np.indices(local_mask.shape)
+        valid_rows = row_indices[local_mask]
+        valid_cols = col_indices[local_mask]
+        valid_x = np.asarray(slope_x[local_mask], dtype=np.float64)
+        valid_y = np.asarray(slope_y[local_mask], dtype=np.float64)
+        if valid_x.size:
+            max_magnitude = float(np.max(np.hypot(valid_x, valid_y)))
+            quiver_scale = max(max_magnitude * 3.0, 1e-6)
+            axis.quiver(
+                valid_cols,
+                valid_rows,
+                valid_x,
+                valid_y,
+                color="white",
+                angles="xy",
+                scale_units="xy",
+                scale=quiver_scale,
+                width=0.007,
+            )
+
+        axis.set_title(title)
+        axis.set_xticks([])
+        axis.set_yticks([])
+        colorbar = self.figure.colorbar(image_artist, ax=axis, fraction=0.046, pad=0.04)
+        colorbar.set_label("slope magnitude [px]")
+
+    def _plot_coefficients(self, axis: Axes, result: RunResult) -> None:
+        axis.axhline(0.0, color="#222222", linewidth=0.8)
+
+        true_nm = None if result.true_zernikes is None else np.asarray(result.true_zernikes, dtype=np.float64) * 1e9
+        fpga_nm = None if result.fpga_zernikes is None else np.asarray(result.fpga_zernikes, dtype=np.float64) * 1e9
+
+        if true_nm is None and fpga_nm is None:
+            axis.text(0.5, 0.5, "No coefficient data", ha="center", va="center")
+            axis.set_title("FPGA Zernike coefficients")
+            axis.set_xticks([])
+            axis.set_yticks([])
+            return
+
+        mode_labels, aligned_series = _align_mode_labels_and_series(result.mode_labels, true_nm, fpga_nm)
+        true_nm = aligned_series[0]
+        fpga_nm = aligned_series[1]
+        if not mode_labels:
+            axis.text(0.5, 0.5, "No coefficient data", ha="center", va="center")
+            axis.set_title("FPGA Zernike coefficients")
+            axis.set_xticks([])
+            axis.set_yticks([])
+            return
+
+        x_axis = np.arange(len(mode_labels))
+
+        if true_nm is not None:
+            axis.plot(x_axis, true_nm, marker="o", linewidth=1.8, color="#457b9d", label="True")
+        if fpga_nm is not None:
+            axis.plot(x_axis, fpga_nm, marker="^", linewidth=1.8, color="#e76f51", label="FPGA")
+
+        axis.set_xticks(x_axis)
+        axis.set_xticklabels(mode_labels, rotation=45, ha="right")
+        axis.set_ylabel("Coefficient [nm]")
+        axis.set_title("FPGA Zernike coefficients")
+        axis.grid(alpha=0.2)
+        axis.legend(loc="upper right")
+
+    def _compute_log_psf(self, opd_map_nm: np.ndarray | None, aperture_mask: np.ndarray | None, wavelength_m: float | None) -> np.ndarray | None:
+        if opd_map_nm is None or aperture_mask is None or wavelength_m is None:
+            return None
+        opd_m = np.asarray(opd_map_nm, dtype=np.float64) * 1e-9
+        pupil = np.asarray(aperture_mask, dtype=np.float64) * np.exp(1j * opd_m * (2.0 * np.pi / wavelength_m))
+        focal = np.fft.fftshift(np.fft.fft2(np.fft.ifftshift(pupil)))
+        psf = np.abs(focal) ** 2
+        peak = float(np.max(psf))
+        if peak <= 0.0:
+            return None
+        return np.log10(np.clip(psf / peak, 1e-12, None))
+
+    def update_result(self, result: RunResult) -> None:
+        fpga_recon = result.fpga_reconstructed_opd_map_nm
+        fpga_resid = result.fpga_residual_opd_map_nm
+
+        if fpga_recon is None and fpga_resid is None:
+            self.show_placeholder(
+                "FPGA reconstruction plots appear after an FPGA hardware run completes.\n"
+                "The FPGA Zernike coefficients are used to reconstruct the OPD map."
+            )
+            return
+
+        self.figure.clear()
+        axes = self.figure.subplots(3, 4)
+
+        self.figure.suptitle(
+            f"FPGA reconstruction diagnostics for {result.source} run at {result.timestamp}",
+            fontsize=14,
+            fontweight="bold",
+        )
+
+        # Row 0: WFS images and FPGA slope field
+        self._plot_image(
+            axes[0, 0],
+            result.reference_image,
+            "Reference WFS image",
+            cmap="inferno",
+            colorbar_label="counts",
+        )
+        self._plot_image(
+            axes[0, 1],
+            result.quantized_image,
+            "Detector frame sent to FPGA",
+            cmap="inferno",
+            colorbar_label="ADU",
+        )
+        self._plot_slope_field(axes[0, 2], result.slopes_xy_grid, result.valid_subaperture_mask, "FPGA slope field")
+
+        # Row 0, col 3: empty placeholder for symmetry
+        axes[0, 3].set_axis_off()
+
+        # Row 1: OPD maps — Input, FPGA Reconstructed, FPGA Residual
+        opd_vmax = max(
+            1.0,
+            self._masked_abs_max(result.input_opd_map_nm, result.aperture_mask),
+            self._masked_abs_max(fpga_recon, result.aperture_mask),
+            self._masked_abs_max(fpga_resid, result.aperture_mask),
+        )
+        residual_rms_nm = self._masked_rms(fpga_resid, result.aperture_mask)
+        fpga_residual_title = "FPGA Residual OPD"
+        if residual_rms_nm is not None:
+            fpga_residual_title = f"FPGA Residual OPD (RMS {residual_rms_nm:.1f} nm)"
+
+        self._plot_image(
+            axes[1, 0],
+            result.input_opd_map_nm,
+            "Input OPD",
+            cmap="RdBu_r",
+            colorbar_label="nm",
+            symmetric=True,
+            mask=result.aperture_mask,
+            vmin=-opd_vmax,
+            vmax=opd_vmax,
+        )
+        self._plot_image(
+            axes[1, 1],
+            fpga_recon,
+            "FPGA Reconstructed OPD",
+            cmap="RdBu_r",
+            colorbar_label="nm",
+            symmetric=True,
+            mask=result.aperture_mask,
+            vmin=-opd_vmax,
+            vmax=opd_vmax,
+        )
+        self._plot_image(
+            axes[1, 2],
+            fpga_resid,
+            fpga_residual_title,
+            cmap="RdBu_r",
+            colorbar_label="nm",
+            symmetric=True,
+            mask=result.aperture_mask,
+            vmin=-opd_vmax,
+            vmax=opd_vmax,
+        )
+
+        # Row 1, col 3: HCIPy vs FPGA residual difference
+        hcipy_resid = result.residual_opd_map_nm
+        if hcipy_resid is not None and fpga_resid is not None:
+            hcipy_2d = self._reshape_square_image(hcipy_resid)
+            fpga_2d = self._reshape_square_image(fpga_resid)
+            if hcipy_2d is not None and fpga_2d is not None and hcipy_2d.shape == fpga_2d.shape:
+                delta = fpga_resid - hcipy_resid
+                self._plot_image(
+                    axes[1, 3],
+                    delta,
+                    "FPGA − HCIPy Residual",
+                    cmap="RdBu_r",
+                    colorbar_label="nm",
+                    symmetric=True,
+                    mask=result.aperture_mask,
+                )
+            else:
+                axes[1, 3].set_axis_off()
+        else:
+            axes[1, 3].set_axis_off()
+
+        # Row 2: PSFs and coefficient trace
+        diffraction_limited_psf = self._compute_log_psf(
+            np.zeros_like(result.input_opd_map_nm) if result.input_opd_map_nm is not None else None,
+            result.aperture_mask,
+            result.wavelength_m,
+        )
+        aberrated_psf = self._compute_log_psf(result.input_opd_map_nm, result.aperture_mask, result.wavelength_m)
+        fpga_corrected_psf = self._compute_log_psf(fpga_resid, result.aperture_mask, result.wavelength_m)
+
+        self._plot_image(
+            axes[2, 0],
+            diffraction_limited_psf,
+            "Diffraction-limited PSF",
+            cmap="inferno",
+            colorbar_label="log10(I / Imax)",
+            vmin=-6,
+            vmax=0,
+        )
+        self._plot_image(
+            axes[2, 1],
+            aberrated_psf,
+            "Aberrated PSF",
+            cmap="inferno",
+            colorbar_label="log10(I / Imax)",
+            vmin=-6,
+            vmax=0,
+        )
+        self._plot_image(
+            axes[2, 2],
+            fpga_corrected_psf,
+            "FPGA-corrected PSF",
+            cmap="inferno",
+            colorbar_label="log10(I / Imax)",
+            vmin=-6,
+            vmax=0,
+        )
+        self._plot_coefficients(axes[2, 3], result)
+
+        self.draw_idle()
+
+
+class FpgaPlotsTab(QtWidgets.QWidget):
+    """Diagnostics tab using FPGA-reconstructed OPD maps instead of HCIPy."""
+
+    def __init__(self, parent: QtWidgets.QWidget | None = None) -> None:
+        super().__init__(parent)
+        self.subtitle = QtWidgets.QLabel(
+            "FPGA reconstruction diagnostics appear after a hardware FPGA run completes. "
+            "OPD maps and PSFs are reconstructed from the FPGA Zernike coefficients."
+        )
+        self.subtitle.setWordWrap(True)
+        self.canvas = FpgaPlotCanvas(self)
+        self.canvas.show_placeholder(
+            "FPGA reconstruction plots appear after an FPGA hardware run completes."
+        )
+        self.toolbar = NavigationToolbar2QT(self.canvas, self)
+
+        layout = QtWidgets.QVBoxLayout(self)
+        layout.addWidget(self.subtitle)
+        layout.addWidget(self.toolbar)
+        layout.addWidget(self.canvas, 1)
+
+    def update_result(self, result: RunResult) -> None:
+        if result.fpga_reconstructed_opd_map_nm is not None:
+            self.subtitle.setText(
+                f"Displaying FPGA reconstruction diagnostics from the {result.source} run at {result.timestamp}. "
+                f"OPD maps and PSFs are reconstructed from the FPGA Zernike coefficients."
+            )
+        elif result.source == "local-preview":
+            self.subtitle.setText(
+                "Local preview does not produce FPGA Zernike coefficients. "
+                "Run an FPGA hardware capture to populate this tab."
+            )
+        self.canvas.update_result(result)
+
+
 class AberrationConfigTab(QtWidgets.QWidget):
     """Interactive Zernike aberration configuration for live demos."""
 
@@ -1078,13 +1454,15 @@ class MainWindow(QtWidgets.QMainWindow):
         self.comparison_tab = ComparisonTab()
         self.zernike_tab = ZernikeComparisonTab()
         self.plots_tab = PlotsTab()
+        self.fpga_plots_tab = FpgaPlotsTab()
 
         self.tabs.addTab(self.config_tab, "\u2699 Aberration Config")
         self.tabs.addTab(self.results_tab, "Run + Results")
         self.tabs.addTab(self.accuracy_tab, "Accuracy Stats")
         self.tabs.addTab(self.comparison_tab, "HCIPy Comparison")
         self.tabs.addTab(self.zernike_tab, "Zernike Chart")
-        self.tabs.addTab(self.plots_tab, "Plots")
+        self.tabs.addTab(self.plots_tab, "Plots (HCIPy)")
+        self.tabs.addTab(self.fpga_plots_tab, "Plots (FPGA)")
         self.setCentralWidget(self.tabs)
 
         self.results_tab.start_server_requested.connect(self.service.start_server)
@@ -1119,6 +1497,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.comparison_tab.update_result(result)
         self.zernike_tab.update_result(result)
         self.plots_tab.update_result(result)
+        self.fpga_plots_tab.update_result(result)
         self.statusBar().showMessage(f"Updated UI with the {result.source} run from {result.timestamp}")
 
 

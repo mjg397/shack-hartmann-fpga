@@ -444,11 +444,29 @@ def collapse_xy_grid(xy_grid, factor=2, valid_mask=None, fill_value=0.0):
 
 
 def make_fpga_subaperture_positions(shwfs, num_lenslets):
-    """Construct 16x16 logical lenslet positions from the HCIPy 32x32 MLA grid."""
-    x_grid = np.asarray(shwfs.mla_grid.x, dtype=np.float64).reshape(num_lenslets * 2, num_lenslets * 2)
-    y_grid = np.asarray(shwfs.mla_grid.y, dtype=np.float64).reshape(num_lenslets * 2, num_lenslets * 2)
-    x_pos = collapse_xy_grid(np.dstack((x_grid, x_grid)), factor=2)[..., 0].ravel()
-    y_pos = collapse_xy_grid(np.dstack((y_grid, y_grid)), factor=2)[..., 0].ravel()
+    """Construct 16x16 logical lenslet positions from the HCIPy MLA grid.
+
+    Handles both a 2x-oversampled grid (32x32 collapsed to 16x16) and a grid
+    that already matches *num_lenslets* x *num_lenslets*.
+    """
+    grid_size = np.asarray(shwfs.mla_grid.x).size
+    expected_direct = num_lenslets * num_lenslets
+    expected_oversampled = (num_lenslets * 2) * (num_lenslets * 2)
+
+    if grid_size == expected_oversampled:
+        x_grid = np.asarray(shwfs.mla_grid.x, dtype=np.float64).reshape(num_lenslets * 2, num_lenslets * 2)
+        y_grid = np.asarray(shwfs.mla_grid.y, dtype=np.float64).reshape(num_lenslets * 2, num_lenslets * 2)
+        x_pos = collapse_xy_grid(np.dstack((x_grid, x_grid)), factor=2)[..., 0].ravel()
+        y_pos = collapse_xy_grid(np.dstack((y_grid, y_grid)), factor=2)[..., 0].ravel()
+    elif grid_size == expected_direct:
+        x_pos = np.asarray(shwfs.mla_grid.x, dtype=np.float64)
+        y_pos = np.asarray(shwfs.mla_grid.y, dtype=np.float64)
+    else:
+        raise ValueError(
+            f"MLA grid has {grid_size} elements; expected {expected_direct} "
+            f"({num_lenslets}x{num_lenslets}) or {expected_oversampled} "
+            f"({num_lenslets*2}x{num_lenslets*2})"
+        )
     return SimpleNamespace(x=x_pos, y=y_pos)
 
 
