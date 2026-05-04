@@ -600,8 +600,8 @@ int main(int argc, char **argv)
         } else if (i < 1024) {
             centroids[i - 512] = SIGN_EXTEND_4_23(sram_ptr[i]); // *(sram_ptr + (i * sizeof(centroids[i - 512])))
         } else if (i < 1034) {
-            printf("Zernike %d : %x\n", i - 1024, sram_ptr[i]);
             zernike_coeffs[i - 1024] = SIGN_EXTEND_4_22(sram_ptr[i]); // *(sram_ptr + (i * sizeof(zernike_coeffs[i - 1024])))
+            printf("Zernike %d : %x\n", i - 1024, zernike_coeffs[i-1024]);
         }
     }
 

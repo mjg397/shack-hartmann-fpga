@@ -8,7 +8,7 @@ module streaming_emulator #(
   input wire reset,
   input wire [7:0] rdata,
   input wire start,
-  
+ 
   output reg [15:0] raddr,
   output reg [7:0] data,
   output reg fv,
@@ -38,8 +38,10 @@ module streaming_emulator #(
   localparam STATE_VERTICAL_BLANKING   = 2'b11;
 
   reg [1:0] state;
-
   reg start_latch;
+
+  // Internal control signals before delay
+  reg fv_int, lv_int, frame_complete_int;
 
   always @(posedge clk) begin
       if (reset)                              start_latch <= 0;
@@ -54,31 +56,28 @@ module streaming_emulator #(
       row_counter <= 0;
       h_blank_counter <= 0;
       v_blank_counter <= 0;
-      lv <= 0;
-      fv <= 0;
-      frame_complete <= 0;
-		raddr <= 16'd0;
+      lv_int <= 0;
+      fv_int <= 0;
+      frame_complete_int <= 0;
+      raddr <= 16'd0;
     end
-
     else begin
       case (state)
         STATE_FRAME_INIT: begin
-          fv <= 1;
+          fv_int <= 1;
           line_counter <= 0;
           row_counter <= 0;
           state <= start_latch ? STATE_ACTIVE_FRAME : STATE_FRAME_INIT;
-          frame_complete <= 0;
+          frame_complete_int <= 0;
         end
 
         STATE_ACTIVE_FRAME: begin
-			 data <= rdata;
-			 raddr <= row_counter * HSIZE + line_counter;
-//          data <= mem[row_counter * HSIZE + line_counter];
+          raddr <= row_counter * HSIZE + line_counter;
           line_counter <= line_counter + 1;
-          lv <= 1;
+          lv_int <= 1;
           if ((line_counter == HSIZE - 1) && (row_counter == VSIZE - 1)) begin
             state <= STATE_VERTICAL_BLANKING;
-            frame_complete <= 1;
+            frame_complete_int <= 1;
           end
           else if (line_counter == HSIZE - 1) begin
             state <= STATE_HOROZONTAL_BLANKING;
@@ -86,7 +85,7 @@ module streaming_emulator #(
         end
 
         STATE_HOROZONTAL_BLANKING: begin
-          lv <= 0;
+          lv_int <= 0;
           line_counter <= 0;
           h_blank_counter <= h_blank_counter + 1;
           if (h_blank_counter == HBLANK - 1) begin
@@ -97,8 +96,8 @@ module streaming_emulator #(
         end
 
         STATE_VERTICAL_BLANKING : begin
-          fv <= 0;
-          lv <= 0;
+          fv_int <= 0;
+          lv_int <= 0;
           line_counter <= 0;
           row_counter <= 0;
           v_blank_counter <= v_blank_counter + 1;
@@ -110,5 +109,30 @@ module streaming_emulator #(
       endcase
     end
   end
-endmodule
 
+  // Delay pipeline to align with SRAM read latency (2 cycles: 1 for SRAM, 1 for data <= rdata)
+  reg [1:0] fv_shift;
+  reg [1:0] lv_shift;
+  reg [1:0] fc_shift;
+
+  always @(posedge clk) begin
+      if (reset) begin
+          fv_shift <= 0;
+          lv_shift <= 0;
+          fc_shift <= 0;
+          data <= 0;
+      end else begin
+          fv_shift <= {fv_shift[0], fv_int};
+          lv_shift <= {lv_shift[0], lv_int};
+          fc_shift <= {fc_shift[0], frame_complete_int};
+          data <= rdata;
+      end
+  end
+
+  always @(*) begin
+      fv = fv_shift[1];
+      lv = lv_shift[1];
+      frame_complete = fc_shift[1];
+  end
+
+endmodule
