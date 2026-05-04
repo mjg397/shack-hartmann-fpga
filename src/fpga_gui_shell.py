@@ -44,6 +44,7 @@ class ResultsTab(QtWidgets.QWidget):
         self.server_state_value = QtWidgets.QLabel("Stopped")
         self.client_state_value = QtWidgets.QLabel("No client connected")
         self.last_run_value = QtWidgets.QLabel("No runs yet")
+        self.compute_time_value = QtWidgets.QLabel("n/a")
         self.note_value = QtWidgets.QLabel("Start listening for a hardware run or generate a local preview.")
         self.note_value.setWordWrap(True)
 
@@ -84,6 +85,7 @@ class ResultsTab(QtWidgets.QWidget):
         status_layout.addWidget(self._make_card("Server State", self.server_state_value), 0, 0)
         status_layout.addWidget(self._make_card("Client State", self.client_state_value), 0, 1)
         status_layout.addWidget(self._make_card("Last Run", self.last_run_value), 0, 2)
+        status_layout.addWidget(self._make_card("FPGA Compute Time", self.compute_time_value), 0, 3)
 
         guidance_box = QtWidgets.QGroupBox("Protocol Notes")
         guidance_layout = QtWidgets.QVBoxLayout(guidance_box)
@@ -133,6 +135,21 @@ class ResultsTab(QtWidgets.QWidget):
         suffix = f" via {result.client_address}" if result.client_address else ""
         self.last_run_value.setText(f"{result.source} at {result.timestamp}{suffix}")
         self.note_value.setText(" ".join(result.notes) if result.notes else "No additional notes.")
+
+        # Format FPGA compute time
+        if result.fpga_compute_time_ns is not None:
+            ns = result.fpga_compute_time_ns
+            if ns < 1_000:
+                time_text = f"{ns} ns"
+            elif ns < 1_000_000:
+                time_text = f"{ns / 1_000:.2f} µs ({ns:,} ns)"
+            elif ns < 1_000_000_000:
+                time_text = f"{ns / 1_000_000:.3f} ms ({ns:,} ns)"
+            else:
+                time_text = f"{ns / 1_000_000_000:.4f} s ({ns:,} ns)"
+            self.compute_time_value.setText(time_text)
+        else:
+            self.compute_time_value.setText("n/a")
 
         baseline = result.hcipy_zernikes
         measured = result.fpga_zernikes
@@ -892,6 +909,160 @@ class PlotsTab(QtWidgets.QWidget):
         self.canvas.update_result(result)
 
 
+class AberrationConfigTab(QtWidgets.QWidget):
+    """Interactive Zernike aberration configuration for live demos."""
+
+    coefficients_changed = QtCore.Signal(object)  # np.ndarray | None
+
+    WAVELENGTH = 0.7e-6  # metres — must match shwfs_utils
+    MODE_LABELS = [
+        "Tilt X",
+        "Tilt Y",
+        "Defocus",
+        "Astig 45\u00b0",
+        "Astig 0\u00b0",
+        "Coma X",
+        "Coma Y",
+        "Trefoil X",
+        "Trefoil Y",
+        "Spherical",
+    ]
+    SLIDER_RESOLUTION = 1000  # slider ticks per 1.0 lambda
+    SLIDER_RANGE_LAMBDA = 0.030  # ±0.030 lambda (limited by 27-bit Q4.22 output in ematrix_accumulator)
+
+    PRESETS: dict[str, list[float]] = {
+        "Defaults": [0.010, 0.007, 0.008, 0.005, -0.004, 0.0, 0.0, 0.0, 0.0, 0.0],
+        "Zero (flat)": [0.0] * 10,
+        "Pure Defocus": [0.0, 0.0, 0.020, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+        "Pure Astigmatism": [0.0, 0.0, 0.0, 0.015, 0.010, 0.0, 0.0, 0.0, 0.0, 0.0],
+        "Pure Coma": [0.0, 0.0, 0.0, 0.0, 0.0, 0.015, 0.010, 0.0, 0.0, 0.0],
+        "Pure Spherical": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.020],
+        "Pure Trefoil": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.015, 0.010, 0.0],
+        "Heavy Mix": [0.015, 0.012, 0.020, 0.010, -0.008, 0.006, -0.005, 0.004, 0.003, 0.010],
+        "Tilt Only": [0.020, 0.015, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+    }
+
+    def __init__(self, parent: QtWidgets.QWidget | None = None) -> None:
+        super().__init__(parent)
+
+        self._sliders: list[QtWidgets.QSlider] = []
+        self._value_labels: list[QtWidgets.QLabel] = []
+        self._suppressing_signals = False
+
+        # ── header ──
+        header = QtWidgets.QLabel(
+            "Configure the Zernike aberration coefficients injected into the HCIPy "
+            "simulation. Values are in fractions of \u03bb (\u03bb = 700 nm). "
+            "Changes take effect on the next Run Local Preview or FPGA run."
+        )
+        header.setWordWrap(True)
+
+        # ── presets ──
+        preset_box = QtWidgets.QGroupBox("Presets")
+        preset_layout = QtWidgets.QHBoxLayout(preset_box)
+        for preset_name in self.PRESETS:
+            btn = QtWidgets.QPushButton(preset_name)
+            btn.clicked.connect(lambda _checked=False, name=preset_name: self._apply_preset(name))
+            preset_layout.addWidget(btn)
+        preset_layout.addStretch()
+
+        # ── sliders ──
+        slider_box = QtWidgets.QGroupBox("Zernike Coefficients")
+        slider_grid = QtWidgets.QGridLayout(slider_box)
+        slider_grid.setColumnStretch(1, 1)
+
+        for index, label in enumerate(self.MODE_LABELS):
+            noll_index = index + 2
+            mode_label = QtWidgets.QLabel(f"Z{noll_index}  {label}")
+            mode_label.setMinimumWidth(120)
+
+            slider = QtWidgets.QSlider(QtCore.Qt.Orientation.Horizontal)
+            tick_range = int(self.SLIDER_RANGE_LAMBDA * self.SLIDER_RESOLUTION)
+            slider.setRange(-tick_range, tick_range)
+            slider.setValue(0)
+            slider.setTickPosition(QtWidgets.QSlider.TickPosition.TicksBelow)
+            slider.setTickInterval(self.SLIDER_RESOLUTION // 10)
+            slider.valueChanged.connect(self._on_slider_changed)
+
+            value_label = QtWidgets.QLabel("0.000 \u03bb")
+            value_label.setMinimumWidth(90)
+            value_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight | QtCore.Qt.AlignmentFlag.AlignVCenter)
+
+            slider_grid.addWidget(mode_label, index, 0)
+            slider_grid.addWidget(slider, index, 1)
+            slider_grid.addWidget(value_label, index, 2)
+
+            self._sliders.append(slider)
+            self._value_labels.append(value_label)
+
+        # ── summary ──
+        self._summary_label = QtWidgets.QLabel("")
+        self._summary_label.setWordWrap(True)
+        self._summary_label.setObjectName("ValueCard")
+
+        # ── layout ──
+        layout = QtWidgets.QVBoxLayout(self)
+        layout.addWidget(header)
+        layout.addWidget(preset_box)
+        layout.addWidget(slider_box, 1)
+        layout.addWidget(self._summary_label)
+
+        # Apply defaults
+        self._apply_preset("Defaults")
+
+    # ── internal ──
+
+    def _slider_to_lambda(self, tick_value: int) -> float:
+        return tick_value / self.SLIDER_RESOLUTION
+
+    def _lambda_to_slider(self, lam_fraction: float) -> int:
+        return int(round(lam_fraction * self.SLIDER_RESOLUTION))
+
+    def _on_slider_changed(self) -> None:
+        if self._suppressing_signals:
+            return
+        for index, slider in enumerate(self._sliders):
+            lam = self._slider_to_lambda(slider.value())
+            self._value_labels[index].setText(f"{lam:+.3f} \u03bb")
+        self._update_summary()
+        self._emit_coefficients()
+
+    def _apply_preset(self, name: str) -> None:
+        values = self.PRESETS[name]
+        self._suppressing_signals = True
+        for index, lam in enumerate(values):
+            self._sliders[index].setValue(self._lambda_to_slider(lam))
+            self._value_labels[index].setText(f"{lam:+.3f} \u03bb")
+        self._suppressing_signals = False
+        self._update_summary()
+        self._emit_coefficients()
+
+    def _update_summary(self) -> None:
+        parts: list[str] = []
+        for index, label in enumerate(self.MODE_LABELS):
+            lam = self._slider_to_lambda(self._sliders[index].value())
+            if abs(lam) > 0.001:
+                parts.append(f"{label}: {lam:+.3f}\u03bb")
+        if parts:
+            self._summary_label.setText("Active: " + ", ".join(parts))
+        else:
+            self._summary_label.setText("All coefficients are zero (flat wavefront).")
+
+    def _emit_coefficients(self) -> None:
+        coeffs_lambda = np.array(
+            [self._slider_to_lambda(s.value()) for s in self._sliders],
+            dtype=np.float64,
+        )
+        coeffs_metres = coeffs_lambda * self.WAVELENGTH
+        self.coefficients_changed.emit(coeffs_metres)
+
+    def get_coefficients_metres(self) -> np.ndarray:
+        return np.array(
+            [self._slider_to_lambda(s.value()) * self.WAVELENGTH for s in self._sliders],
+            dtype=np.float64,
+        )
+
+
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self) -> None:
         super().__init__()
@@ -901,12 +1072,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self.service = FpgaControlService(self)
 
         self.tabs = QtWidgets.QTabWidget()
+        self.config_tab = AberrationConfigTab()
         self.results_tab = ResultsTab()
         self.accuracy_tab = AccuracyTab()
         self.comparison_tab = ComparisonTab()
         self.zernike_tab = ZernikeComparisonTab()
         self.plots_tab = PlotsTab()
 
+        self.tabs.addTab(self.config_tab, "\u2699 Aberration Config")
         self.tabs.addTab(self.results_tab, "Run + Results")
         self.tabs.addTab(self.accuracy_tab, "Accuracy Stats")
         self.tabs.addTab(self.comparison_tab, "HCIPy Comparison")
@@ -918,11 +1091,16 @@ class MainWindow(QtWidgets.QMainWindow):
         self.results_tab.stop_server_requested.connect(self.service.stop_server)
         self.results_tab.preview_requested.connect(self.service.generate_local_preview)
 
+        self.config_tab.coefficients_changed.connect(self.service.set_true_coeffs)
+
         self.service.log_message.connect(self.results_tab.append_log)
         self.service.server_state_changed.connect(self.results_tab.set_server_state)
         self.service.client_state_changed.connect(self.results_tab.set_client_state)
         self.service.error_reported.connect(self._handle_error)
         self.service.run_completed.connect(self._handle_result)
+
+        # Push the initial default coefficients to the service
+        self.service.set_true_coeffs(self.config_tab.get_coefficients_metres())
 
         self.statusBar().showMessage("Ready")
 

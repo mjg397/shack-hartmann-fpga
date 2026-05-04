@@ -70,6 +70,7 @@ class RunResult:
     wavelength_m: float | None = None
     notes: list[str] = field(default_factory=list)
     client_address: str | None = None
+    fpga_compute_time_ns: int | None = None
 
     @property
     def has_accuracy_comparison(self) -> bool:
@@ -218,6 +219,14 @@ class FpgaControlService(QtCore.QObject):
         self._preview_thread: threading.Thread | None = None
         self._server_socket: socket.socket | None = None
         self._state_lock = threading.Lock()
+        self._user_true_coeffs: np.ndarray | None = None
+
+    def set_true_coeffs(self, coeffs: np.ndarray | None) -> None:
+        """Set the Zernike coefficients (in metres) used for simulation.
+
+        Pass *None* to revert to the built-in defaults.
+        """
+        self._user_true_coeffs = coeffs
 
     @QtCore.Slot(str, int)
     def start_server(self, bind_ip: str = DEFAULT_BIND_IP, bind_port: int = DEFAULT_BIND_PORT) -> None:
@@ -341,6 +350,7 @@ class FpgaControlService(QtCore.QObject):
 
     def _build_simulation_bundle(self) -> tuple[dict[str, object], dict[str, np.ndarray]]:
         simulation = generate_shwfs_case(
+            true_coeffs=self._user_true_coeffs,
             num_lenslets=NUM_SUBAPERTURES_SIDE,
             num_zernike=NUM_ZERNIKE,
             demo_image_path=None,
@@ -402,6 +412,22 @@ class FpgaControlService(QtCore.QObject):
                     raise RuntimeError("Client disconnected while sending zernike coefficients.")
                 client_socket.sendall(b"zernike_done\n")
 
+                # Receive FPGA compute timing from the client
+                fpga_compute_time_ns: int | None = None
+                timing_line = recv_line(client_socket)
+                if timing_line is not None:
+                    timing_text = timing_line.decode("utf-8", errors="strict").strip()
+                    if timing_text.startswith("compute_time_ns:"):
+                        try:
+                            fpga_compute_time_ns = int(timing_text.split(":", 1)[1])
+                            self.log_message.emit(f"FPGA compute time: {fpga_compute_time_ns} ns")
+                        except ValueError:
+                            self.log_message.emit(f"Could not parse compute timing: {timing_text}")
+                    else:
+                        self.log_message.emit(f"Unexpected line instead of timing: {timing_text}")
+                else:
+                    self.log_message.emit("No compute timing received from client.")
+
                 centroids_q4_23 = decode_q4_23_from_bytes(centroid_bytes, NUM_PACKED_XY)
                 slopes_q4_23 = decode_q4_23_from_bytes(slope_bytes, NUM_PACKED_XY)
                 fpga_zernikes_raw, fpga_zernikes_meters = decode_fpga_zernikes_from_bytes(zernike_bytes, NUM_ZERNIKE)
@@ -434,6 +460,7 @@ class FpgaControlService(QtCore.QObject):
                         "Coefficient accuracy is compared against the HCIPy estimator for the same synthetic case.",
                     ],
                     client_address=client_label,
+                    fpga_compute_time_ns=fpga_compute_time_ns,
                 )
                 self._write_result_artifacts(result)
                 self.run_completed.emit(result)

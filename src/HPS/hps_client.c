@@ -1,4 +1,4 @@
-// cc -o client -std=c99 -D_GNU_SOURCE hps_client.c
+// cc -o client -std=c99 -D_GNU_SOURCE hps_client.c -lrt
 
 #include <arpa/inet.h> // inet_addr()
 #include <netdb.h>
@@ -20,6 +20,7 @@
 #include <sys/time.h> 
 #include <math.h> 
 #include <unistd.h>
+#include <time.h>
 
 #define SIGN_EXTEND_4_23(v) \
     (((v) & (1u << 26)) ? ((v) | 0xF8000000u) : ((v) & 0x07FFFFFFu))
@@ -532,7 +533,7 @@ int main(int argc, char **argv)
 
     // assign IP, PORT
     servaddr.sin_family = AF_INET;
-    servaddr.sin_addr.s_addr = inet_addr("10.48.129.113");
+    servaddr.sin_addr.s_addr = inet_addr("10.48.40.237");
     servaddr.sin_port = htons(PORT);
 
     // connect the client socket to server socket
@@ -580,13 +581,22 @@ int main(int argc, char **argv)
 
     *ctrl_reg_h2f |= 1u; // signal bit 0 in ctrl reg
     usleep(10);
+
+    struct timespec ts_start, ts_end;
+    clock_gettime(CLOCK_MONOTONIC, &ts_start);
+
     *ctrl_reg_h2f &= ~1u; // reset bit 0 (go bit)
 
     // read results back from FPGA mem
 
     while (*ctrl_reg_f2h == 0) WAIT; // wait for results to be ready in mem
 
-    sleep(2);
+    clock_gettime(CLOCK_MONOTONIC, &ts_end);
+    long long compute_time_ns = (long long)(ts_end.tv_sec - ts_start.tv_sec) * 1000000000LL
+                              + (long long)(ts_end.tv_nsec - ts_start.tv_nsec);
+    printf("FPGA compute time: %lld ns\n", compute_time_ns);
+
+    // sleep(2);
 
     printf("Compute done \n");
 
@@ -620,6 +630,13 @@ int main(int argc, char **argv)
     // fabricate_results();
 
     send_shwfs(sockfd); // return data to python
+
+    // Send FPGA compute timing to the server
+    char timing_buf[64];
+    int timing_len = snprintf(timing_buf, sizeof(timing_buf), "compute_time_ns:%lld\n", compute_time_ns);
+    if (send_all(sockfd, timing_buf, timing_len) != 0) {
+        printf("Failed to send compute timing\n");
+    }
 
     // results
     fclose(output);
