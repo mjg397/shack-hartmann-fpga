@@ -248,10 +248,13 @@ class FpgaControlService(QtCore.QObject):
         self.log_message.emit("Generating local preview with the host-side HCIPy model.")
         try:
             simulation, hcipy_estimation = self._build_simulation_bundle()
+            rmat_fpga = np.round(simulation["reconstruction_matrix"] * (1 << 16)).astype(np.int64)
             fpga_like = run_fpga_like_estimation(
                 simulation["image_aber"],
                 num_subapertures_side=NUM_SUBAPERTURES_SIDE,
                 subaperture_pixels=SUBAPERTURE_PIXELS,
+                reconstruction_mask=simulation["fpga_subaperture_mask"],
+                reconstruction_matrix_q1_16=rmat_fpga,
             )
             result = RunResult(
                 source="local-preview",
