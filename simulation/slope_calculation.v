@@ -9,8 +9,8 @@ module slope_calculation (
     input wire [26:0] rec_intensity, // input 1 / sI
     input wire [19:0] x_intensity,   // s(x * I)
     input wire [19:0] y_intensity,   // s(y * I)
-    output reg signed [26:0] x_centroid, // s(x * I) / sI
-    output reg signed [26:0] y_centroid, // s(y * I) / sI
+  output reg [26:0] x_centroid, // unsigned Q4.23 centroid in local pixel coordinates
+  output reg [26:0] y_centroid, // unsigned Q4.23 centroid in local pixel coordinates
     output reg signed [26:0] x_slope,    // (s(x * I) / sI) - 7.5
     output reg signed [26:0] y_slope,    // (s(y * I) / sI) - 7.5
     output reg         new_subapeture,
@@ -40,6 +40,8 @@ module slope_calculation (
 
   wire [26:0] x_centroid_mult;
   wire [26:0] y_centroid_mult;
+  wire signed [27:0] x_centroid_ext = {1'b0, x_centroid_mult};
+  wire signed [27:0] y_centroid_ext = {1'b0, y_centroid_mult};
 
   unsigned_mult x_mult(
     .out(x_centroid_mult),
@@ -54,8 +56,8 @@ module slope_calculation (
   );
 
 
-  wire signed [27:0] raw_x_slope = $signed(x_centroid_mult) - x_ref;
-  wire signed [27:0] raw_y_slope = $signed(y_centroid_mult) - y_ref;
+  wire signed [27:0] raw_x_slope = x_centroid_ext - x_ref;
+  wire signed [27:0] raw_y_slope = y_centroid_ext - y_ref;
 
   always @(posedge clk) begin
     if (rst) begin
@@ -64,8 +66,8 @@ module slope_calculation (
         x_slope    <= 0;
         y_slope    <= 0;
     end else begin
-        x_centroid <= $signed(x_centroid_mult);
-        y_centroid <= $signed(y_centroid_mult);
+        x_centroid <= x_centroid_mult;
+        y_centroid <= y_centroid_mult;
 
         // Truncate slope to 27-bit signed (4.23)
         x_slope <= raw_x_slope[26:0];
@@ -97,12 +99,12 @@ endmodule
 `timescale 1ns/1ps
 
 module unsigned_mult (
-  output signed [26:0] out,
-  input signed  [19:0] a,  // in this case 20.0
-  input signed  [26:0] b  // in this case 0.27
+  output [26:0] out,
+  input [19:0] a,  // in this case 20.0
+  input [26:0] b  // in this case 0.27
   );
   // intermediate full bit length
-  wire signed [46:0] mult_out;
+  wire [46:0] mult_out;
   assign mult_out = a * b;
   // select bits for 4.23 fixed point
   assign out = mult_out[30:4];
