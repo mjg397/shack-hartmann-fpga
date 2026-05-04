@@ -69,9 +69,15 @@ module slope_calculation (
         x_centroid <= x_centroid_mult;
         y_centroid <= y_centroid_mult;
 
-        // Truncate slope to 27-bit signed (4.23)
-        x_slope <= raw_x_slope[26:0];
-        y_slope <= raw_y_slope[26:0];
+        // Saturate 28-bit signed slope to 27-bit signed (Q4.23) range.
+        // If bits [27] and [26] disagree, the value overflowed 27-bit signed;
+        // clamp to most-negative or most-positive representable value.
+        x_slope <= (raw_x_slope[27] != raw_x_slope[26])
+                   ? {raw_x_slope[27], {26{~raw_x_slope[27]}}}
+                   : raw_x_slope[26:0];
+        y_slope <= (raw_y_slope[27] != raw_y_slope[26])
+                   ? {raw_y_slope[27], {26{~raw_y_slope[27]}}}
+                   : raw_y_slope[26:0];
 
     end
   end
