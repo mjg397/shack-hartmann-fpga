@@ -120,8 +120,8 @@ class WfsAnalysisCanvas(FigureCanvasQTAgg):
             sy = np.zeros(len(sub_positions))
 
         # Reconstructed OPD (FPGA)
-        z_basis = shwfs_utils.make_zernike_basis(len(result.mode_labels), 1.0, sim["pupil_grid"], 1)
-        z_basis.grid = sim["pupil_grid"] # Ensure correct grid
+        z_basis = shwfs_utils.make_zernike_basis(len(result.mode_labels), 1.0, aperture.grid, 1)
+        z_basis.grid = aperture.grid # Ensure correct grid
         # Use true basis from sim if available
         if "zernike_modes" in sim:
             reconstructed_zernike = sum(c * m for c, m in zip(result.fpga_zernikes, sim["zernike_modes"]))
@@ -234,7 +234,7 @@ class AoDemoCanvas(FigureCanvasQTAgg):
             strehl_corr = psf_corr.max() / peak
             
             axes = self.figure.subplots(2, 3)
-            self.figure.suptitle(f"AO IMAGING DEMO | STREHL RATIO: {strehl_aber:.3f} \u2192 {strehl_corr:.3f}", 
+            self.figure.suptitle(f"AO IMAGING DEMO | STREHL RATIO: {strehl_aber:.3f} -> {strehl_corr:.3f}", 
                                  color=SUCCESS_COLOR, fontsize=16, fontweight="bold")
             
             # Scene Convolution
@@ -577,11 +577,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self.accuracy = AccuracyTab()
         self.pipeline = PipelineCanvas()
         
-        self.tabs.addTab(self.dashboard, "① DASHBOARD")
-        self.tabs.addTab(self.wfs_analysis, "② WFS ANALYSIS")
-        self.tabs.addTab(self.ao_demo, "③ AO IMAGING DEMO")
-        self.tabs.addTab(self.accuracy, "④ ACCURACY METRICS")
-        self.tabs.addTab(self.pipeline, "⑤ PIPELINE DIAGRAM")
+        self.tabs.addTab(self.dashboard, "DASHBOARD")
+        self.tabs.addTab(self.wfs_analysis, "WFS ANALYSIS")
+        self.tabs.addTab(self.ao_demo, "AO IMAGING DEMO")
+        self.tabs.addTab(self.accuracy, "ACCURACY METRICS")
+        self.tabs.addTab(self.pipeline, "PIPELINE DIAGRAM")
         
         # Header
         header = QtWidgets.QLabel("SHACK-HARTMANN FPGA TELEMETRY")
