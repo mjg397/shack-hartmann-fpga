@@ -2,8 +2,19 @@
 
 module shwfs_vivado_ila_top (
     input wire clk,
-    input wire reset
+    input wire reset,
+    input wire [3:0] zernike_mode_select,
+    output wire [26:0] zernike_mode_data,
+    output wire zernike_done
 );
+
+    wire [269:0] zernike_out_internal;
+    wire         done_internal;
+
+    assign zernike_mode_data = (zernike_mode_select < 4'd10)
+                              ? zernike_out_internal[zernike_mode_select * 27 +: 27]
+                              : 27'd0;
+    assign zernike_done = done_internal;
 
     shwfs_vivado_top pipeline (
         .clk                              (clk),
@@ -28,8 +39,8 @@ module shwfs_vivado_ila_top (
         .y_slopes                         (),
         .new_subapeture                   (),
         .subap_valid                      (),
-        .zernike_out                      (),
-        .done                             ()
+        .zernike_out                      (zernike_out_internal),
+        .done                             (done_internal)
     );
 
 endmodule
