@@ -3,4 +3,7 @@ Ultra-low-latency, fully streaming FPGA architecture for Shack-Hartmann wavefron
 
 Currently the world's lowest-latency Shack-Hartmann wavefront sensing and Zernike-based wavefront reconstruction pipeline, with experimentally confirmed latency of 120ns from arrival of final pixel to Zernike output on Altera De1-SoC and sucessful timing closure on Zynq 7000 at 150MHz, with corresponding latency of 53.3ns.
 
+For more information on this project, please refer to the following website, and be on the lookout for an upcoming preprint demonstrating our novel architecture.
+https://people.ece.cornell.edu/land/courses/ece5760/FinalProjects/s2026/sjb336_mss464_mjg397/sjb336_mss464_mjg397/sjb336_mss464_mjg397/index.html
+
 This research made use of HCIPy, an open-source object-oriented framework written in Python for performing end-to-end simulations of high-contrast imaging instruments (Por et al. 2018).
