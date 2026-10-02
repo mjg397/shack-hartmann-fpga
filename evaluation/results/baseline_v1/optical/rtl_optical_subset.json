@@ -1,0 +1,13 @@
+{
+  "n_cases": 19,
+  "n_optical_cases": 15,
+  "n_directed_cases": 4,
+  "coefficients_compared": 190,
+  "case_mismatches": 0,
+  "all_exact": true,
+  "latency_cycles_observed": [
+    9
+  ],
+  "seed": 7711,
+  "scope": "supports correctness on these tests; not a proof of equivalence for all inputs"
+}

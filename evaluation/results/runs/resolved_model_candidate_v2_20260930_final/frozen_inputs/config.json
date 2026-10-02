@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "run_id": "resolved_model_candidate_v2_20260930_final",
+  "source_forward_run": "evaluation/results/runs/forward_model_investigation_v2_20260928_final",
+  "source_blocker_run": "evaluation/results/runs/blocker_investigation_v1_20260928_final",
+  "source_calibration_run": "evaluation/results/runs/manuscript_v1_20260928_final",
+  "freeze_policy": {
+    "physical_sensor": "unchanged",
+    "rtl_arithmetic_widths_latency": "unchanged",
+    "reciprocal_lut_and_scaling": "unchanged and optimization deferred",
+    "active_reference_and_e_matrix_roms": "unchanged",
+    "detector_gain_threshold_and_acceptance": "unchanged",
+    "candidate_files": "separate run directory only",
+    "historical_runs": "read-only",
+    "bounded_extension": "factor 9 added only after preserved v1 factor-7 candidate missed the frozen spot-width gate"
+  },
+  "detector": {
+    "quantum_efficiency": 0.8,
+    "gain_e_per_adu": 20.0,
+    "read_noise_e": 3.0,
+    "background_e": 0.0,
+    "offset_adu": 0.0,
+    "full_well_e": 20000.0,
+    "adc_bits": 8,
+    "pixel_threshold_adu": 5
+  },
+  "resolution": {
+    "propagation_factors": [5, 6, 7, 8, 9],
+    "candidate_factor": 8,
+    "finer_check_factor": 9,
+    "photons_per_pupil": 3000000.0,
+    "selection_cases": [
+      "flat",
+      "single_tilt_x_100nm",
+      "mixed_20nm_0",
+      "mixed_100nm_0"
+    ],
+    "common_scoring_pupil_base": 240,
+    "common_scoring_edge_supersample": 20,
+    "edge_control_factor": 7,
+    "edge_supersampling": [4, 12, 20],
+    "edge_control_cases": ["flat", "mixed_100nm_0"],
+    "fresnel_control_factor": 5,
+    "fresnel_control_cases": ["flat", "mixed_100nm_0"],
+    "fresnel_controls": [
+      {"name": "default", "zero_padding": 2, "transfer_oversampling": 2},
+      {"name": "padding3", "zero_padding": 3, "transfer_oversampling": 2},
+      {"name": "transfer1", "zero_padding": 2, "transfer_oversampling": 1},
+      {"name": "transfer4", "zero_padding": 2, "transfer_oversampling": 4}
+    ],
+    "simple_lenslet_factors": [5, 6, 7, 8, 9],
+    "simple_lenslet_tilt_pixels": [-0.4, 0.0, 0.4]
+  },
+  "optical_gate": {
+    "frozen_before_run": true,
+    "normalized_image_relative_l2_max": 0.0025,
+    "captured_flux_relative_change_max": 0.0005,
+    "continuous_centroid_rms_change_px_max": 0.0012,
+    "spot_sigma_rms_change_px_max": 0.002,
+    "analytic_lenslet_image_relative_l2_max": 0.0025,
+    "analytic_lenslet_centroid_abs_error_px_max": 0.0005,
+    "rationale": "unchanged from v1: 0.0012 detector pixel corresponds to 0.5 nm across one lenslet; final reconstructed-wavefront tests enforce both original tolerances"
+  },
+  "candidate_calibration": {
+    "probe_nm": 30.0,
+    "reference_convention": "single noiseless integer flat frame; exact thresholded quotient rounded to signed Q18",
+    "interaction_convention": "exact thresholded integer-frame centroids from independent +/- mode probes",
+    "inverse": "numpy.linalg.pinv with default rcond",
+    "primary_policy": "one frozen factor-8 calibration applied at factors 8 and 9",
+    "per_grid_policy": "factor-9 recalibration is diagnostic only"
+  },
+  "held_out": {
+    "mixed_wavefronts_per_amplitude": 20,
+    "wavefront_rms_nm": [20.0, 100.0, 400.0],
+    "single_mode_amplitude_nm": 75.0,
+    "single_mode_indices": [0, 1, 2, 5],
+    "photon_levels": [1000000.0, 3000000.0]
+  },
+  "noisy_confirmation": {
+    "independent_batches": 4,
+    "exposures_per_batch": 5,
+    "flat_monte_carlo_units": 20,
+    "coupling": "pair-local shared-minimum Poisson plus shared Gaussian read noise",
+    "expected_difference_estimator": "mean of cross-products between independent batch-mean coefficient differences; unbiased for squared expected-reconstruction difference",
+    "mean_image_reconstruction": "prohibited"
+  },
+  "acceptance": {
+    "frozen_before_confirmation": true,
+    "confidence_level": 0.95,
+    "relative_tolerance_pct": 5.0,
+    "absolute_tolerance_nm": 0.5,
+    "equivalence_margin_nm": "min(0.5, 0.05 * factor-9 reference mean residual in nm)",
+    "deterministic_case_rule": "both reconstructed-wavefront RMS change and absolute residual change are <= the equivalence margin; factor 9 is never credited for self-agreement",
+    "noisy_residual_rule": "paired Student-t interval across independent wavefronts lies wholly inside +/- equivalence margin",
+    "noisy_expected_reconstruction_rule": "upper Student-t interval for the independent-cross-batch squared estimator is <= equivalence_margin_nm squared",
+    "noisy_deterministic_rule": "upper Student-t interval for exact deterministic integer-frame reconstruction difference is <= equivalence margin",
+    "noisy_cell_rule": "residual, expected-reconstruction, and deterministic rules all pass"
+  },
+  "seeds": {
+    "heldout_20nm": 930201,
+    "heldout_100nm": 930202,
+    "heldout_400nm": 930203,
+    "noise": 930301,
+    "flat_noise": 930401
+  }
+}

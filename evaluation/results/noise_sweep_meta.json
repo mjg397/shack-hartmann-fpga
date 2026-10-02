@@ -1,0 +1,19 @@
+{
+  "seed": 20260924,
+  "n_realisations_per_level": 300,
+  "fluxes_photons": [
+    100.0,
+    300.0,
+    1000.0,
+    3000.0,
+    10000.0,
+    30000.0,
+    100000.0,
+    300000.0,
+    1000000.0
+  ],
+  "adu_sum_held_constant": 812.0,
+  "crossover_flux_10pct_penalty": 10000.0,
+  "noise_model": "Poisson photon noise only; no read noise or background (repository defines neither)",
+  "elapsed_s": 12.451908826828003
+}

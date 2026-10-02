@@ -1,0 +1,31 @@
+% Prior-work comparison -- TEMPLATE, DELIBERATELY EMPTY.
+%
+% Every cell must be filled from a cited publication that you have read. Do not
+% populate this from memory or from secondary sources.
+%
+% Latency figures are NOT comparable unless the anchor matches. This design's
+% figure is 9 cycles / 60.0 ns measured from the final contributing pixel
+% ARRIVING at the processing input (see EVALUATION_REPORT.md section 4.6). Published figures
+% variously measure from end-of-frame, from end-of-exposure, or include readout
+% -- record the definition in its own column, and do not compare across
+% different definitions.
+%
+% Do not claim superiority on any row where the configurations differ in
+% subaperture count, mode count, or reconstruction method.
+\begin{tabular}{llllrrlll}
+\hline
+Work & FPGA & WFS config. & Recon. method & Modes & $f$ (MHz) &
+Latency & Latency definition & Resources \\
+\hline
+This work & (device TBD) & $16\times16$, 168 valid & Modal MAC (dense E) & 10 &
+150\textsuperscript{*} & 60.0~ns & final pixel arrival $\rightarrow$ output &
+(TBD) \\
+\hline
+ &  &  &  &  &  &  &  &  \\
+ &  &  &  &  &  &  &  &  \\
+ &  &  &  &  &  &  &  &  \\
+\hline
+\end{tabular}
+
+% \textsuperscript{*} target clock; timing closure not yet verified -- no
+% post-implementation report exists. See EVALUATION_REPORT.md section 4.9.

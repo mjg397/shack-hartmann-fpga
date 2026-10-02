@@ -1,0 +1,22 @@
+test_gram_component_squares_and_cross_terms_close (evaluation.tests.test_final_evidence_package.FinalEvidenceMetricTests.test_gram_component_squares_and_cross_terms_close) ... ok
+test_gram_metric_matches_direct_pupil_wavefront (evaluation.tests.test_final_evidence_package.FinalEvidenceMetricTests.test_gram_metric_matches_direct_pupil_wavefront) ... ok
+test_signed_rom_writer_uses_declared_sign_extension (evaluation.tests.test_final_evidence_package.FinalEvidenceMetricTests.test_signed_rom_writer_uses_declared_sign_extension) ... ok
+test_frozen_rule_requires_four_batches (evaluation.tests.test_resolved_model_candidate.CrossBatchEstimatorTests.test_frozen_rule_requires_four_batches) ... ok
+test_identical_batch_means_recover_squared_metric_norm (evaluation.tests.test_resolved_model_candidate.CrossBatchEstimatorTests.test_identical_batch_means_recover_squared_metric_norm) ... ok
+test_independent_zero_mean_noise_is_not_forced_positive (evaluation.tests.test_resolved_model_candidate.CrossBatchEstimatorTests.test_independent_zero_mean_noise_is_not_forced_positive) ... ok
+test_dictionary_order_does_not_change_pair (evaluation.tests.test_noise_coupling.PairwiseNoiseCouplingTests.test_dictionary_order_does_not_change_pair) ... ok
+test_identical_expectations_produce_identical_frames (evaluation.tests.test_noise_coupling.PairwiseNoiseCouplingTests.test_identical_expectations_produce_identical_frames) ... ok
+test_pair_is_repeatable_without_comparison_set_state (evaluation.tests.test_noise_coupling.PairwiseNoiseCouplingTests.test_pair_is_repeatable_without_comparison_set_state) ... ok
+test_authoritative_roms_have_exact_declared_shapes (evaluation.tests.test_rom_loading.ROMLoadingTests.test_authoritative_roms_have_exact_declared_shapes) ... ok
+test_incomplete_required_rom_fails_clearly (evaluation.tests.test_rom_loading.ROMLoadingTests.test_incomplete_required_rom_fails_clearly) ... ok
+test_missing_required_rom_fails_clearly (evaluation.tests.test_rom_loading.ROMLoadingTests.test_missing_required_rom_fails_clearly) ... ok
+test_runner_is_independent_of_calling_working_directory (evaluation.tests.test_rom_loading.ROMLoadingTests.test_runner_is_independent_of_calling_working_directory) ... ok
+test_streamer_preserves_nonzero_first_pixel_of_each_row (evaluation.tests.test_rom_loading.ROMLoadingTests.test_streamer_preserves_nonzero_first_pixel_of_each_row) ... ok
+test_exact_and_rtl_conventions_are_not_conflated (evaluation.tests.test_reference_conventions.ReferenceConventionTests.test_exact_and_rtl_conventions_are_not_conflated) ... ok
+test_rtl_reference_matches_pipeline_centroid_stage (evaluation.tests.test_reference_conventions.ReferenceConventionTests.test_rtl_reference_matches_pipeline_centroid_stage) ... ok
+test_unknown_convention_is_rejected (evaluation.tests.test_reference_conventions.ReferenceConventionTests.test_unknown_convention_is_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 4.942s
+
+OK

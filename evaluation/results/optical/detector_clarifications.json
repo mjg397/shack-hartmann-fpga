@@ -1,0 +1,15 @@
+{
+  "clipped_counts_are": "PER FRAME in DetectorResult; the sweep CSV aggregates over all realisations at a level",
+  "flux_per_lenslet_adu": {
+    "min": 334,
+    "p05": 525.05,
+    "median": 623.5,
+    "p95": 642.65,
+    "max": 648,
+    "ratio_max_min": 1.9401197604790419
+  },
+  "negative_read_noise_samples": "read noise is additive Gaussian and CAN go negative; negatives are clipped to 0 by np.clip(e,0,full_well) before ADC, so the floor is hard at 0 ADU",
+  "detector_offset_adu": 0.0,
+  "operating_point_established_by": "scan over photons x gain on a FLAT wavefront, then corrected using ABERRATED frames (signal_sweep.csv) which clip earlier",
+  "zero_clipping_scope": "observed over the tested wavefronts and amplitudes; NOT a guarantee for every possible aberration -- a sufficiently concentrated spot pattern can clip at any fixed gain"
+}

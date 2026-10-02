@@ -1,0 +1,16 @@
+{
+  "n_cases": 10000,
+  "seed": 20260914,
+  "coefficient_scale_m": 6e-08,
+  "spot_sigma_px": 0.75,
+  "spot_sum_adu": 812.0,
+  "pixel_threshold": 5,
+  "num_modes": 10,
+  "num_subaps_valid": 168,
+  "zernike_shift": 43,
+  "meters_per_lsb": 1.1368683772161603e-13,
+  "wavelength_m": 7e-07,
+  "elapsed_s": 36.41876697540283,
+  "reference": "float64, identical algorithm (isolates quantisation)",
+  "forward_model": "pinv(E) from e_matrix_{x,y}.mem"
+}

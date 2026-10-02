@@ -1,0 +1,19 @@
+control,metric,n_exposures,mean,sd,ci95_low,ci95_high,interval_method
+identical_pair_corrected,detector_rms_adu,100,0.0,0.0,0.0,0.0,two-sided Student-t interval across independent wavefront units
+identical_pair_corrected,detector_changed_pixels,100,0.0,0.0,0.0,0.0,two-sided Student-t interval across independent wavefront units
+identical_pair_corrected,reconstructed_wavefront_rms_difference_nm,100,0.0,0.0,0.0,0.0,two-sided Student-t interval across independent wavefront units
+identical_pair_legacy_embedded,detector_rms_adu,100,0.17828555566715604,0.0024510670057795642,0.17779921079692185,0.17877190053739023,two-sided Student-t interval across independent wavefront units
+identical_pair_legacy_embedded,detector_changed_pixels,100,1502.48,29.8428476448806,1496.5585315819417,1508.4014684180584,two-sided Student-t interval across independent wavefront units
+identical_pair_legacy_embedded,reconstructed_wavefront_rms_difference_nm,100,2.3876999914692196,0.8434210411922768,2.2203469587433813,2.555053024195058,two-sided Student-t interval across independent wavefront units
+identical_pair_legacy_only,detector_rms_adu,100,0.0,0.0,0.0,0.0,two-sided Student-t interval across independent wavefront units
+identical_pair_legacy_only,detector_changed_pixels,100,0.0,0.0,0.0,0.0,two-sided Student-t interval across independent wavefront units
+identical_pair_legacy_only,reconstructed_wavefront_rms_difference_nm,100,0.0,0.0,0.0,0.0,two-sided Student-t interval across independent wavefront units
+nonidentical_corrected_pair,detector_rms_adu,100,1.7704174008129647,0.0036582033429857206,1.7696915339044146,1.7711432677215149,two-sided Student-t interval across independent wavefront units
+nonidentical_corrected_pair,detector_changed_pixels,100,7153.41,42.2242916824049,7145.031784467504,7161.788215532496,two-sided Student-t interval across independent wavefront units
+nonidentical_corrected_pair,reconstructed_wavefront_rms_difference_nm,100,7.263949661214749,1.0178249110678421,7.061991116985974,7.465908205443524,two-sided Student-t interval across independent wavefront units
+nonidentical_legacy_pair_only,detector_rms_adu,100,1.7704174008129647,0.0036582033429857206,1.7696915339044146,1.7711432677215149,two-sided Student-t interval across independent wavefront units
+nonidentical_legacy_pair_only,detector_changed_pixels,100,7153.41,42.2242916824049,7145.031784467504,7161.788215532496,two-sided Student-t interval across independent wavefront units
+nonidentical_legacy_pair_only,reconstructed_wavefront_rms_difference_nm,100,7.263949661214749,1.0178249110678421,7.061991116985974,7.465908205443524,two-sided Student-t interval across independent wavefront units
+nonidentical_legacy_with_unrelated,detector_rms_adu,100,1.7707081897714618,0.003432702475174327,1.7700270671273626,1.771389312415561,two-sided Student-t interval across independent wavefront units
+nonidentical_legacy_with_unrelated,detector_changed_pixels,100,7164.13,37.29940422520922,7156.728988985226,7171.531011014774,two-sided Student-t interval across independent wavefront units
+nonidentical_legacy_with_unrelated,reconstructed_wavefront_rms_difference_nm,100,7.297181600245287,1.031798475710709,7.092450397632666,7.501912802857909,two-sided Student-t interval across independent wavefront units

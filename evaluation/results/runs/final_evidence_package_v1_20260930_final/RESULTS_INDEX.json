@@ -1,0 +1,307 @@
+{
+  "schema_version": 1,
+  "authoritative_report": "REPORT.md",
+  "entries": [
+    {
+      "path": "existing_metric_separation.csv",
+      "kind": "table",
+      "source_run": "evaluation/results/runs/resolved_model_candidate_v2_20260930_final",
+      "optical_settings": "source factor 8/9",
+      "calibration": "source frozen factor 8",
+      "calibration_id": "frozen_factor8_floating",
+      "arithmetic_path": "floating",
+      "sample_count": "20 units/cell",
+      "uncertainty": "95% Student-t across independent units"
+    },
+    {
+      "path": "gram_identity_audit.csv",
+      "kind": "table",
+      "source_run": "final_evidence_package_v1_20260930_final",
+      "optical_settings": "common scoring pupil",
+      "calibration": "none",
+      "arithmetic_path": "coefficient Gram/direct OPD",
+      "calibration_id": "none",
+      "sample_count": "representative basis and mixed vectors",
+      "uncertainty": "identity check"
+    },
+    {
+      "path": "confirmation_optical_inputs.csv",
+      "kind": "table",
+      "source_run": "final_evidence_package_v1_20260930_final",
+      "optical_settings": "factors 8/9; physical-pixel integration",
+      "calibration": "none",
+      "calibration_id": "none",
+      "arithmetic_path": "optical probability input",
+      "sample_count": "138 propagated cases",
+      "uncertainty": "deterministic optical input; no interval"
+    },
+    {
+      "path": "deterministic_confirmation_raw.csv",
+      "kind": "table",
+      "source_run": "final_evidence_package_v1_20260930_final",
+      "optical_settings": "factors 8/9; 1M/3M",
+      "calibration": "frozen factor-8 candidate",
+      "calibration_id": "candidate_hardware",
+      "arithmetic_path": "float/dequant/fixed with component squares and signed cross terms",
+      "sample_count": "276 per-case detector frames",
+      "uncertainty": "per-case result; no interval"
+    },
+    {
+      "path": "deterministic_performance_summary.csv",
+      "kind": "table",
+      "source_run": "final_evidence_package_v1_20260930_final",
+      "optical_settings": "factors 8/9; 1M/3M",
+      "calibration": "frozen factor-8 candidate",
+      "arithmetic_path": "float/dequant/fixed",
+      "calibration_id": "candidate_hardware",
+      "sample_count": "20 wavefronts per amplitude",
+      "uncertainty": "95% Student-t"
+    },
+    {
+      "path": "deterministic_numerical_sensitivity.csv",
+      "kind": "table",
+      "source_run": "final_evidence_package_v1_20260930_final",
+      "optical_settings": "paired factors 8/9; 1M/3M",
+      "calibration": "frozen factor-8 candidate",
+      "calibration_id": "candidate_hardware",
+      "arithmetic_path": "float/dequant/fixed",
+      "sample_count": "20 paired wavefronts/cell",
+      "uncertainty": "95% Student-t across paired wavefronts"
+    },
+    {
+      "path": "noisy_confirmation_raw.csv",
+      "kind": "table",
+      "source_run": "final_evidence_package_v1_20260930_final",
+      "optical_settings": "paired factors 8/9; 1M/3M; noisy detector",
+      "calibration": "frozen factor-8 candidate",
+      "calibration_id": "candidate_hardware",
+      "arithmetic_path": "float/dequant/fixed",
+      "sample_count": "3,200 paired exposures",
+      "uncertainty": "raw nested exposures; no interval"
+    },
+    {
+      "path": "noisy_confirmation_independent_units.csv",
+      "kind": "table",
+      "source_run": "final_evidence_package_v1_20260930_final",
+      "optical_settings": "paired factors 8/9; 1M/3M; noisy detector",
+      "calibration": "frozen factor-8 candidate",
+      "calibration_id": "candidate_hardware",
+      "arithmetic_path": "float/dequant/fixed",
+      "sample_count": "480 unit/path records",
+      "uncertainty": "unit-level values before across-unit interval"
+    },
+    {
+      "path": "noisy_confirmation_summary.csv",
+      "kind": "table",
+      "source_run": "final_evidence_package_v1_20260930_final",
+      "optical_settings": "factors 8/9; paired noise",
+      "calibration": "frozen factor-8 candidate",
+      "arithmetic_path": "float/dequant/fixed",
+      "calibration_id": "candidate_hardware",
+      "sample_count": "20 units x 4 batches x 5 exposures/cell",
+      "uncertainty": "95% Student-t across units; independent-batch squared estimator"
+    },
+    {
+      "path": "noisy_flat_bias.csv",
+      "kind": "table",
+      "source_run": "final_evidence_package_v1_20260930_final",
+      "optical_settings": "factor 8; noisy flat; 1M/3M",
+      "calibration": "frozen factor-8 candidate",
+      "calibration_id": "candidate_hardware",
+      "arithmetic_path": "float/dequant/fixed",
+      "sample_count": "400 exposures/cell",
+      "uncertainty": "reported mean; raw nested exposures preserved"
+    },
+    {
+      "path": "noise_batch_index.csv",
+      "kind": "table",
+      "source_run": "final_evidence_package_v1_20260930_final",
+      "optical_settings": "paired factors 8/9; noisy detector",
+      "calibration": "frozen factor-8 candidate",
+      "calibration_id": "candidate_hardware",
+      "arithmetic_path": "float/dequant/fixed",
+      "sample_count": "480 four-batch arrays",
+      "uncertainty": "batch mapping for unbiased cross-products"
+    },
+    {
+      "path": "noisy_coefficient_index.csv",
+      "kind": "table",
+      "source_run": "final_evidence_package_v1_20260930_final",
+      "optical_settings": "factors 8/9; noisy detector",
+      "calibration": "frozen factor-8 candidate",
+      "calibration_id": "candidate_hardware",
+      "arithmetic_path": "float/dequant/fixed",
+      "sample_count": "6,400 factor/exposure records",
+      "uncertainty": "index for raw coefficient arrays; no interval"
+    },
+    {
+      "path": "candidate_rtl_cases.csv",
+      "kind": "table",
+      "source_run": "final_evidence_package_v1_20260930_final",
+      "optical_settings": "selected factor-8/9 integer frames",
+      "calibration": "candidate hardware ROMs",
+      "arithmetic_path": "bit-accurate and RTL",
+      "calibration_id": "candidate_hardware",
+      "sample_count": 19,
+      "uncertainty": "exact integer equality"
+    },
+    {
+      "path": "figures/01_optical_setup_sampling.png",
+      "kind": "figure",
+      "description": "actual sampled pupil and fixed physical detector geometry",
+      "source_run": "final_evidence_package_v1_20260930_final",
+      "optical_settings": "as labeled",
+      "calibration": "frozen factor-8 candidate",
+      "calibration_id": "candidate_hardware",
+      "calibration_rom_sha256": {
+        "reciprocal_u16_q18.mem": "c688004b3bd5b7f7b23bf815d073a1209a39a144dd590eb81304b16772456164",
+        "slopes_ref_x.mem": "b6477eeb2a7af2242a56ca441cc36a492af62b9d8642e31164269909a6030f70",
+        "slopes_ref_y.mem": "2cdec26e605ea14c93440dc58ee1963698b76b8a937ef8f76bfcde2635e48794",
+        "subaperture_bitmap.mem": "e40db0994c74ae547b8051b6f92d4bf188b2c6f568a2efc37ca2132d23f56bfa",
+        "e_matrix_x.mem": "432d2414afc2954fb1d99c6698724d2e3c296797eed4e210a6b9b27339909785",
+        "e_matrix_y.mem": "61b6b95ebf5befd7534874cb1649f5e01f436e7f5ea6f80912c75b17dbf05a6f"
+      },
+      "arithmetic_path": "as labeled",
+      "sample_count": "see source table",
+      "uncertainty": "see source table and caption labels"
+    },
+    {
+      "path": "figures/02_residual_float_fixed.png",
+      "kind": "figure",
+      "description": "factor-8 residual versus input RMS",
+      "source_run": "final_evidence_package_v1_20260930_final",
+      "optical_settings": "as labeled",
+      "calibration": "frozen factor-8 candidate",
+      "calibration_id": "candidate_hardware",
+      "calibration_rom_sha256": {
+        "reciprocal_u16_q18.mem": "c688004b3bd5b7f7b23bf815d073a1209a39a144dd590eb81304b16772456164",
+        "slopes_ref_x.mem": "b6477eeb2a7af2242a56ca441cc36a492af62b9d8642e31164269909a6030f70",
+        "slopes_ref_y.mem": "2cdec26e605ea14c93440dc58ee1963698b76b8a937ef8f76bfcde2635e48794",
+        "subaperture_bitmap.mem": "e40db0994c74ae547b8051b6f92d4bf188b2c6f568a2efc37ca2132d23f56bfa",
+        "e_matrix_x.mem": "432d2414afc2954fb1d99c6698724d2e3c296797eed4e210a6b9b27339909785",
+        "e_matrix_y.mem": "61b6b95ebf5befd7534874cb1649f5e01f436e7f5ea6f80912c75b17dbf05a6f"
+      },
+      "arithmetic_path": "as labeled",
+      "sample_count": "see source table",
+      "uncertainty": "see source table and caption labels"
+    },
+    {
+      "path": "figures/03_arithmetic_discrepancy.png",
+      "kind": "figure",
+      "description": "fixed-minus-floating discrepancy",
+      "source_run": "final_evidence_package_v1_20260930_final",
+      "optical_settings": "as labeled",
+      "calibration": "frozen factor-8 candidate",
+      "calibration_id": "candidate_hardware",
+      "calibration_rom_sha256": {
+        "reciprocal_u16_q18.mem": "c688004b3bd5b7f7b23bf815d073a1209a39a144dd590eb81304b16772456164",
+        "slopes_ref_x.mem": "b6477eeb2a7af2242a56ca441cc36a492af62b9d8642e31164269909a6030f70",
+        "slopes_ref_y.mem": "2cdec26e605ea14c93440dc58ee1963698b76b8a937ef8f76bfcde2635e48794",
+        "subaperture_bitmap.mem": "e40db0994c74ae547b8051b6f92d4bf188b2c6f568a2efc37ca2132d23f56bfa",
+        "e_matrix_x.mem": "432d2414afc2954fb1d99c6698724d2e3c296797eed4e210a6b9b27339909785",
+        "e_matrix_y.mem": "61b6b95ebf5befd7534874cb1649f5e01f436e7f5ea6f80912c75b17dbf05a6f"
+      },
+      "arithmetic_path": "as labeled",
+      "sample_count": "see source table",
+      "uncertainty": "see source table and caption labels"
+    },
+    {
+      "path": "figures/04_noise_flux_performance.png",
+      "kind": "figure",
+      "description": "candidate noisy/flux performance",
+      "source_run": "final_evidence_package_v1_20260930_final",
+      "optical_settings": "as labeled",
+      "calibration": "frozen factor-8 candidate",
+      "calibration_id": "candidate_hardware",
+      "calibration_rom_sha256": {
+        "reciprocal_u16_q18.mem": "c688004b3bd5b7f7b23bf815d073a1209a39a144dd590eb81304b16772456164",
+        "slopes_ref_x.mem": "b6477eeb2a7af2242a56ca441cc36a492af62b9d8642e31164269909a6030f70",
+        "slopes_ref_y.mem": "2cdec26e605ea14c93440dc58ee1963698b76b8a937ef8f76bfcde2635e48794",
+        "subaperture_bitmap.mem": "e40db0994c74ae547b8051b6f92d4bf188b2c6f568a2efc37ca2132d23f56bfa",
+        "e_matrix_x.mem": "432d2414afc2954fb1d99c6698724d2e3c296797eed4e210a6b9b27339909785",
+        "e_matrix_y.mem": "61b6b95ebf5befd7534874cb1649f5e01f436e7f5ea6f80912c75b17dbf05a6f"
+      },
+      "arithmetic_path": "as labeled",
+      "sample_count": "see source table",
+      "uncertainty": "see source table and caption labels"
+    },
+    {
+      "path": "figures/05_numerical_sensitivity.png",
+      "kind": "figure",
+      "description": "noisy expected versus deterministic sensitivity",
+      "source_run": "final_evidence_package_v1_20260930_final",
+      "optical_settings": "as labeled",
+      "calibration": "frozen factor-8 candidate",
+      "calibration_id": "candidate_hardware",
+      "calibration_rom_sha256": {
+        "reciprocal_u16_q18.mem": "c688004b3bd5b7f7b23bf815d073a1209a39a144dd590eb81304b16772456164",
+        "slopes_ref_x.mem": "b6477eeb2a7af2242a56ca441cc36a492af62b9d8642e31164269909a6030f70",
+        "slopes_ref_y.mem": "2cdec26e605ea14c93440dc58ee1963698b76b8a937ef8f76bfcde2635e48794",
+        "subaperture_bitmap.mem": "e40db0994c74ae547b8051b6f92d4bf188b2c6f568a2efc37ca2132d23f56bfa",
+        "e_matrix_x.mem": "432d2414afc2954fb1d99c6698724d2e3c296797eed4e210a6b9b27339909785",
+        "e_matrix_y.mem": "61b6b95ebf5befd7534874cb1649f5e01f436e7f5ea6f80912c75b17dbf05a6f"
+      },
+      "arithmetic_path": "as labeled",
+      "sample_count": "see source table",
+      "uncertainty": "see source table and caption labels"
+    },
+    {
+      "path": "figures/06_rtl_agreement_latency.png",
+      "kind": "figure",
+      "description": "candidate RTL equality and event latency",
+      "source_run": "final_evidence_package_v1_20260930_final",
+      "optical_settings": "as labeled",
+      "calibration": "frozen factor-8 candidate",
+      "calibration_id": "candidate_hardware",
+      "calibration_rom_sha256": {
+        "reciprocal_u16_q18.mem": "c688004b3bd5b7f7b23bf815d073a1209a39a144dd590eb81304b16772456164",
+        "slopes_ref_x.mem": "b6477eeb2a7af2242a56ca441cc36a492af62b9d8642e31164269909a6030f70",
+        "slopes_ref_y.mem": "2cdec26e605ea14c93440dc58ee1963698b76b8a937ef8f76bfcde2635e48794",
+        "subaperture_bitmap.mem": "e40db0994c74ae547b8051b6f92d4bf188b2c6f568a2efc37ca2132d23f56bfa",
+        "e_matrix_x.mem": "432d2414afc2954fb1d99c6698724d2e3c296797eed4e210a6b9b27339909785",
+        "e_matrix_y.mem": "61b6b95ebf5befd7534874cb1649f5e01f436e7f5ea6f80912c75b17dbf05a6f"
+      },
+      "arithmetic_path": "as labeled",
+      "sample_count": "see source table",
+      "uncertainty": "see source table and caption labels"
+    }
+  ],
+  "calibrations": {
+    "none": {
+      "calibration_sha256": {},
+      "rom_sha256": {}
+    },
+    "frozen_factor8_floating": {
+      "calibration_sha256": {
+        "e_matrix_m_per_slope_px.npy": "db0cec8eb5cab8a88aab91dcfa2a422eca8d10e3b280b52bf9259aeea8a90299",
+        "reference_exact_x_px.npy": "97de9595450b2e403f67cfcebcf70545e2d0347c80cd34eaedf20d99713a91e9",
+        "reference_exact_y_px.npy": "f38e54439799097b8872712fca5e0369707e2dda68713b8f914626ae5302aad6"
+      },
+      "rom_sha256": {}
+    },
+    "candidate_hardware": {
+      "calibration_sha256": {
+        "e_matrix_m_per_slope_px.npy": "db0cec8eb5cab8a88aab91dcfa2a422eca8d10e3b280b52bf9259aeea8a90299",
+        "reference_exact_x_px.npy": "97de9595450b2e403f67cfcebcf70545e2d0347c80cd34eaedf20d99713a91e9",
+        "reference_exact_y_px.npy": "f38e54439799097b8872712fca5e0369707e2dda68713b8f914626ae5302aad6"
+      },
+      "rom_sha256": {
+        "reciprocal_u16_q18.mem": "c688004b3bd5b7f7b23bf815d073a1209a39a144dd590eb81304b16772456164",
+        "slopes_ref_x.mem": "b6477eeb2a7af2242a56ca441cc36a492af62b9d8642e31164269909a6030f70",
+        "slopes_ref_y.mem": "2cdec26e605ea14c93440dc58ee1963698b76b8a937ef8f76bfcde2635e48794",
+        "subaperture_bitmap.mem": "e40db0994c74ae547b8051b6f92d4bf188b2c6f568a2efc37ca2132d23f56bfa",
+        "e_matrix_x.mem": "432d2414afc2954fb1d99c6698724d2e3c296797eed4e210a6b9b27339909785",
+        "e_matrix_y.mem": "61b6b95ebf5befd7534874cb1649f5e01f436e7f5ea6f80912c75b17dbf05a6f"
+      }
+    }
+  },
+  "candidate_rom_sha256": {
+    "reciprocal_u16_q18.mem": "c688004b3bd5b7f7b23bf815d073a1209a39a144dd590eb81304b16772456164",
+    "slopes_ref_x.mem": "b6477eeb2a7af2242a56ca441cc36a492af62b9d8642e31164269909a6030f70",
+    "slopes_ref_y.mem": "2cdec26e605ea14c93440dc58ee1963698b76b8a937ef8f76bfcde2635e48794",
+    "subaperture_bitmap.mem": "e40db0994c74ae547b8051b6f92d4bf188b2c6f568a2efc37ca2132d23f56bfa",
+    "e_matrix_x.mem": "432d2414afc2954fb1d99c6698724d2e3c296797eed4e210a6b9b27339909785",
+    "e_matrix_y.mem": "61b6b95ebf5befd7534874cb1649f5e01f436e7f5ea6f80912c75b17dbf05a6f"
+  },
+  "active_roms_modified": false
+}

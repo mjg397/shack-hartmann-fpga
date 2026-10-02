@@ -1,0 +1,214 @@
+{
+  "control_case": "mixed_20nm_0",
+  "n_exposures": 100,
+  "legacy_insertion_order_permutation_failures": 0,
+  "corrected_pair_repeat_failures_after_unrelated_draw": 0,
+  "legacy_embedded_identical_reconstruction_floor_nm": {
+    "control": "identical_pair_legacy_embedded",
+    "metric": "reconstructed_wavefront_rms_difference_nm",
+    "n_exposures": 100,
+    "mean": 2.3876999914692196,
+    "sd": 0.8434210411922768,
+    "ci95_low": 2.2203469587433813,
+    "ci95_high": 2.555053024195058,
+    "interval_method": "two-sided Student-t interval across independent wavefront units"
+  },
+  "corrected_identical_reconstruction_floor_nm": {
+    "control": "identical_pair_corrected",
+    "metric": "reconstructed_wavefront_rms_difference_nm",
+    "n_exposures": 100,
+    "mean": 0.0,
+    "sd": 0.0,
+    "ci95_low": 0.0,
+    "ci95_high": 0.0,
+    "interval_method": "two-sided Student-t interval across independent wavefront units"
+  },
+  "interpretation": {
+    "per_setting_marginals": "valid in the prior run",
+    "per_setting_residual_summaries": "interpretable",
+    "paired_mean_residual_difference": "mean estimand remains marginally valid, but its uncertainty depends on coupling",
+    "framewise_prediction_rms_difference": "confounded and superseded because it can be nonzero for identical expectations and changes when an unrelated grid is added"
+  },
+  "rows": [
+    {
+      "control": "identical_pair_corrected",
+      "metric": "detector_rms_adu",
+      "n_exposures": 100,
+      "mean": 0.0,
+      "sd": 0.0,
+      "ci95_low": 0.0,
+      "ci95_high": 0.0,
+      "interval_method": "two-sided Student-t interval across independent wavefront units"
+    },
+    {
+      "control": "identical_pair_corrected",
+      "metric": "detector_changed_pixels",
+      "n_exposures": 100,
+      "mean": 0.0,
+      "sd": 0.0,
+      "ci95_low": 0.0,
+      "ci95_high": 0.0,
+      "interval_method": "two-sided Student-t interval across independent wavefront units"
+    },
+    {
+      "control": "identical_pair_corrected",
+      "metric": "reconstructed_wavefront_rms_difference_nm",
+      "n_exposures": 100,
+      "mean": 0.0,
+      "sd": 0.0,
+      "ci95_low": 0.0,
+      "ci95_high": 0.0,
+      "interval_method": "two-sided Student-t interval across independent wavefront units"
+    },
+    {
+      "control": "identical_pair_legacy_embedded",
+      "metric": "detector_rms_adu",
+      "n_exposures": 100,
+      "mean": 0.17828555566715604,
+      "sd": 0.0024510670057795642,
+      "ci95_low": 0.17779921079692185,
+      "ci95_high": 0.17877190053739023,
+      "interval_method": "two-sided Student-t interval across independent wavefront units"
+    },
+    {
+      "control": "identical_pair_legacy_embedded",
+      "metric": "detector_changed_pixels",
+      "n_exposures": 100,
+      "mean": 1502.48,
+      "sd": 29.8428476448806,
+      "ci95_low": 1496.5585315819417,
+      "ci95_high": 1508.4014684180584,
+      "interval_method": "two-sided Student-t interval across independent wavefront units"
+    },
+    {
+      "control": "identical_pair_legacy_embedded",
+      "metric": "reconstructed_wavefront_rms_difference_nm",
+      "n_exposures": 100,
+      "mean": 2.3876999914692196,
+      "sd": 0.8434210411922768,
+      "ci95_low": 2.2203469587433813,
+      "ci95_high": 2.555053024195058,
+      "interval_method": "two-sided Student-t interval across independent wavefront units"
+    },
+    {
+      "control": "identical_pair_legacy_only",
+      "metric": "detector_rms_adu",
+      "n_exposures": 100,
+      "mean": 0.0,
+      "sd": 0.0,
+      "ci95_low": 0.0,
+      "ci95_high": 0.0,
+      "interval_method": "two-sided Student-t interval across independent wavefront units"
+    },
+    {
+      "control": "identical_pair_legacy_only",
+      "metric": "detector_changed_pixels",
+      "n_exposures": 100,
+      "mean": 0.0,
+      "sd": 0.0,
+      "ci95_low": 0.0,
+      "ci95_high": 0.0,
+      "interval_method": "two-sided Student-t interval across independent wavefront units"
+    },
+    {
+      "control": "identical_pair_legacy_only",
+      "metric": "reconstructed_wavefront_rms_difference_nm",
+      "n_exposures": 100,
+      "mean": 0.0,
+      "sd": 0.0,
+      "ci95_low": 0.0,
+      "ci95_high": 0.0,
+      "interval_method": "two-sided Student-t interval across independent wavefront units"
+    },
+    {
+      "control": "nonidentical_corrected_pair",
+      "metric": "detector_rms_adu",
+      "n_exposures": 100,
+      "mean": 1.7704174008129647,
+      "sd": 0.0036582033429857206,
+      "ci95_low": 1.7696915339044146,
+      "ci95_high": 1.7711432677215149,
+      "interval_method": "two-sided Student-t interval across independent wavefront units"
+    },
+    {
+      "control": "nonidentical_corrected_pair",
+      "metric": "detector_changed_pixels",
+      "n_exposures": 100,
+      "mean": 7153.41,
+      "sd": 42.2242916824049,
+      "ci95_low": 7145.031784467504,
+      "ci95_high": 7161.788215532496,
+      "interval_method": "two-sided Student-t interval across independent wavefront units"
+    },
+    {
+      "control": "nonidentical_corrected_pair",
+      "metric": "reconstructed_wavefront_rms_difference_nm",
+      "n_exposures": 100,
+      "mean": 7.263949661214749,
+      "sd": 1.0178249110678421,
+      "ci95_low": 7.061991116985974,
+      "ci95_high": 7.465908205443524,
+      "interval_method": "two-sided Student-t interval across independent wavefront units"
+    },
+    {
+      "control": "nonidentical_legacy_pair_only",
+      "metric": "detector_rms_adu",
+      "n_exposures": 100,
+      "mean": 1.7704174008129647,
+      "sd": 0.0036582033429857206,
+      "ci95_low": 1.7696915339044146,
+      "ci95_high": 1.7711432677215149,
+      "interval_method": "two-sided Student-t interval across independent wavefront units"
+    },
+    {
+      "control": "nonidentical_legacy_pair_only",
+      "metric": "detector_changed_pixels",
+      "n_exposures": 100,
+      "mean": 7153.41,
+      "sd": 42.2242916824049,
+      "ci95_low": 7145.031784467504,
+      "ci95_high": 7161.788215532496,
+      "interval_method": "two-sided Student-t interval across independent wavefront units"
+    },
+    {
+      "control": "nonidentical_legacy_pair_only",
+      "metric": "reconstructed_wavefront_rms_difference_nm",
+      "n_exposures": 100,
+      "mean": 7.263949661214749,
+      "sd": 1.0178249110678421,
+      "ci95_low": 7.061991116985974,
+      "ci95_high": 7.465908205443524,
+      "interval_method": "two-sided Student-t interval across independent wavefront units"
+    },
+    {
+      "control": "nonidentical_legacy_with_unrelated",
+      "metric": "detector_rms_adu",
+      "n_exposures": 100,
+      "mean": 1.7707081897714618,
+      "sd": 0.003432702475174327,
+      "ci95_low": 1.7700270671273626,
+      "ci95_high": 1.771389312415561,
+      "interval_method": "two-sided Student-t interval across independent wavefront units"
+    },
+    {
+      "control": "nonidentical_legacy_with_unrelated",
+      "metric": "detector_changed_pixels",
+      "n_exposures": 100,
+      "mean": 7164.13,
+      "sd": 37.29940422520922,
+      "ci95_low": 7156.728988985226,
+      "ci95_high": 7171.531011014774,
+      "interval_method": "two-sided Student-t interval across independent wavefront units"
+    },
+    {
+      "control": "nonidentical_legacy_with_unrelated",
+      "metric": "reconstructed_wavefront_rms_difference_nm",
+      "n_exposures": 100,
+      "mean": 7.297181600245287,
+      "sd": 1.031798475710709,
+      "ci95_low": 7.092450397632666,
+      "ci95_high": 7.501912802857909,
+      "interval_method": "two-sided Student-t interval across independent wavefront units"
+    }
+  ]
+}

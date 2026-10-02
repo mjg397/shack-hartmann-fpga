@@ -1,0 +1,14 @@
+{
+  "n_unit_path_arrays": 480,
+  "shape_required": [
+    4,
+    10
+  ],
+  "all_shapes_correct": true,
+  "recomputation_mismatches": [],
+  "negative_unbiased_unit_estimates_preserved": 151,
+  "squared_quantities_compared_to_squared_tolerances": true,
+  "confidence_unit": "wavefront for mixed cases; Monte Carlo replicate for flat",
+  "batch_independence": "unique seed tuple for every batch/exposure; four disjoint batches",
+  "passed": true
+}

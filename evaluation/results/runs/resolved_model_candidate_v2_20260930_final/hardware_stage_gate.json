@@ -1,0 +1,12 @@
+{
+  "optical_gate_passed": true,
+  "selection_candidate_passed": false,
+  "heldout_deterministic_passed": false,
+  "heldout_noisy_passed": false,
+  "passed": false,
+  "candidate_e_matrix_quantized": false,
+  "candidate_hardware_roms_generated": false,
+  "rtl_simulation_run": false,
+  "reason": "candidate failed before hardware quantization/RTL staging",
+  "active_roms_changed": false
+}

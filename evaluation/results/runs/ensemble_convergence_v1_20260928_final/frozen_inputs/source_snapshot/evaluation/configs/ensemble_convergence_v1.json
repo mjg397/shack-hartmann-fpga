@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "run_id": "ensemble_convergence_v1_20260928_final",
+  "source_blocker_run": "evaluation/results/runs/blocker_investigation_v1_20260928_final",
+  "source_calibration_run": "evaluation/results/runs/manuscript_v1_20260928_final",
+  "freeze_policy": {
+    "rtl_arithmetic": "unchanged",
+    "active_reference_roms": "unchanged",
+    "active_e_matrix_roms": "unchanged",
+    "reciprocal_optimization": "deferred",
+    "fixed_flat_result_nm": 7.615181444684047
+  },
+  "detector": {
+    "quantum_efficiency": 0.8,
+    "gain_e_per_adu": 20.0,
+    "read_noise_e": 3.0,
+    "background_e": 0.0,
+    "offset_adu": 0.0,
+    "full_well_e": 20000.0,
+    "adc_bits": 8,
+    "pixel_threshold_adu": 5
+  },
+  "common_scoring_pupil": {
+    "pupil_pixels_base": 240,
+    "pupil_edge_supersample": 20
+  },
+  "deterministic": {
+    "photons_per_pupil": 3000000.0,
+    "reuse_cases": "convergence_cases.json from source_blocker_run",
+    "edge_supersampling": [4, 12, 16, 20],
+    "propagation_factors": [1, 2, 3, 4, 5],
+    "production_calibration": "frozen active reference and E-matrix ROMs",
+    "diagnostic_calibration": "reuse per-grid recalibration evidence from source_blocker_run"
+  },
+  "noisy_ensemble": {
+    "wavefront_rms_nm": [20.0, 100.0],
+    "photons_per_pupil": [1000000.0, 3000000.0],
+    "independent_wavefronts_per_amplitude": 20,
+    "noise_exposures_per_wavefront": 5,
+    "edge_supersampling": [4, 12, 16, 20],
+    "propagation_factors": [1, 2, 3, 4, 5],
+    "coupling": {
+      "shot_noise": "pixelwise shared Poisson(min lambda over all settings) plus an independent Poisson(lambda_setting - min lambda) increment",
+      "read_noise": "one shared Gaussian field per paired exposure",
+      "marginal_guarantee": "sum of independent Poisson variables has the required setting-specific Poisson mean; shared Gaussian field has the required N(0,sigma^2) marginal",
+      "pairing_scope": "all numerical settings within one amplitude/wavefront/flux/repeat cell"
+    }
+  },
+  "acceptance": {
+    "frozen_before_run": true,
+    "confidence_level": 0.95,
+    "relative_tolerance_pct": 5.0,
+    "absolute_tolerance_nm": 0.5,
+    "equivalence_margin_nm": "min(0.5, 0.05 * supported-reference mean residual in nm)",
+    "independent_unit": "wavefront mean over five nested noise exposures",
+    "residual_rule": "two-sided paired Student-t confidence interval for mean residual difference must lie wholly inside +/- equivalence_margin_nm",
+    "prediction_rule": "upper endpoint of the paired Student-t confidence interval for mean reconstructed-wavefront RMS difference must be <= equivalence_margin_nm",
+    "cell_rule": "both residual_rule and prediction_rule must pass",
+    "comparison_rule": "all four predeclared amplitude/flux cells must pass",
+    "finest_self_comparison": "never evidence"
+  },
+  "comparisons": {
+    "edge": [[4, 12], [12, 16], [16, 20], [4, 20]],
+    "propagation": [[1, 2], [2, 3], [3, 4], [4, 5], [1, 5]]
+  },
+  "seeds": {
+    "wavefronts_20nm": 926201,
+    "wavefronts_100nm": 926202,
+    "noise_coupling": 926301
+  }
+}

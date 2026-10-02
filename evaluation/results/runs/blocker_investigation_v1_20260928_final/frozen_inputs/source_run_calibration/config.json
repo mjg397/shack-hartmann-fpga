@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "run_id": "manuscript_v1_20260928_final",
+  "configuration_frozen_before_final_run": true,
+  "primary_float_baseline": "unquantized optically calibrated E matrix",
+  "secondary_float_baseline": "dequantized stored 18-bit E matrix",
+  "piston_convention": "remove aperture-weighted pupil mean before RMS and inner products",
+  "detector": {
+    "quantum_efficiency": 0.8,
+    "gain_e_per_adu": 20.0,
+    "read_noise_e": 3.0,
+    "background_e": 0.0,
+    "offset_adu": 0.0,
+    "full_well_e": 20000.0,
+    "adc_bits": 8,
+    "pixel_threshold_adu": 5,
+    "photon_definition": "photons incident over the full simulated pupil per detector frame"
+  },
+  "experiments": {
+    "flat_noisy_trials": 100,
+    "mode_amplitudes_nm": [10, 20, 40, 80, 150],
+    "mixed_levels_nm_rms": [20, 50, 100, 200, 400],
+    "mixed_trials_per_level": 60,
+    "noise_wavefronts": 20,
+    "noise_repeats_per_wavefront": 5,
+    "noise_photons_per_pupil": [500000, 1000000, 2000000, 3000000, 5000000, 8000000, 12000000, 20000000],
+    "noise_read_noise_e": [0.0, 3.0],
+    "noise_input_rms_nm": 80,
+    "dynamic_levels_nm_rms": [10, 30, 100, 300, 600, 1000, 1500, 2000, 3000, 4000],
+    "dynamic_trials_per_level": 12,
+    "unmodelled_fractions": [0.0, 0.1, 0.25, 0.5, 1.0],
+    "unmodelled_trials_per_level": 25,
+    "subpixel_phase_min_px": 0.0,
+    "subpixel_phase_max_px": 1.0,
+    "subpixel_positions": 41,
+    "convergence_wavefronts": 6,
+    "convergence_supersampling": [2, 4, 8, 16],
+    "convergence_propagation_factors": [1, 2, 3],
+    "convergence_acceptance_relative_pct": 5.0,
+    "convergence_acceptance_absolute_nm": 0.5,
+    "rtl_mixed_cases": 8
+  },
+  "seeds": {
+    "flat": 5101,
+    "modes": 5202,
+    "mixed": 5303,
+    "noise_wavefronts": 5404,
+    "noise_exposures": 5405,
+    "dynamic": 31415,
+    "unmodelled": 31416,
+    "convergence": 31422,
+    "rtl": 7711,
+    "bootstrap": 99173
+  },
+  "independence": {
+    "calibration_probe_seed": 88001,
+    "calibration_case_seed": 88002,
+    "statement": "All final-evaluation seeds differ from optical calibration seeds. No final seed or outcome was used to select settings."
+  }
+}

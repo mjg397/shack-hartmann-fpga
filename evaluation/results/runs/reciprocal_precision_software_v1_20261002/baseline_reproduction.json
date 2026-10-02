@@ -1,0 +1,26 @@
+{
+  "frame_sha256": "aa567ad032d7c55eb9dc76a9ba7ec118b2bcfcb300314cb55c746c10939f9341",
+  "floating_residual_nm": 0.0,
+  "fixed_residual_nm": 7.6584878514271075,
+  "fixed_coefficients_nm": [
+    -5.337876214205218,
+    -5.337876214205218,
+    -0.0002392915324429649,
+    0.0,
+    0.0,
+    0.4204352225022893,
+    0.4204352225022893,
+    -0.1097151676250994,
+    0.10959552185887793,
+    0.0016750407271007544
+  ],
+  "coefficient_mismatch_count": 0,
+  "slope_centroid_mismatch_count": 0,
+  "valid_slopes": 168,
+  "valid_coefficients": 10,
+  "unknown_valid_slopes": 0,
+  "unknown_valid_coefficients": 0,
+  "final_pixel_to_done_cycles": 9,
+  "last_contributing_pixel_to_done_cycles": 7,
+  "baseline_passed": true
+}

@@ -1,0 +1,27 @@
+{
+  "label": "baseline_v1",
+  "description": "immutable snapshot BEFORE reference/matrix regeneration",
+  "date": "2026-09-28",
+  "rtl_sources": {
+    "shwfs_processing.v": "6ecf5cefc632034b",
+    "Thresholding_CoG_intensity_accumulator.v": "d8f93f8a977d7f18",
+    "intensity_reciprocal_q18.v": "002f1c999b8171ae",
+    "reciprocal_u16_q18.v": "71b7114cbe83c2ef",
+    "slope_calculation.v": "65f034df140745c1",
+    "ematrix_accumulator.v": "2333ff6a21fcf604",
+    "streaming_emulator.v": "f509c4e1e62a8035"
+  },
+  "calibration_roms": {
+    "slopes_ref_x.mem": "5441e690c09fded9",
+    "slopes_ref_y.mem": "1acf58fcd7a00089",
+    "e_matrix_x.mem": "2068e43fbc2f4f12",
+    "e_matrix_y.mem": "64406ae35d7b3241",
+    "subaperture_bitmap.mem": "e40db0994c74ae54",
+    "reciprocal_u16_q18.mem": "c688004b3bd5b7f7"
+  },
+  "tools": {
+    "iverilog": "Icarus Verilog version 13.0 (stable) (v13_0)",
+    "verilator": "Verilator 5.050 2026-07-01 rev vUNKNOWN-built20260701"
+  },
+  "frozen_scale_m_per_lsb": 1.144674103097925e-13
+}

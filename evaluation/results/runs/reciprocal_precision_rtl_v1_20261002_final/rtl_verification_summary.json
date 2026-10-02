@@ -1,0 +1,40 @@
+{
+  "baseline": {
+    "frames": 19,
+    "bit_exact": true,
+    "correct_output_counts": true,
+    "no_unknown_valid_outputs": true,
+    "final_pixel_to_done_cycles": [
+      9
+    ],
+    "accumulator_to_reciprocal_cycles": [
+      3
+    ],
+    "reciprocal_to_slope_cycles": [
+      2
+    ],
+    "slope_to_done_cycles": [
+      2
+    ],
+    "passed": true
+  },
+  "candidate": {
+    "frames": 19,
+    "bit_exact": true,
+    "correct_output_counts": true,
+    "no_unknown_valid_outputs": true,
+    "final_pixel_to_done_cycles": [
+      9
+    ],
+    "accumulator_to_reciprocal_cycles": [
+      3
+    ],
+    "reciprocal_to_slope_cycles": [
+      2
+    ],
+    "slope_to_done_cycles": [
+      2
+    ],
+    "passed": true
+  }
+}

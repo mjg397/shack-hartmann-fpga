@@ -1,0 +1,33 @@
+{
+  "method": "single noiseless exposure",
+  "detector": {
+    "total_photons": 3000000.0,
+    "quantum_efficiency": 0.8,
+    "gain_e_per_adu": 20.0,
+    "read_noise_e": 0.0,
+    "background_e": 0.0,
+    "offset_adu": 0.0,
+    "full_well_e": 20000.0,
+    "adc_bits": 8,
+    "shot_noise": false,
+    "signal_e_per_lenslet": 14285.714285714286,
+    "adc_max": 255,
+    "status": "ASSUMED detector parameters for simulation -- not a measured device",
+    "note": "gain is held FIXED within any sweep; frames are NOT individually normalised"
+  },
+  "n_valid": 168,
+  "new_centroid_px_range": [
+    7.358003442340792,
+    7.641996557659208
+  ],
+  "old_centroid_px_range": [
+    7.212989807128906,
+    7.787036895751953
+  ],
+  "delta_x_px_rms": 0.03754933188666003,
+  "delta_y_px_rms": 0.03754933188666003,
+  "delta_x_px_max": 0.1859130859375,
+  "delta_max_px": 0.1859130859375,
+  "format": "Q18, signed 25-bit",
+  "applied_to_rtl": true
+}

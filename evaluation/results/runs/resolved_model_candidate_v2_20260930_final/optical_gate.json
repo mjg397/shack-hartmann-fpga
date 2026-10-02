@@ -1,0 +1,25 @@
+{
+  "candidate_factor": 8,
+  "finer_check_factor": 9,
+  "limits": {
+    "frozen_before_run": true,
+    "normalized_image_relative_l2_max": 0.0025,
+    "captured_flux_relative_change_max": 0.0005,
+    "continuous_centroid_rms_change_px_max": 0.0012,
+    "spot_sigma_rms_change_px_max": 0.002,
+    "analytic_lenslet_image_relative_l2_max": 0.0025,
+    "analytic_lenslet_centroid_abs_error_px_max": 0.0005,
+    "rationale": "unchanged from v1: 0.0012 detector pixel corresponds to 0.5 nm across one lenslet; final reconstructed-wavefront tests enforce both original tolerances"
+  },
+  "checks": {
+    "normalized_image": true,
+    "captured_flux": true,
+    "continuous_centroid": true,
+    "spot_sigma": true,
+    "analytic_lenslet_image": true,
+    "analytic_lenslet_centroid": true
+  },
+  "passed": true,
+  "self_comparison_used": false,
+  "centroid_gate_equivalent_wavefront_nm": 0.49999999999999994
+}

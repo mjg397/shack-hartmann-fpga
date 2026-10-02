@@ -1,0 +1,8 @@
+{
+  "words": 65536,
+  "width_bits": 18,
+  "minimum_nonzero": 65537,
+  "maximum": 131072,
+  "sha256": "86c064bceb2ee44db68271f86f490b46d557e7d959711a4ea4782080487e26dc",
+  "definition": "round_half_up(2^(17+floor(log2(d)))/d), d>0; zero for d=0"
+}

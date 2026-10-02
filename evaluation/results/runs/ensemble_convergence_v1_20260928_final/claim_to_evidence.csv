@@ -1,0 +1,6 @@
+claim,status,evidence
+Frozen production predictions are insensitive to tested refinements,NOT ESTABLISHED,deterministic_frozen_paired.csv; ensemble_paired_summary.csv
+Per-grid recalibration is production calibration,NOT CLAIMED,per_grid_recalibration_diagnostic_summary.csv is diagnostic only
+Noisy ensemble intervals establish agreement,CONDITION-SPECIFIC,ensemble_paired_summary.csv; ensemble_comparison_summary.csv
+7.615181 nm fixed flat and active calibration are preserved,ESTABLISHED,reused_evidence/flat_summary.json; MANIFEST.json ROM hashes
+Physical bench or implemented FPGA performance,UNTESTED,outside scope

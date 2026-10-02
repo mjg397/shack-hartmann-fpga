@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "run_id": "forward_model_investigation_v2_20260928_final",
+  "source_ensemble_run": "evaluation/results/runs/ensemble_convergence_v1_20260928_final",
+  "source_blocker_run": "evaluation/results/runs/blocker_investigation_v1_20260928_final",
+  "source_calibration_run": "evaluation/results/runs/manuscript_v1_20260928_final",
+  "freeze_policy": {
+    "rtl_arithmetic": "unchanged",
+    "active_reference_roms": "unchanged",
+    "active_e_matrix_roms": "unchanged",
+    "reciprocal_optimization": "deferred",
+    "physical_geometry": "unchanged",
+    "gain_and_threshold": "unchanged",
+    "historical_negative_results": "preserved"
+  },
+  "detector": {
+    "quantum_efficiency": 0.8,
+    "gain_e_per_adu": 20.0,
+    "read_noise_e": 3.0,
+    "background_e": 0.0,
+    "offset_adu": 0.0,
+    "full_well_e": 20000.0,
+    "adc_bits": 8,
+    "pixel_threshold_adu": 5
+  },
+  "simple_lenslet": {
+    "propagation_factors": [1, 2, 3, 4, 5],
+    "tilt_spot_shift_detector_pixels": [-0.4, 0.0, 0.4],
+    "analytic_model": "square-aperture focal-plane sinc-squared intensity integrated over physical detector pixels"
+  },
+  "full_forward_model": {
+    "propagation_factors": [1, 2, 3, 4, 5],
+    "pupil_edge_supersampling": [4, 12, 20],
+    "photons_per_pupil": 3000000.0,
+    "calibration_probe_nm": 30.0,
+    "cases": ["flat", "single_tilt_x_100nm", "mixed_20nm_0", "mixed_100nm_0"],
+    "common_scoring_pupil_base": 240,
+    "common_scoring_edge_supersample": 20
+  },
+  "noise_audit": {
+    "control_exposures": 100,
+    "photons_per_pupil": 3000000.0,
+    "control_case": "mixed_20nm_0"
+  },
+  "corrected_noisy_confirmation": {
+    "comparisons": ["edge_4_to_20", "propagation_1_to_5"],
+    "wavefront_rms_nm": [20.0, 100.0],
+    "photons_per_pupil": 3000000.0,
+    "independent_wavefronts_per_amplitude": 20,
+    "nested_exposures_per_wavefront": 5,
+    "wavefront_source": "source ensemble run; identical physical coefficient vectors",
+    "coupling": "pair-local shared-minimum Poisson plus shared Gaussian read noise"
+  },
+  "acceptance": {
+    "frozen_before_confirmation": true,
+    "confidence_level": 0.95,
+    "relative_tolerance_pct": 5.0,
+    "absolute_tolerance_nm": 0.5,
+    "equivalence_margin_nm": "min(0.5, 0.05 * supported-reference mean residual in nm)",
+    "independent_unit": "wavefront mean over five nested exposures",
+    "mean_residual_rule": "paired Student-t interval for mean residual difference lies wholly inside +/- equivalence margin",
+    "mean_reconstruction_rule": "upper Student-t interval for wavefront RMS of the five-exposure mean coefficient difference is <= equivalence margin",
+    "stability_rule": "both mean-residual and mean-reconstruction rules pass; noise variability is reported separately",
+    "supersession": "the prior all-grid-coupled framewise prediction-RMS decision is superseded because that estimand depended on unrelated grids"
+  },
+  "seeds": {
+    "noise_controls": 928101,
+    "corrected_confirmation": 928201
+  }
+}

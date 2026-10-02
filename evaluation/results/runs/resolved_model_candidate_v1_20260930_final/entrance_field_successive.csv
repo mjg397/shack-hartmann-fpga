@@ -1,0 +1,13 @@
+coarse_factor,fine_factor,case,normalized_base_cell_complex_field_relative_l2,scope
+5,6,flat,0.0005177189820743907,entrance pupil and OPD quadrature only; no MLA or propagation
+5,6,single_tilt_x_100nm,0.0023339479715816518,entrance pupil and OPD quadrature only; no MLA or propagation
+5,6,mixed_20nm_0,0.0007730140461646314,entrance pupil and OPD quadrature only; no MLA or propagation
+5,6,mixed_100nm_0,0.0025165852114675926,entrance pupil and OPD quadrature only; no MLA or propagation
+6,7,flat,0.0002656691547726547,entrance pupil and OPD quadrature only; no MLA or propagation
+6,7,single_tilt_x_100nm,0.0018978461920965565,entrance pupil and OPD quadrature only; no MLA or propagation
+6,7,mixed_20nm_0,0.0005585633646284347,entrance pupil and OPD quadrature only; no MLA or propagation
+6,7,mixed_100nm_0,0.0020455219840230907,entrance pupil and OPD quadrature only; no MLA or propagation
+7,8,flat,0.00020719319597272228,entrance pupil and OPD quadrature only; no MLA or propagation
+7,8,single_tilt_x_100nm,0.001443734778687876,entrance pupil and OPD quadrature only; no MLA or propagation
+7,8,mixed_20nm_0,0.0004174650421274415,entrance pupil and OPD quadrature only; no MLA or propagation
+7,8,mixed_100nm_0,0.0015577875552323837,entrance pupil and OPD quadrature only; no MLA or propagation

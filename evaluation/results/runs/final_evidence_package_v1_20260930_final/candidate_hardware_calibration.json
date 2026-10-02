@@ -1,0 +1,76 @@
+{
+  "source_candidate_run": "/Users/michaelgrillo/Documents/_Admin/Unresolved/shack-hartmann-fpga-main/evaluation/results/runs/resolved_model_candidate_v2_20260930_final",
+  "source_floating_e_sha256": "db0cec8eb5cab8a88aab91dcfa2a422eca8d10e3b280b52bf9259aeea8a90299",
+  "source_reference_exact_x_sha256": "97de9595450b2e403f67cfcebcf70545e2d0347c80cd34eaedf20d99713a91e9",
+  "source_reference_exact_y_sha256": "f38e54439799097b8872712fca5e0369707e2dda68713b8f914626ae5302aad6",
+  "scale_m_per_output_lsb": 1.1964576622148245e-13,
+  "scale_log2": -42.926295886883615,
+  "scale_derivation": "max(abs(E_float))/(2^17-1); E_q=round(E_float/scale); RTL output raw=(sum(E_q*slope_q18)>>18), coefficient_m=raw*scale",
+  "scale_fitted": false,
+  "ematrix_shape": [
+    10,
+    336
+  ],
+  "ematrix_integer_max_abs": 131071,
+  "ematrix_saturated_words": 0,
+  "ematrix_quantization_rms_m_per_slope_px": 3.458466522155759e-14,
+  "ematrix_quantization_max_abs_m_per_slope_px": 5.978946158978647e-14,
+  "reference_rule": "exact thresholded integer-frame quotient rounded once to nearest Q18",
+  "reciprocal_preserved_sha256": "c688004b3bd5b7f7b23bf815d073a1209a39a144dd590eb81304b16772456164",
+  "rom_manifest": {
+    "reciprocal_u16_q18.mem": {
+      "source": "/Users/michaelgrillo/Documents/_Admin/Unresolved/shack-hartmann-fpga-main/evaluation/results/runs/final_evidence_package_v1_20260930_final/candidate_hardware_roms/reciprocal_u16_q18.mem",
+      "words": 65536,
+      "width_bits": 19,
+      "signed": false,
+      "encoded_bits": 19,
+      "bytes": 393216,
+      "sha256": "c688004b3bd5b7f7b23bf815d073a1209a39a144dd590eb81304b16772456164"
+    },
+    "slopes_ref_x.mem": {
+      "source": "/Users/michaelgrillo/Documents/_Admin/Unresolved/shack-hartmann-fpga-main/evaluation/results/runs/final_evidence_package_v1_20260930_final/candidate_hardware_roms/slopes_ref_x.mem",
+      "words": 256,
+      "width_bits": 25,
+      "signed": true,
+      "encoded_bits": 28,
+      "bytes": 2048,
+      "sha256": "b6477eeb2a7af2242a56ca441cc36a492af62b9d8642e31164269909a6030f70"
+    },
+    "slopes_ref_y.mem": {
+      "source": "/Users/michaelgrillo/Documents/_Admin/Unresolved/shack-hartmann-fpga-main/evaluation/results/runs/final_evidence_package_v1_20260930_final/candidate_hardware_roms/slopes_ref_y.mem",
+      "words": 256,
+      "width_bits": 25,
+      "signed": true,
+      "encoded_bits": 28,
+      "bytes": 2048,
+      "sha256": "2cdec26e605ea14c93440dc58ee1963698b76b8a937ef8f76bfcde2635e48794"
+    },
+    "subaperture_bitmap.mem": {
+      "source": "/Users/michaelgrillo/Documents/_Admin/Unresolved/shack-hartmann-fpga-main/evaluation/results/runs/final_evidence_package_v1_20260930_final/candidate_hardware_roms/subaperture_bitmap.mem",
+      "words": 1,
+      "width_bits": 256,
+      "signed": false,
+      "encoded_bits": 256,
+      "bytes": 65,
+      "sha256": "e40db0994c74ae547b8051b6f92d4bf188b2c6f568a2efc37ca2132d23f56bfa"
+    },
+    "e_matrix_x.mem": {
+      "source": "/Users/michaelgrillo/Documents/_Admin/Unresolved/shack-hartmann-fpga-main/evaluation/results/runs/final_evidence_package_v1_20260930_final/candidate_hardware_roms/e_matrix_x.mem",
+      "words": 1680,
+      "width_bits": 18,
+      "signed": true,
+      "encoded_bits": 20,
+      "bytes": 10080,
+      "sha256": "432d2414afc2954fb1d99c6698724d2e3c296797eed4e210a6b9b27339909785"
+    },
+    "e_matrix_y.mem": {
+      "source": "/Users/michaelgrillo/Documents/_Admin/Unresolved/shack-hartmann-fpga-main/evaluation/results/runs/final_evidence_package_v1_20260930_final/candidate_hardware_roms/e_matrix_y.mem",
+      "words": 1680,
+      "width_bits": 18,
+      "signed": true,
+      "encoded_bits": 20,
+      "bytes": 10080,
+      "sha256": "61b6b95ebf5befd7534874cb1649f5e01f436e7f5ea6f80912c75b17dbf05a6f"
+    }
+  }
+}

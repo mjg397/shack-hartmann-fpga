@@ -1,0 +1,13 @@
+% Error source ablation. Software-only; the RTL is unmodified.
+\begin{tabular}{lrrr}
+\hline
+Variant & Centroid RMS (px) & Zernike RMSE (nm) & vs baseline \\
+\hline
+all fixed & 0.00947 & 1.699 & 1.000 \\
+exact reciprocal & 0.00634 & 0.592 & 0.669 \\
+exact slope only & 0.00947 & 1.699 & 1.000 \\
+exact output only & 0.00947 & 1.699 & 1.000 \\
+ematrix dither pm half lsb & 0.00947 & 1.699 & 1.000 \\
+all float & 0.00634 & 0.592 & 0.669 \\
+\hline
+\end{tabular}

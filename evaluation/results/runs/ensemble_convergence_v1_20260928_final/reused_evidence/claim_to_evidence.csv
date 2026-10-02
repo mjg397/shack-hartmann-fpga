@@ -1,0 +1,6 @@
+claim,status,evidence
+Frozen RTL creates the 7.615181 nm flat residual at reciprocal/centroid arithmetic,ESTABLISHED FOR EXACT FROZEN FRAME,flat_stage_trace.csv; flat_coefficient_ablations.csv; flat_rtl_summary.json
+RTL equals the bit-accurate model,ESTABLISHED FOR FINITE TEST SET,35 historical cases plus exact flat replay; not formal proof
+Production optical grid is numerically converged,NOT ESTABLISHED,convergence_raw.csv; convergence_paired_successive.csv; convergence_physical_checks.csv
+ADC clipping is a major but not sole high-flux contributor in this detector model,ESTABLISHED FOR PAIRED SIMULATED CASES,clipping_ablation_raw.csv; clipping_ablation_summary.csv
+"Physical-bench equivalence, FPGA timing, power, or resources",UNTESTED,outside simulation-only scope

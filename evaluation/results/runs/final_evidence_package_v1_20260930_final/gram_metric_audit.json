@@ -1,0 +1,23 @@
+{
+  "definition": "G_ij=<mode_i-piston_i, mode_j-piston_j> on the common aperture-weighted pupil",
+  "common_scoring_pupil": {
+    "telescope_diameter_m": 8.0,
+    "central_obscuration_m": 1.2,
+    "spider_width_m": 0.05,
+    "num_spiders": 4,
+    "oversizing_factor": 1.0666666666666667,
+    "wavelength_m": 7e-07,
+    "f_number": 50.0,
+    "sh_diameter_base_m": 0.005,
+    "num_lenslets": 16,
+    "num_zernike": 10,
+    "pupil_pixels_base": 240,
+    "supersample": 20
+  },
+  "symmetry_max_abs": 0.0,
+  "minimum_eigenvalue": 0.8431071789176589,
+  "maximum_eigenvalue": 1.0311203313575554,
+  "representative_max_absolute_identity_error_m": 1.3234889800848443e-23,
+  "representative_max_relative_identity_error": 1.3158703871518727e-16,
+  "passed": true
+}

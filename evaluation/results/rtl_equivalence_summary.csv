@@ -1,0 +1,17 @@
+metric,value
+n_cases,168
+n_coefficients_checked,1680
+n_coefficients_exact,1680
+n_coefficients_mismatched,0
+coefficient_mismatch_rate,0.0
+n_slope_centroid_values_checked,84672
+n_slope_centroid_mismatched,0
+n_random,150
+seed,20260915
+equivalence_failures,0
+equivalence_pass_rate,1.0
+all_exact,True
+unique_latencies_cycles,[9]
+zernike_rmse_m_median,1.5434222957551857e-09
+centroid_rmse_px_median,0.007011185756285452
+pixel_mismatch_total,0

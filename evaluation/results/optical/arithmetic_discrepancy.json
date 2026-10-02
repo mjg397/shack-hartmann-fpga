@@ -1,0 +1,76 @@
+{
+  "summary": [
+    {
+      "amp_nm": 20,
+      "photons": 1000000.0,
+      "n": 40,
+      "float_vs_true_mean_nm": 10.70205107003604,
+      "fixed_vs_true_mean_nm": 10.754160974405924,
+      "fixed_vs_float_mean_nm": 1.4135909278085588,
+      "fixed_vs_float_p95_nm": 1.77558139118935,
+      "fixed_vs_float_max_nm": 1.9364919270635972,
+      "ratio_to_total": 0.1320859822624448
+    },
+    {
+      "amp_nm": 20,
+      "photons": 3000000.0,
+      "n": 40,
+      "float_vs_true_mean_nm": 4.051012723331603,
+      "fixed_vs_true_mean_nm": 4.455487679120078,
+      "fixed_vs_float_mean_nm": 1.244874512936545,
+      "fixed_vs_float_p95_nm": 2.474296534899643,
+      "fixed_vs_float_max_nm": 2.77684983049695,
+      "ratio_to_total": 0.3072995811064116
+    },
+    {
+      "amp_nm": 100,
+      "photons": 1000000.0,
+      "n": 40,
+      "float_vs_true_mean_nm": 28.155628825109225,
+      "fixed_vs_true_mean_nm": 28.23074312006334,
+      "fixed_vs_float_mean_nm": 1.3947741956489321,
+      "fixed_vs_float_p95_nm": 1.9251099273206833,
+      "fixed_vs_float_max_nm": 2.0628272944190718,
+      "ratio_to_total": 0.049538023260381626
+    },
+    {
+      "amp_nm": 100,
+      "photons": 3000000.0,
+      "n": 40,
+      "float_vs_true_mean_nm": 7.231951423362584,
+      "fixed_vs_true_mean_nm": 7.201467244089453,
+      "fixed_vs_float_mean_nm": 1.4721443725057868,
+      "fixed_vs_float_p95_nm": 2.1411267631260498,
+      "fixed_vs_float_max_nm": 3.023890866411014,
+      "ratio_to_total": 0.2035611533216432
+    },
+    {
+      "amp_nm": 400,
+      "photons": 1000000.0,
+      "n": 40,
+      "float_vs_true_mean_nm": 31.58528446741372,
+      "fixed_vs_true_mean_nm": 31.640973898704477,
+      "fixed_vs_float_mean_nm": 1.5687184617072438,
+      "fixed_vs_float_p95_nm": 1.9256480140156074,
+      "fixed_vs_float_max_nm": 2.033952366610514,
+      "ratio_to_total": 0.04966611788238531
+    },
+    {
+      "amp_nm": 400,
+      "photons": 3000000.0,
+      "n": 40,
+      "float_vs_true_mean_nm": 24.01070999634262,
+      "fixed_vs_true_mean_nm": 24.07302231465945,
+      "fixed_vs_float_mean_nm": 1.2069541499109824,
+      "fixed_vs_float_p95_nm": 2.1978624588052704,
+      "fixed_vs_float_max_nm": 2.653400525414546,
+      "ratio_to_total": 0.05026732446041075
+    }
+  ],
+  "reconciliation": {
+    "note": "the earlier ~0.2 nm figure came from comparing fixed and float COEFFICIENTS on identical pixels, then converting. This measures RMS(W_fixed - W_float) on the pupil per frame, which is the quantity that matters for a wavefront claim. They are different quantities and need not agree numerically.",
+    "paired_method": "per-frame difference of reconstructed OPD maps; no quadrature"
+  },
+  "scale_m_per_lsb": 1.5776159884040182e-13,
+  "seed": 60606
+}

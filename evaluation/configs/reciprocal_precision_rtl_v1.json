@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "run_id": "reciprocal_precision_rtl_v1_20261002_final",
+  "source_evidence_run": "evaluation/results/runs/final_evidence_package_v1_20260930_final",
+  "source_software_run": "evaluation/results/runs/reciprocal_precision_software_v1_20261002",
+  "selected_candidate": "normalized_q17_rne",
+  "experimental_rtl": {
+    "mantissa_bits": 18,
+    "mantissa_fraction_bits": 17,
+    "exponent_bits": 4,
+    "reciprocal_rounding": "nearest_half_up",
+    "product_rounding": "nearest_half_up",
+    "added_pipeline_cycles": 0,
+    "estimated_dsp_delta": 0,
+    "default_build_changed": false
+  },
+  "verification": {
+    "frames": "all 19 frozen RTL subset frames",
+    "require_exact_centroids_slopes_coefficients": true,
+    "require_no_unknowns": true,
+    "require_output_counts": true,
+    "verify_baseline_simultaneously": true
+  },
+  "synthesis": {
+    "run_vivado": false,
+    "reason": "simulation-only bounded task; report structural estimates, not achieved utilization or timing"
+  }
+}

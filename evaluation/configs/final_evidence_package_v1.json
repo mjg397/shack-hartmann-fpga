@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "run_id": "final_evidence_package_v1_20260930_final",
+  "source_candidate_run": "evaluation/results/runs/resolved_model_candidate_v2_20260930_final",
+  "source_forward_run": "evaluation/results/runs/forward_model_investigation_v2_20260928_final",
+  "source_blocker_run": "evaluation/results/runs/blocker_investigation_v1_20260928_final",
+  "source_ensemble_run": "evaluation/results/runs/ensemble_convergence_v1_20260928_final",
+  "source_manuscript_run": "evaluation/results/runs/manuscript_v1_20260928_final",
+  "freeze_policy": {
+    "physical_geometry": "unchanged",
+    "detector_gain_threshold_order": "unchanged",
+    "rtl_architecture_widths_latency": "unchanged",
+    "reciprocal_lut_and_arithmetic": "unchanged; optimization deferred",
+    "active_roms": "read-only and hash-checked before/after",
+    "candidate_roms": "isolated run directory only",
+    "tip_tilt": "retained in every residual and discrepancy",
+    "output_bias": "no empirical subtraction",
+    "output_scale": "derived from candidate E matrix and stored word width; never fitted"
+  },
+  "candidate_hardware": {
+    "factor": 8,
+    "finer_diagnostic_factor": 9,
+    "ematrix_bits": 18,
+    "ematrix_encoding_bits": 20,
+    "reference_fraction_bits": 18,
+    "reference_encoding_bits": 28,
+    "scale_rule": "max(abs(E_float))/(2^(EMATRIX_BITS-1)-1)",
+    "reference_rule": "exact thresholded integer-frame quotient rounded once to nearest Q18",
+    "reciprocal_source": "unchanged active/frozen reciprocal_u16_q18.mem",
+    "arithmetic": "unchanged RTL"
+  },
+  "detector": {
+    "quantum_efficiency": 0.8,
+    "gain_e_per_adu": 20.0,
+    "read_noise_e": 3.0,
+    "background_e": 0.0,
+    "offset_adu": 0.0,
+    "full_well_e": 20000.0,
+    "adc_bits": 8,
+    "pixel_threshold_adu": 5
+  },
+  "confirmation": {
+    "factors": [8, 9],
+    "mixed_wavefronts_per_amplitude": 20,
+    "wavefront_rms_nm": [20.0, 100.0, 400.0],
+    "photon_levels": [1000000.0, 3000000.0],
+    "signed_mode_indices": [0, 1, 2, 5],
+    "signed_mode_amplitude_nm": 75.0,
+    "flat_monte_carlo_units": 20,
+    "independent_noise_batches": 4,
+    "exposures_per_batch": 5,
+    "common_scoring_pupil_base": 240,
+    "common_scoring_edge_supersample": 20,
+    "pairing": "factor-local pair only; shared-minimum Poisson plus shared Gaussian read noise",
+    "independent_unit": "wavefront for mixed ensembles; Monte Carlo replicate for flat",
+    "mean_image_reconstruction": "prohibited"
+  },
+  "original_working_criterion": {
+    "relative_tolerance_pct": 5.0,
+    "absolute_tolerance_nm": 0.5,
+    "margin_nm": "min(0.5, 0.05 * factor-9 reference residual)",
+    "status": "preserved as original project criterion; not redefined as a journal requirement"
+  },
+  "claim_specification": {
+    "optical_accuracy": "mean aperture-weighted piston-removed ground-truth residual with 95% Student-t CI across 20 independent wavefronts",
+    "numerical_sensitivity": "observed paired factor-8/factor-9 changes; adjacent-pair sensitivity, not a rigorous continuum-error bound",
+    "noisy_expected_change": "independent-batch Gram-weighted cross-product estimator of squared expected reconstructed-wavefront change",
+    "arithmetic_discrepancy": "candidate fixed-minus-original-floating reconstruction on identical detector integers",
+    "no_alternative_pass_rule": true
+  },
+  "rtl_subset": {
+    "include_flat_both_fluxes": true,
+    "include_noisy_flat_both_fluxes": true,
+    "include_all_signed_modes_at_3m": true,
+    "include_first_mixed_each_amplitude_and_flux": true,
+    "include_one_factor9_frame": true
+  },
+  "seeds": {
+    "mixed_20nm": 930501,
+    "mixed_100nm": 930502,
+    "mixed_400nm": 930503,
+    "noise": 930601,
+    "flat_noise": 930602
+  }
+}

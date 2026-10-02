@@ -1,0 +1,14 @@
+{
+  "n_frames": 19,
+  "exact_integer_model_rtl_agreement": true,
+  "no_unknown_valid_outputs": true,
+  "correct_output_counts": true,
+  "true_latency_cycles_values": [
+    9
+  ],
+  "last_contributing_pixel_latency_cycles_values": [
+    7
+  ],
+  "all_passed": true,
+  "latency_definition": "primary: arrival of FINAL_TILE_PIXEL at the processing input to done; the testbench also reports its historical last-contributing-pixel counter"
+}

@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "entries": [
+    {
+      "path": "software_evidence/stage_error_attribution.csv",
+      "description": "ranked A-I isolated replacements",
+      "source_evidence_run": "final_evidence_package_v1_20260930_final",
+      "source_software_run": "reciprocal_precision_software_v1_20261002",
+      "calibration": "unchanged frozen factor-8 candidate",
+      "candidate_reciprocal_rom_sha256": "86c064bceb2ee44db68271f86f490b46d557e7d959711a4ea4782080487e26dc",
+      "sample_count": "one frozen 3M flat frame",
+      "uncertainty": "deterministic isolated ablation"
+    },
+    {
+      "path": "software_evidence/precision_sweep_summary.csv",
+      "description": "candidate arithmetic summary",
+      "source_evidence_run": "final_evidence_package_v1_20260930_final",
+      "source_software_run": "reciprocal_precision_software_v1_20261002",
+      "calibration": "unchanged frozen factor-8 candidate",
+      "candidate_reciprocal_rom_sha256": "86c064bceb2ee44db68271f86f490b46d557e7d959711a4ea4782080487e26dc",
+      "sample_count": "276 deterministic frames/candidate",
+      "uncertainty": "descriptive full-set statistics"
+    },
+    {
+      "path": "software_evidence/operating_point_summary.csv",
+      "description": "mixed operating-point summary",
+      "source_evidence_run": "final_evidence_package_v1_20260930_final",
+      "source_software_run": "reciprocal_precision_software_v1_20261002",
+      "calibration": "unchanged frozen factor-8 candidate",
+      "candidate_reciprocal_rom_sha256": "86c064bceb2ee44db68271f86f490b46d557e7d959711a4ea4782080487e26dc",
+      "sample_count": "20 independent wavefronts/cell",
+      "uncertainty": "95% Student-t interval"
+    },
+    {
+      "path": "baseline_control_rtl_cases.csv",
+      "description": "frozen baseline RTL equality",
+      "source_evidence_run": "final_evidence_package_v1_20260930_final",
+      "source_software_run": "reciprocal_precision_software_v1_20261002",
+      "calibration": "unchanged frozen factor-8 candidate",
+      "candidate_reciprocal_rom_sha256": "86c064bceb2ee44db68271f86f490b46d557e7d959711a4ea4782080487e26dc",
+      "sample_count": "19 selected frames",
+      "uncertainty": "exact integer equality"
+    },
+    {
+      "path": "candidate_rtl_cases.csv",
+      "description": "experimental candidate RTL equality",
+      "source_evidence_run": "final_evidence_package_v1_20260930_final",
+      "source_software_run": "reciprocal_precision_software_v1_20261002",
+      "calibration": "unchanged frozen factor-8 candidate",
+      "candidate_reciprocal_rom_sha256": "86c064bceb2ee44db68271f86f490b46d557e7d959711a4ea4782080487e26dc",
+      "sample_count": "19 selected frames",
+      "uncertainty": "exact integer equality"
+    },
+    {
+      "path": "latency_resource_estimate.csv",
+      "description": "latency and structural resource comparison",
+      "source_evidence_run": "final_evidence_package_v1_20260930_final",
+      "source_software_run": "reciprocal_precision_software_v1_20261002",
+      "calibration": "unchanged frozen factor-8 candidate",
+      "candidate_reciprocal_rom_sha256": "86c064bceb2ee44db68271f86f490b46d557e7d959711a4ea4782080487e26dc",
+      "sample_count": "two architectures",
+      "uncertainty": "simulated cycles; structural estimates"
+    }
+  ]
+}

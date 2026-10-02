@@ -1,0 +1,5 @@
+comparison,amplitude_nm_rms,old_framewise_prediction_mean_nm,old_framewise_prediction_ci95_high_nm,new_pair_local_mean_reconstruction_difference_nm,new_pair_local_mean_reconstruction_ci95_high_nm,old_decision,old_prediction_metric_status
+edge_4_to_20,20.0,2.457000770350652,2.6303471544640034,0.46604758866645807,0.5296176144833757,False,SUPERSEDED: comparison-set-dependent coupling
+edge_4_to_20,100.0,2.371579005272947,2.5444131948388966,0.5765538076514611,0.6794439042732949,False,SUPERSEDED: comparison-set-dependent coupling
+propagation_1_to_5,20.0,7.2580517654490855,7.479853253993036,6.583739958596178,6.856663514938653,False,SUPERSEDED: comparison-set-dependent coupling
+propagation_1_to_5,100.0,11.329688405183743,12.498847296583172,11.004094397573706,12.274209337616808,False,SUPERSEDED: comparison-set-dependent coupling

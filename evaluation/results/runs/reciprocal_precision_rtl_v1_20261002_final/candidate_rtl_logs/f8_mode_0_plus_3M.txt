@@ -1,0 +1,56 @@
+VCD info: dumpfile waves/zynq_pipeline.vcd opened for output.
+
+=====================================================
+ Zynq SHWFS pipeline -- frame complete
+=====================================================
+  cycles elapsed        : 62593
+  pixels streamed       : 61384 (expected 65536)
+  pixel mismatches      : 0
+  frame_complete pulses : 0
+  subapertures valid    : 168
+  reciprocal MSB trips  : 0
+  unknown valid slope values : 0
+
+  LATENCY (cycles, and ns at 150 MHz)
+    final contributing pixel was #61378
+    that pixel -> done              : 7 cy  (46.6 ns)
+    last subap_valid        -> done : 2 cy  (13.3 ns)
+
+  THROUGHPUT
+    first input pixel cycle         : 13
+    last input pixel cycle          : 62591
+    first subap_valid cycle         : 8190
+    done cycle                      : 62592
+    longest back-to-back pixel run  : 256
+    active-region stall events      : 239
+
+  TRUE final-pixel-to-result (pixel ARRIVAL -> done)
+    final tile pixel #61375 arrived at cycle : 62583
+    arrival -> done                 : 9 cy  (60.0 ns)
+    accumulator internal depth      : 2 cy
+    anchor s1 -> done               : 8 cy
+    anchor accum -> done            : 7 cy
+
+  STAGE BOUNDARY CYCLES (last subaperture)
+    accumulator completion cycle    : 62585
+    reciprocal completion cycle     : 62588
+    slope (subap_valid) cycle       : 62590
+    zernike (done) cycle            : 62592
+
+  mode  raw (signed Q22)
+    1   549216
+    2   -70
+    3   -1323
+    4   2
+    5   3879
+    6   8
+    7   15068
+    8   -7
+    9   4685
+   10   -3487
+  unknown valid coefficients : 0
+
+  RESULT: pixel stream verified, coefficients written
+=====================================================
+
+/Users/michaelgrillo/Documents/_Admin/Unresolved/shack-hartmann-fpga-main/sim/tb_full_pipeline.v:329: $finish called at 626025000 (1ps)

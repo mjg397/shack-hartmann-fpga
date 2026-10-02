@@ -1,0 +1,7 @@
+stage,cycles,cycles_min,cycles_max,deterministic,ns_at_150mhz
+Final accumulation,2,2,2,True,13.333333333333334
+Centroid / reciprocal,3,3,3,True,20.0
+Slope calculation,2,2,2,True,13.333333333333334
+Zernike reconstruction + output,2,2,2,True,13.333333333333334
+TOTAL (sum of stages),9,9,9,True,60.0
+TOTAL (measured final-pixel -> done),9,9,9,True,60.0

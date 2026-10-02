@@ -1,0 +1,13 @@
+project/
+*.xpr
+*.jou
+*.log
+*.str
+*.wdb
+*.runs/
+*.cache/
+*.hw/
+*.ip_user_files/
+*.sim/
+__pycache__/
+*.pyc

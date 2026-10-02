@@ -1,0 +1,10 @@
+study,comparison,coarse_setting,fine_setting,coarse_key,fine_key,comparison_type,n_predeclared_cells,accepted_cells,all_cells_accepted,max_abs_residual_difference_mean_nm,max_prediction_rms_difference_mean_nm,max_prediction_to_margin_ratio
+pupil_edge_supersampling,edge_4_to_12,4,12,production,edge_ss12,successive_refinement,4,0,False,0.07701541311601864,2.63193780363682,12.8185963602663
+pupil_edge_supersampling,edge_12_to_16,12,16,edge_ss12,edge_ss16,successive_refinement,4,0,False,0.12795756004329908,2.5954695365508424,13.454376355838352
+pupil_edge_supersampling,edge_16_to_20,16,20,edge_ss16,edge_ss20,successive_refinement,4,0,False,0.0922071403938953,2.653664354358402,13.21504349399591
+pupil_edge_supersampling,edge_4_to_20,4,20,production,edge_ss20,production_to_supported_reference,4,0,False,0.130001405478523,2.457000770350652,12.216167647581932
+propagation_grid_with_detector_integration,propagation_1_to_2,1,2,production,prop_f2,successive_refinement,4,0,False,15.54782698398712,31.3591528428993,68.78486548634832
+propagation_grid_with_detector_integration,propagation_2_to_3,2,3,prop_f2,prop_f3,successive_refinement,4,0,False,3.7410373569932727,9.71786015143801,22.49425272884716
+propagation_grid_with_detector_integration,propagation_3_to_4,3,4,prop_f3,prop_f4,successive_refinement,4,0,False,1.997053793036896,6.465084455689989,14.689083592199076
+propagation_grid_with_detector_integration,propagation_4_to_5,4,5,prop_f4,prop_f5,successive_refinement,4,0,False,0.7493381010561743,6.707268798409414,15.967177067273918
+propagation_grid_with_detector_integration,propagation_1_to_5,1,5,production,prop_f5,production_to_supported_reference,4,0,False,9.060397732900773,42.38755556915911,94.27239021934498

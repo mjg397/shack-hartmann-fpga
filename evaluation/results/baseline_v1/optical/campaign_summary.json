@@ -1,0 +1,221 @@
+{
+  "frozen_scale_m_per_lsb": 1.144674103097925e-13,
+  "optics": {
+    "telescope_diameter_m": 8.0,
+    "central_obscuration_m": 1.2,
+    "spider_width_m": 0.05,
+    "num_spiders": 4,
+    "oversizing_factor": 1.0666666666666667,
+    "wavelength_m": 7e-07,
+    "f_number": 50.0,
+    "sh_diameter_base_m": 0.005,
+    "num_lenslets": 16,
+    "num_zernike": 10,
+    "pupil_pixels_base": 240,
+    "supersample": 4,
+    "derived_sh_diameter_m": 0.005333333333333333,
+    "derived_lenslet_diameter_m": 0.0003333333333333333,
+    "derived_focal_length_m": 0.016666666666666666,
+    "derived_num_pupil_pixels": 256,
+    "derived_detector_pixel_pitch_m": 2.0833333333333333e-05,
+    "derived_magnification": 0.000625,
+    "config_hash": "b5ace985c0efdab9",
+    "provenance": "verbatim from src/shwfs_utils.py generate_shwfs_case",
+    "status": "ASSUMED SIMULATION CONFIGURATION -- not measured hardware"
+  },
+  "pilot": true,
+  "flat": {
+    "noiseless_bias_coeffs_m": [
+      7.575139273900263e-12,
+      7.580786738039194e-12,
+      -9.610537687503974e-10,
+      -4.1305894641390586e-12,
+      6.543363956919588e-14,
+      3.4571436077738398e-12,
+      3.4866017667630327e-12,
+      -1.6884737347837997e-12,
+      1.6885541658124402e-12,
+      8.615054260136112e-09
+    ],
+    "noiseless_float_residual_m": 8.182679058911899e-09,
+    "noiseless_fixed_residual_m": 1.1497547515051919e-08,
+    "n_noisy_trials": 10,
+    "noisy_float_residual_mean_m": 8.841323748701769e-09,
+    "noisy_float_residual_sd_m": 2.50841326813619e-10,
+    "noisy_fixed_residual_mean_m": 8.953989612259217e-09,
+    "repeatability_sd_coeff0_m": 1.410282082973103e-09,
+    "detector": {
+      "total_photons": 3000000.0,
+      "quantum_efficiency": 0.8,
+      "gain_e_per_adu": 20.0,
+      "read_noise_e": 3.0,
+      "background_e": 0.0,
+      "offset_adu": 0.0,
+      "full_well_e": 20000.0,
+      "adc_bits": 8,
+      "shot_noise": true,
+      "signal_e_per_lenslet": 14285.714285714286,
+      "adc_max": 255,
+      "status": "ASSUMED detector parameters for simulation -- not a measured device",
+      "note": "gain is held FIXED within any sweep; frames are NOT individually normalised"
+    },
+    "interpretation": "the noiseless residual is systematic bias -- the stored reference slopes do not exactly match this bench's flat wavefront; the noisy spread is repeatability"
+  },
+  "modes": {
+    "per_mode": [
+      {
+        "mode": 1,
+        "label": "Tilt X",
+        "gain": 0.8846423199255505,
+        "offset_m": 7.408613471544647e-12,
+        "nonlinearity_rms_m": 3.5370839241008265e-09,
+        "crosstalk_rms_m": 3.0884744233550553e-09
+      },
+      {
+        "mode": 2,
+        "label": "Tilt Y",
+        "gain": 0.884642870016188,
+        "offset_m": 7.411359384621626e-12,
+        "nonlinearity_rms_m": 3.5370820492440138e-09,
+        "crosstalk_rms_m": 3.0884747632517176e-09
+      },
+      {
+        "mode": 3,
+        "label": "Defocus",
+        "gain": 1.030701809320482,
+        "offset_m": -2.8886988110962395e-10,
+        "nonlinearity_rms_m": 4.462503781196859e-09,
+        "crosstalk_rms_m": 2.9467781206522587e-09
+      },
+      {
+        "mode": 4,
+        "label": "Astig 45",
+        "gain": 1.1127762115726,
+        "offset_m": -4.163574506052903e-12,
+        "nonlinearity_rms_m": 3.6436437312363404e-09,
+        "crosstalk_rms_m": 2.9005534871940813e-09
+      },
+      {
+        "mode": 5,
+        "label": "Astig 0",
+        "gain": 0.9228915869739022,
+        "offset_m": 6.42441865915043e-14,
+        "nonlinearity_rms_m": 4.255222162402256e-09,
+        "crosstalk_rms_m": 3.112380067103761e-09
+      },
+      {
+        "mode": 6,
+        "label": "Coma X",
+        "gain": 1.0266103037141867,
+        "offset_m": 3.4900202578404684e-12,
+        "nonlinearity_rms_m": 3.3104444244751396e-10,
+        "crosstalk_rms_m": 3.1605282161803467e-09
+      },
+      {
+        "mode": 7,
+        "label": "Coma Y",
+        "gain": 1.0266124533707075,
+        "offset_m": 3.5058611241241765e-12,
+        "nonlinearity_rms_m": 3.310465364216413e-10,
+        "crosstalk_rms_m": 3.160525581746191e-09
+      },
+      {
+        "mode": 8,
+        "label": "Trefoil X",
+        "gain": 1.042647911047463,
+        "offset_m": -1.7475246346521311e-12,
+        "nonlinearity_rms_m": 1.7361704923785321e-09,
+        "crosstalk_rms_m": 3.654887930933574e-09
+      },
+      {
+        "mode": 9,
+        "label": "Trefoil Y",
+        "gain": 1.0426464899047896,
+        "offset_m": 1.7518122683867703e-12,
+        "nonlinearity_rms_m": 1.7361679432790107e-09,
+        "crosstalk_rms_m": 3.6548851575642897e-09
+      },
+      {
+        "mode": 10,
+        "label": "Sph.",
+        "gain": 1.0373455834452783,
+        "offset_m": 9.017269003998644e-09,
+        "nonlinearity_rms_m": 4.827482431626568e-10,
+        "crosstalk_rms_m": 3.211495955246453e-10
+      }
+    ],
+    "gain_min": 0.8846423199255505,
+    "gain_max": 1.1127762115726,
+    "amplitudes_nm": [
+      20,
+      60
+    ]
+  },
+  "mixed": {
+    "levels": [
+      {
+        "level_nm": 40,
+        "n": 5,
+        "true_rms_mean_m": 4.000000000000001e-08,
+        "float_residual_mean_m": 1.0893537645891497e-08,
+        "float_residual_sem_m": 6.608279616305823e-10,
+        "float_residual_p95_m": 1.2571700082768156e-08,
+        "fixed_residual_mean_m": 1.102737732306377e-08,
+        "fixed_residual_sem_m": 6.684520806629391e-10,
+        "fixed_residual_p95_m": 1.2453266256646241e-08,
+        "fixed_minus_float_mean_m": 1.6806187908101772e-09,
+        "float_rel_error": 0.2723384411472874,
+        "fixed_rel_error": 0.2756844330765942
+      },
+      {
+        "level_nm": 120,
+        "n": 5,
+        "true_rms_mean_m": 1.2e-07,
+        "float_residual_mean_m": 1.9086162491629353e-08,
+        "float_residual_sem_m": 2.6767693024184592e-09,
+        "float_residual_p95_m": 2.475556786119033e-08,
+        "fixed_residual_mean_m": 1.9344916759687954e-08,
+        "fixed_residual_sem_m": 2.368237314912244e-09,
+        "fixed_residual_p95_m": 2.4012121879985817e-08,
+        "fixed_minus_float_mean_m": 1.7297188075954054e-09,
+        "float_rel_error": 0.1590513540969113,
+        "fixed_rel_error": 0.1612076396640663
+      }
+    ],
+    "n_total": 10
+  },
+  "sweep": {
+    "rows": [
+      {
+        "noise_case": "shot_only",
+        "photons": 1000000.0,
+        "read_noise_e": 0.0,
+        "e_per_lenslet": 4761.9047619047615,
+        "n": 10,
+        "float_residual_mean_m": 2.7879071546975894e-08,
+        "float_residual_sem_m": 1.4453437381501177e-09,
+        "fixed_residual_mean_m": 2.7614017876829175e-08,
+        "fixed_residual_sem_m": 1.432141684218178e-09,
+        "fixed_minus_float_mean_m": 1.2236468352725695e-09,
+        "penalty_ratio": 0.9904927368294849,
+        "saturated_px_total": 0,
+        "clipped_adu_total": 0
+      },
+      {
+        "noise_case": "shot_only",
+        "photons": 5000000.0,
+        "read_noise_e": 0.0,
+        "e_per_lenslet": 23809.52380952381,
+        "n": 10,
+        "float_residual_mean_m": 1.4073670374086076e-08,
+        "float_residual_sem_m": 8.289939435879707e-10,
+        "fixed_residual_mean_m": 1.4642044727360325e-08,
+        "fixed_residual_sem_m": 8.691208100232745e-10,
+        "fixed_minus_float_mean_m": 2.124666918488517e-09,
+        "penalty_ratio": 1.040385651941998,
+        "saturated_px_total": 0,
+        "clipped_adu_total": 1188
+      }
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+test_exact_integer_centroid_rounding (evaluation.tests.test_precision_experimental.PrecisionExperimentalTests.test_exact_integer_centroid_rounding) ... ok
+test_newton_is_integer_and_improves_seed (evaluation.tests.test_precision_experimental.PrecisionExperimentalTests.test_newton_is_integer_and_improves_seed) ... ok
+test_normalized_path_reduces_centroid_error (evaluation.tests.test_precision_experimental.PrecisionExperimentalTests.test_normalized_path_reduces_centroid_error) ... ok
+test_normalized_q17_fits_eighteen_bits_for_all_nonzero_u16 (evaluation.tests.test_precision_experimental.PrecisionExperimentalTests.test_normalized_q17_fits_eighteen_bits_for_all_nonzero_u16) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.073s
+
+OK

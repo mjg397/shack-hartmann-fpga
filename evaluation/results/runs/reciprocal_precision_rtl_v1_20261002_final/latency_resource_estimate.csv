@@ -1,0 +1,3 @@
+design,centroid_multipliers,ematrix_multipliers,newton_multipliers,estimated_total_dsp48,estimated_dsp_delta,added_arithmetic_pipeline_stages,final_pixel_to_done_cycles,reciprocal_boundary_cycles,centroid_slope_boundary_cycles,steady_state_throughput,bram_effect,lut_ff_effect,estimate_or_actual
+baseline_q18,2,20,0,22,0,0,9,3,2,one accepted pixel/cycle and one completed subaperture/cycle,"65,536x19 reciprocal ROM",frozen baseline,structural estimate plus simulated cycles
+normalized_q17_rne,2,20,0,22,0,0,9,3,2,one accepted pixel/cycle and one completed subaperture/cycle,"65,536x18 normalized ROM; same depth, one fewer data bit",adds 4-bit exponent path plus two 38-bit rounding/barrel-shift networks; not synthesized,structural estimate plus simulated cycles

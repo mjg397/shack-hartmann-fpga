@@ -1,0 +1,6 @@
+claim,status,evidence
+Optical calibration is self-consistent for the simulated bench,ESTABLISHED AT FROZEN DISCRETIZATION,"noiseless flat, independent ±mode probes, held-out optical wavefronts; see convergence qualification"
+Floating reconstruction accuracy over 20–400 nm RMS,CONDITIONAL ON FROZEN NUMERICAL GRID,300 held-out mixed wavefronts
+Fixed-point discrepancy is separated from optical residual,ESTABLISHED FOR TESTED CASES,"paired original-E, dequantized-E, and bit-accurate reconstructions on identical frames"
+RTL equals the bit-accurate model,ESTABLISHED FOR FINITE TEST SET,"35 cases, 350 coefficients"
+Physical-bench optical performance or hardware timing/power/resources,UNTESTED,"no experimental frames, board run, synthesis, implementation, or timing closure in scope"

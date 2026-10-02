@@ -1,0 +1,160 @@
+{
+  "frame_sha256": "5f95210c8f81328c07f73d8f84d84d75090790c454c73f9b987859764b7df545",
+  "detector_settings_identical_to_historical_noisy_flat_except_noise_enable": {
+    "photons": 3000000.0,
+    "gain_e_per_adu": 20.0,
+    "threshold_adu": 5,
+    "adc_bits": 8,
+    "pupil_and_calibration": "same frozen source run"
+  },
+  "thresholded_pixel_count": 63340,
+  "nonzero_pixels_after_threshold": 2196,
+  "stored_reference_equals_rounded_exact_q18": {
+    "x": true,
+    "y": true
+  },
+  "fixed_minus_exact_centroid_q18": {
+    "x_mean_lsb": 1078.9285714285713,
+    "y_mean_lsb": 1078.9285714285713,
+    "x_rms_lsb": 1672.3597884141923,
+    "y_rms_lsb": 1672.3597884141923,
+    "x_min_lsb": -1920,
+    "x_max_lsb": 2040,
+    "y_min_lsb": -1920,
+    "y_max_lsb": 2040,
+    "x_correlation_with_reciprocal_error": 0.9954402195436591,
+    "y_correlation_with_reciprocal_error": 0.9954402195436594
+  },
+  "fixed_mac_coefficients_m": [
+    5.31593483452618e-09,
+    5.31593483452618e-09,
+    -1.5776159884040183e-12,
+    0.0,
+    0.0,
+    3.361899671288963e-10,
+    3.361899671288963e-10,
+    -3.297217415764398e-11,
+    3.281441255880358e-11,
+    4.101801569850447e-12
+  ],
+  "fixed_wavefront_rms_m": 7.615181444684047e-09,
+  "rtl": {
+    "frame_sha256": "5f95210c8f81328c07f73d8f84d84d75090790c454c73f9b987859764b7df545",
+    "model_zernike_raw": [
+      33696,
+      33696,
+      -10,
+      0,
+      0,
+      2131,
+      2131,
+      -209,
+      208,
+      26
+    ],
+    "rtl_zernike_raw": [
+      33696,
+      33696,
+      -10,
+      0,
+      0,
+      2131,
+      2131,
+      -209,
+      208,
+      26
+    ],
+    "rtl_coefficients_m": [
+      5.31593483452618e-09,
+      5.31593483452618e-09,
+      -1.5776159884040183e-12,
+      0.0,
+      0.0,
+      3.361899671288963e-10,
+      3.361899671288963e-10,
+      -3.297217415764398e-11,
+      3.281441255880358e-11,
+      4.101801569850447e-12
+    ],
+    "rtl_wavefront_rms_m": 7.615181444684047e-09,
+    "coefficient_mismatch_count": 0,
+    "slope_centroid_mismatch_count": 0,
+    "unknown_valid_values": 0,
+    "latency_cycles": 9
+  },
+  "noisy_flat": {
+    "ideal_float": {
+      "n_frames": 100,
+      "mean_per_frame_wavefront_rms_m": 3.5633235559169077e-09,
+      "root_mean_square_per_frame_wavefront_rms_m": 3.808910773679964e-09,
+      "sd_per_frame_wavefront_rms_m": 1.352336742215656e-09,
+      "rms_of_mean_reconstructed_wavefront_m": 5.889624383406492e-10,
+      "rms_frame_to_frame_wavefront_variability_m": 3.763100387722755e-09,
+      "mean_coefficients_m": [
+        5.727507817491958e-12,
+        2.911086540643473e-10,
+        3.658996161351567e-10,
+        5.267108189484371e-11,
+        3.2387329886179624e-12,
+        -3.751820090592881e-11,
+        5.903524665233139e-11,
+        1.251702186057234e-10,
+        1.2859782536136277e-11,
+        3.142489827875715e-10
+      ]
+    },
+    "dequantized_float": {
+      "n_frames": 100,
+      "mean_per_frame_wavefront_rms_m": 3.563325201784421e-09,
+      "root_mean_square_per_frame_wavefront_rms_m": 3.808911850698022e-09,
+      "sd_per_frame_wavefront_rms_m": 1.3523354257555285e-09,
+      "rms_of_mean_reconstructed_wavefront_m": 5.889761718061027e-10,
+      "rms_frame_to_frame_wavefront_variability_m": 3.763099328403711e-09,
+      "mean_coefficients_m": [
+        5.727908159898436e-12,
+        2.9110848030618286e-10,
+        3.659165136364155e-10,
+        5.2669939704572595e-11,
+        3.2373691329655945e-12,
+        -3.7520457615726606e-11,
+        5.903693551052867e-11,
+        1.251679649743735e-10,
+        1.2859121792047067e-11,
+        3.142553908427636e-10
+      ]
+    },
+    "fixed": {
+      "n_frames": 100,
+      "mean_per_frame_wavefront_rms_m": 3.708228074487132e-09,
+      "root_mean_square_per_frame_wavefront_rms_m": 3.940182223058381e-09,
+      "sd_per_frame_wavefront_rms_m": 1.3386562305259727e-09,
+      "rms_of_mean_reconstructed_wavefront_m": 6.804145565027706e-10,
+      "rms_frame_to_frame_wavefront_variability_m": 3.880988531573422e-09,
+      "mean_coefficients_m": [
+        -3.831161547039741e-10,
+        -1.0954176615483297e-10,
+        3.821822060388386e-10,
+        1.0492408415677445e-10,
+        -6.291217038557545e-11,
+        -1.3341898413932782e-10,
+        -3.469335320099276e-11,
+        1.2027271010795711e-10,
+        2.5131422695276015e-11,
+        3.1868631773755376e-10
+      ]
+    },
+    "detector": {
+      "total_photons": 3000000.0,
+      "quantum_efficiency": 0.8,
+      "gain_e_per_adu": 20.0,
+      "read_noise_e": 3.0,
+      "background_e": 0.0,
+      "offset_adu": 0.0,
+      "full_well_e": 20000.0,
+      "adc_bits": 8,
+      "shot_noise": true
+    },
+    "seed": 915101
+  },
+  "cause": "the stored reference is round(moment/sum * 2^18), while RTL forms moment * round(2^18/sum); reciprocal rounding is multiplied by the moment before reference subtraction"
+}

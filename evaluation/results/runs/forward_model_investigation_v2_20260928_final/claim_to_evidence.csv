@@ -1,0 +1,7 @@
+claim,status,evidence
+Prior all-grid-coupled framewise prediction difference is valid,SUPERSEDED,noise_coupling_controls_summary.csv
+Refinement preserves physical geometry and detector boundaries,ESTABLISHED,physical_geometry_audit.csv
+Square-lenslet propagation follows independent analytic diffraction,QUANTIFIED,simple_lenslet_validation.csv
+Full frozen production optical predictions are converged,NOT ESTABLISHED,forward_stage_paired.csv
+Corrected bounded noisy comparisons establish stability,NOT ESTABLISHED,corrected_noisy_summary.csv
+Active RTL/calibration was changed,NO,MANIFEST.json

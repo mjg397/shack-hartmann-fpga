@@ -1,0 +1,13 @@
+factor,tilt_shift_command_px,physical_pixels_axis,subsamples_per_physical_pixel_axis,normalized_image_relative_l2_error,centroid_x_error_px,reference,field
+5,-0.4,256,5,0.0053143028154615714,-3.048326681896231e-06,adaptive quadrature over identical physical pixel edges,analytic sinc-squared; isolates detector-pixel quadrature
+6,-0.4,256,6,0.003682779899228865,-2.1064782650928766e-06,adaptive quadrature over identical physical pixel edges,analytic sinc-squared; isolates detector-pixel quadrature
+7,-0.4,256,7,0.0027023144052497287,-1.543035554798372e-06,adaptive quadrature over identical physical pixel edges,analytic sinc-squared; isolates detector-pixel quadrature
+8,-0.4,256,8,0.002067273287888522,-1.1791201659267121e-06,adaptive quadrature over identical physical pixel edges,analytic sinc-squared; isolates detector-pixel quadrature
+5,0.0,256,5,0.004903699750065905,3.878414145786569e-16,adaptive quadrature over identical physical pixel edges,analytic sinc-squared; isolates detector-pixel quadrature
+6,0.0,256,6,0.0033993845934172165,5.425320473418923e-16,adaptive quadrature over identical physical pixel edges,analytic sinc-squared; isolates detector-pixel quadrature
+7,0.0,256,7,0.002494873299801033,2.9506307931590766e-16,adaptive quadrature over identical physical pixel edges,analytic sinc-squared; isolates detector-pixel quadrature
+8,0.0,256,8,0.001908830943545497,5.280392226245039e-16,adaptive quadrature over identical physical pixel edges,analytic sinc-squared; isolates detector-pixel quadrature
+5,0.4,256,5,0.00531430281545251,3.0483266852301526e-06,adaptive quadrature over identical physical pixel edges,analytic sinc-squared; isolates detector-pixel quadrature
+6,0.4,256,6,0.0036827798992198667,2.1064782680202225e-06,adaptive quadrature over identical physical pixel edges,analytic sinc-squared; isolates detector-pixel quadrature
+7,0.4,256,7,0.0027023144052408113,1.5430355576444028e-06,adaptive quadrature over identical physical pixel edges,analytic sinc-squared; isolates detector-pixel quadrature
+8,0.4,256,8,0.0020672732878796044,1.1791201686914277e-06,adaptive quadrature over identical physical pixel edges,analytic sinc-squared; isolates detector-pixel quadrature

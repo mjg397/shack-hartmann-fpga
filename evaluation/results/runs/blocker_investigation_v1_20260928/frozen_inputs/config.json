@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "run_id": "blocker_investigation_v1_20260928",
+  "source_run": "evaluation/results/runs/manuscript_v1_20260928_final",
+  "reference_policy": "retain the frozen exact-quotient Q18 reference; diagnose but do not subtract the RTL reciprocal bias",
+  "detector": {
+    "total_photons": 3000000.0,
+    "quantum_efficiency": 0.8,
+    "gain_e_per_adu": 20.0,
+    "read_noise_e": 3.0,
+    "background_e": 0.0,
+    "offset_adu": 0.0,
+    "full_well_e": 20000.0,
+    "adc_bits": 8,
+    "pixel_threshold_adu": 5
+  },
+  "flat": {
+    "fresh_noisy_exposures": 100
+  },
+  "convergence": {
+    "pupil_edge_supersampling": [2, 4, 6, 8, 10, 12, 16, 20],
+    "propagation_grid_factors": [1, 2, 3, 4, 5],
+    "probe_nm": 30.0,
+    "mixed_low_nm_rms": 20.0,
+    "moderate_nm_rms": 100.0,
+    "acceptance_relative_pct": 5.0,
+    "acceptance_absolute_nm": 0.5,
+    "common_scoring_supersample": 20,
+    "detector_paths": ["production_adc", "continuous_diagnostic"]
+  },
+  "clipping_ablation": {
+    "photons_per_pupil": [3000000.0, 5000000.0, 8000000.0, 12000000.0],
+    "wavefronts": 8,
+    "noise_repeats_per_wavefront": 3,
+    "input_rms_nm": 80.0
+  },
+  "seeds": {
+    "flat_noise": 915101,
+    "convergence": 915422,
+    "clipping_wavefronts": 915404,
+    "clipping_exposures": 915405
+  }
+}

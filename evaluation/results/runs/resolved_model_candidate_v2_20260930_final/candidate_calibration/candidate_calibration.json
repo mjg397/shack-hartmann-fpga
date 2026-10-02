@@ -1,0 +1,33 @@
+{
+  "candidate_factor": 8,
+  "reference_convention": "single noiseless deterministic integer flat frame; threshold at 5 ADU; exact moment quotient; nearest-integer Q18 only in reference_q18_*.npy",
+  "interaction": "independent +/-30 nm modal probes through the same integer detector path",
+  "hardware_mem_files_generated": false,
+  "reason": "hardware quantization remains gated on end-to-end candidate stability",
+  "files": {
+    "e_matrix_m_per_slope_px.npy": {
+      "sha256": "db0cec8eb5cab8a88aab91dcfa2a422eca8d10e3b280b52bf9259aeea8a90299",
+      "bytes": 27008
+    },
+    "interaction_slope_px_per_m.npy": {
+      "sha256": "903499246992d5dee4ab9906acf98f39531e0fc216ebb37a6579a793e25696bf",
+      "bytes": 27008
+    },
+    "reference_exact_x_px.npy": {
+      "sha256": "97de9595450b2e403f67cfcebcf70545e2d0347c80cd34eaedf20d99713a91e9",
+      "bytes": 2176
+    },
+    "reference_exact_y_px.npy": {
+      "sha256": "f38e54439799097b8872712fca5e0369707e2dda68713b8f914626ae5302aad6",
+      "bytes": 2176
+    },
+    "reference_q18_x.npy": {
+      "sha256": "aa69301d7ff06df382cb923fa93cc15ee3a0c0ab6162d0f6f5e2dfe042771f0c",
+      "bytes": 2176
+    },
+    "reference_q18_y.npy": {
+      "sha256": "b77b69002250a6704753d8ebcdb196a33b818205e926200b102cb81c82862154",
+      "bytes": 2176
+    }
+  }
+}

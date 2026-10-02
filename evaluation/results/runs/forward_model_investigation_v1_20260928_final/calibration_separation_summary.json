@@ -1,0 +1,204 @@
+{
+  "rows": [
+    {
+      "factor": 1,
+      "calibration_policy": "common_factor5_diagnostic",
+      "n_cases": 4,
+      "mean_residual_nm": 8.672425469124686,
+      "max_residual_nm": 11.686713570883438,
+      "active_production_path": false
+    },
+    {
+      "factor": 1,
+      "calibration_policy": "frozen_dequantized_rom",
+      "n_cases": 4,
+      "mean_residual_nm": 4.697906185539966,
+      "max_residual_nm": 9.846746677244047,
+      "active_production_path": false
+    },
+    {
+      "factor": 1,
+      "calibration_policy": "frozen_fixed_production",
+      "n_cases": 4,
+      "mean_residual_nm": 6.7637752018916135,
+      "max_residual_nm": 8.398691113698664,
+      "active_production_path": true
+    },
+    {
+      "factor": 1,
+      "calibration_policy": "per_grid_diagnostic",
+      "n_cases": 4,
+      "mean_residual_nm": 4.697938964583582,
+      "max_residual_nm": 9.84674103552295,
+      "active_production_path": false
+    },
+    {
+      "factor": 2,
+      "calibration_policy": "common_factor5_diagnostic",
+      "n_cases": 4,
+      "mean_residual_nm": 5.929236383388688,
+      "max_residual_nm": 10.048954888172668,
+      "active_production_path": false
+    },
+    {
+      "factor": 2,
+      "calibration_policy": "frozen_dequantized_rom",
+      "n_cases": 4,
+      "mean_residual_nm": 8.945060875087474,
+      "max_residual_nm": 14.215828766848,
+      "active_production_path": false
+    },
+    {
+      "factor": 2,
+      "calibration_policy": "frozen_fixed_production",
+      "n_cases": 4,
+      "mean_residual_nm": 9.710661664140238,
+      "max_residual_nm": 16.3253876328429,
+      "active_production_path": true
+    },
+    {
+      "factor": 2,
+      "calibration_policy": "per_grid_diagnostic",
+      "n_cases": 4,
+      "mean_residual_nm": 4.115416314083806,
+      "max_residual_nm": 14.35824588570609,
+      "active_production_path": false
+    },
+    {
+      "factor": 3,
+      "calibration_policy": "common_factor5_diagnostic",
+      "n_cases": 4,
+      "mean_residual_nm": 5.765759653058919,
+      "max_residual_nm": 10.116603306799432,
+      "active_production_path": false
+    },
+    {
+      "factor": 3,
+      "calibration_policy": "frozen_dequantized_rom",
+      "n_cases": 4,
+      "mean_residual_nm": 10.057624847113006,
+      "max_residual_nm": 18.36732812013429,
+      "active_production_path": false
+    },
+    {
+      "factor": 3,
+      "calibration_policy": "frozen_fixed_production",
+      "n_cases": 4,
+      "mean_residual_nm": 10.752257755519995,
+      "max_residual_nm": 20.413342354742134,
+      "active_production_path": true
+    },
+    {
+      "factor": 3,
+      "calibration_policy": "per_grid_diagnostic",
+      "n_cases": 4,
+      "mean_residual_nm": 4.870088279392396,
+      "max_residual_nm": 9.230453677852648,
+      "active_production_path": false
+    },
+    {
+      "factor": 4,
+      "calibration_policy": "common_factor5_diagnostic",
+      "n_cases": 4,
+      "mean_residual_nm": 5.498797481104935,
+      "max_residual_nm": 10.523706257506495,
+      "active_production_path": false
+    },
+    {
+      "factor": 4,
+      "calibration_policy": "frozen_dequantized_rom",
+      "n_cases": 4,
+      "mean_residual_nm": 10.540101058083092,
+      "max_residual_nm": 18.78014635780157,
+      "active_production_path": false
+    },
+    {
+      "factor": 4,
+      "calibration_policy": "frozen_fixed_production",
+      "n_cases": 4,
+      "mean_residual_nm": 11.37198778886922,
+      "max_residual_nm": 20.1980825905404,
+      "active_production_path": true
+    },
+    {
+      "factor": 4,
+      "calibration_policy": "per_grid_diagnostic",
+      "n_cases": 4,
+      "mean_residual_nm": 6.30311675503308,
+      "max_residual_nm": 13.857158472163116,
+      "active_production_path": false
+    },
+    {
+      "factor": 5,
+      "calibration_policy": "common_factor5_diagnostic",
+      "n_cases": 4,
+      "mean_residual_nm": 5.428386692197144,
+      "max_residual_nm": 10.679236995606333,
+      "active_production_path": false
+    },
+    {
+      "factor": 5,
+      "calibration_policy": "frozen_dequantized_rom",
+      "n_cases": 4,
+      "mean_residual_nm": 10.696443033882213,
+      "max_residual_nm": 18.916184660713622,
+      "active_production_path": false
+    },
+    {
+      "factor": 5,
+      "calibration_policy": "frozen_fixed_production",
+      "n_cases": 4,
+      "mean_residual_nm": 11.661181865405203,
+      "max_residual_nm": 23.229984421670316,
+      "active_production_path": true
+    },
+    {
+      "factor": 5,
+      "calibration_policy": "per_grid_diagnostic",
+      "n_cases": 4,
+      "mean_residual_nm": 5.428386692197144,
+      "max_residual_nm": 10.679236995606333,
+      "active_production_path": false
+    }
+  ],
+  "metadata": [
+    {
+      "factor": 1,
+      "probe_nm": 30.0,
+      "condition_number": 6.393885383318215,
+      "singular_min": 7016754.200374052,
+      "singular_max": 44864322.12010834
+    },
+    {
+      "factor": 2,
+      "probe_nm": 30.0,
+      "condition_number": 5.952727211927456,
+      "singular_min": 6801792.120258047,
+      "singular_max": 40489213.04413383
+    },
+    {
+      "factor": 3,
+      "probe_nm": 30.0,
+      "condition_number": 5.602217996000208,
+      "singular_min": 7166884.700832925,
+      "singular_max": 40150450.44626478
+    },
+    {
+      "factor": 4,
+      "probe_nm": 30.0,
+      "condition_number": 5.277377884520038,
+      "singular_min": 7578973.07064556,
+      "singular_max": 39997104.8703978
+    },
+    {
+      "factor": 5,
+      "probe_nm": 30.0,
+      "condition_number": 5.4847154251103145,
+      "singular_min": 7303216.065784986,
+      "singular_max": 40056061.80892438
+    }
+  ],
+  "diagnostic_only": true,
+  "active_roms_changed": false,
+  "common_calibration_source_factor": 5
+}

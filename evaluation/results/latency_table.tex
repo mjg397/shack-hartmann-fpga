@@ -1,0 +1,14 @@
+% Pipeline latency breakdown, measured from registered valid events.
+% 10 randomised frames; every stage deterministic.
+\begin{tabular}{lrr}
+\hline
+Stage & Cycles & Latency (ns) \\
+\hline
+Final accumulation & 2 & 13.33 \\
+Centroid / reciprocal & 3 & 20.00 \\
+Slope calculation & 2 & 13.33 \\
+Zernike reconstruction + output & 2 & 13.33 \\
+\hline
+\textbf{Final pixel $\rightarrow$ output} & \textbf{9} & \textbf{60.00} \\
+\hline
+\end{tabular}

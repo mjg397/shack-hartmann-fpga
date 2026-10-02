@@ -1,0 +1,5 @@
+{
+  "scale_m_per_lsb": 1.5776159884040182e-13,
+  "method": "derived: max|E| mapped to the full signed 18-bit word",
+  "e_matrix_bits": 18
+}

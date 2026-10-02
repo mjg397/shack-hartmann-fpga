@@ -1,0 +1,82 @@
+{
+  "n_cases": 35,
+  "n_coefficients_checked": 350,
+  "n_coefficient_mismatches": 0,
+  "n_slope_centroid_values_checked": 23520,
+  "n_slope_centroid_mismatches": 0,
+  "n_unknown_valid_values": 0,
+  "latency_cycles_observed": [
+    9
+  ],
+  "latency_definition": "cycles from final contributing input-pixel arrival to output done/valid",
+  "all_exact": true,
+  "scope": "finite Icarus simulation set; not formal equivalence and not measured hardware",
+  "rom_manifest": {
+    "reciprocal_u16_q18.mem": {
+      "source": "/Users/michaelgrillo/Documents/_Admin/Unresolved/shack-hartmann-fpga-main/rtl/reciprocal_u16_q18.mem",
+      "words": 65536,
+      "width_bits": 19,
+      "signed": false,
+      "encoded_bits": 19,
+      "bytes": 393216,
+      "sha256": "c688004b3bd5b7f7b23bf815d073a1209a39a144dd590eb81304b16772456164",
+      "staged_path": "/private/var/folders/zt/m9h71v3n7mjc20rkj4637qjh0000gn/T/shwfs_eval_7iif4h1e/reciprocal_u16_q18.mem",
+      "staged_sha256": "c688004b3bd5b7f7b23bf815d073a1209a39a144dd590eb81304b16772456164"
+    },
+    "slopes_ref_x.mem": {
+      "source": "/Users/michaelgrillo/Documents/_Admin/Unresolved/shack-hartmann-fpga-main/rtl/slopes_ref_x.mem",
+      "words": 256,
+      "width_bits": 25,
+      "signed": true,
+      "encoded_bits": 28,
+      "bytes": 2048,
+      "sha256": "925fdbffe177e2a0e10f35cfbde2a89937863c3f888051e6dc22a3500184821d",
+      "staged_path": "/private/var/folders/zt/m9h71v3n7mjc20rkj4637qjh0000gn/T/shwfs_eval_7iif4h1e/slopes_ref_x.mem",
+      "staged_sha256": "925fdbffe177e2a0e10f35cfbde2a89937863c3f888051e6dc22a3500184821d"
+    },
+    "slopes_ref_y.mem": {
+      "source": "/Users/michaelgrillo/Documents/_Admin/Unresolved/shack-hartmann-fpga-main/rtl/slopes_ref_y.mem",
+      "words": 256,
+      "width_bits": 25,
+      "signed": true,
+      "encoded_bits": 28,
+      "bytes": 2048,
+      "sha256": "dd80f03d6f7d4245b647e7a3ca4c4a446cb04b2c566d1eee83cce0cf7933491b",
+      "staged_path": "/private/var/folders/zt/m9h71v3n7mjc20rkj4637qjh0000gn/T/shwfs_eval_7iif4h1e/slopes_ref_y.mem",
+      "staged_sha256": "dd80f03d6f7d4245b647e7a3ca4c4a446cb04b2c566d1eee83cce0cf7933491b"
+    },
+    "subaperture_bitmap.mem": {
+      "source": "/Users/michaelgrillo/Documents/_Admin/Unresolved/shack-hartmann-fpga-main/rtl/subaperture_bitmap.mem",
+      "words": 1,
+      "width_bits": 256,
+      "signed": false,
+      "encoded_bits": 256,
+      "bytes": 65,
+      "sha256": "e40db0994c74ae547b8051b6f92d4bf188b2c6f568a2efc37ca2132d23f56bfa",
+      "staged_path": "/private/var/folders/zt/m9h71v3n7mjc20rkj4637qjh0000gn/T/shwfs_eval_7iif4h1e/subaperture_bitmap.mem",
+      "staged_sha256": "e40db0994c74ae547b8051b6f92d4bf188b2c6f568a2efc37ca2132d23f56bfa"
+    },
+    "e_matrix_x.mem": {
+      "source": "/Users/michaelgrillo/Documents/_Admin/Unresolved/shack-hartmann-fpga-main/rtl/e_matrix_x.mem",
+      "words": 1680,
+      "width_bits": 18,
+      "signed": true,
+      "encoded_bits": 20,
+      "bytes": 10080,
+      "sha256": "5489ada9d32bc9012ee8a0fdbcdc5320fa2da50432a4ad6a5b8dbcac732adf39",
+      "staged_path": "/private/var/folders/zt/m9h71v3n7mjc20rkj4637qjh0000gn/T/shwfs_eval_7iif4h1e/e_matrix_x.mem",
+      "staged_sha256": "5489ada9d32bc9012ee8a0fdbcdc5320fa2da50432a4ad6a5b8dbcac732adf39"
+    },
+    "e_matrix_y.mem": {
+      "source": "/Users/michaelgrillo/Documents/_Admin/Unresolved/shack-hartmann-fpga-main/rtl/e_matrix_y.mem",
+      "words": 1680,
+      "width_bits": 18,
+      "signed": true,
+      "encoded_bits": 20,
+      "bytes": 10080,
+      "sha256": "2aac4c1a1debe3017005ddc46afa763391ee9a9862d902874c504da0f1b94d26",
+      "staged_path": "/private/var/folders/zt/m9h71v3n7mjc20rkj4637qjh0000gn/T/shwfs_eval_7iif4h1e/e_matrix_y.mem",
+      "staged_sha256": "2aac4c1a1debe3017005ddc46afa763391ee9a9862d902874c504da0f1b94d26"
+    }
+  }
+}

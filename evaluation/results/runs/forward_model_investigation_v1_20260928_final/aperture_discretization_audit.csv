@@ -1,0 +1,4 @@
+edge_supersample,reference,amplitude_relative_l2_error,amplitude_max_abs_error,coherent_area_m2,energy_area_m2,sqrt_area_fraction_not_used,reason
+4,factor-5 binary point quadrature block-averaged to production cells,0.008709145302535443,0.09999999999999998,48.452777777777776,48.13767361111111,True,cell mean is the coherent field-amplitude quadrature; square-root would preserve cell energy but alter coherent diffraction
+12,factor-5 binary point quadrature block-averaged to production cells,0.00759659492101342,0.07499999999999996,48.45490740740741,48.132543938614546,True,cell mean is the coherent field-amplitude quadrature; square-root would preserve cell energy but alter coherent diffraction
+20,factor-5 binary point quadrature block-averaged to production cells,0.007566355947877118,0.07499999999999996,48.4546,48.13201955555555,True,cell mean is the coherent field-amplitude quadrature; square-root would preserve cell energy but alter coherent diffraction
